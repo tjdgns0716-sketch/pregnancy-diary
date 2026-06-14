@@ -14,6 +14,7 @@ export default function Login() {
   const [babyName, setBabyName] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [loading, setLoading] = useState(true);
+  const [currentSlide, setCurrentSlide] = useState(0);
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [agreePrivacy, setAgreePrivacy] = useState(false);
   const [agreeSensitive, setAgreeSensitive] = useState(false);
@@ -300,78 +301,116 @@ export default function Login() {
 
   if (mode === "landing") {
     return (
-      <main className="main-content" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: '#FAFAFA' }}>
+      <main className="main-content" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'radial-gradient(circle at 50% 20%, #E8DEFF 0%, #F5F0FF 40%, #FFFDFD 100%)' }}>
         
-        {/* Hero Section */}
-        <section className="animate-fade-up" style={{ minHeight: '85vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 20px', textAlign: 'center', background: 'linear-gradient(180deg, #FFFFFF 0%, #FDFBF7 100%)' }}>
-          <div style={{ fontSize: '3.5rem', marginBottom: '20px' }}>🤍</div>
-          <h1 style={{ fontSize: '2.8rem', color: '#333', marginBottom: '20px', letterSpacing: '-0.04em', fontWeight: '800' }}>우리의 열달</h1>
-          <p style={{ fontSize: '1.2rem', color: '#666', lineHeight: '1.6', marginBottom: '50px', wordBreak: 'keep-all', fontWeight: '400' }}>
+        {/* Header / Hero */}
+        <section className="animate-fade-up" style={{ padding: '80px 20px 40px', textAlign: 'center' }}>
+          <div className="animate-float" style={{ fontSize: '4rem', marginBottom: '15px', display: 'inline-block' }}>💜</div>
+          <h1 style={{ fontSize: '2.5rem', color: '#333', marginBottom: '15px', letterSpacing: '-0.03em', fontWeight: '800' }}>우리의 열달</h1>
+          <p style={{ fontSize: '1.1rem', color: '#666', lineHeight: '1.6', marginBottom: '40px', wordBreak: 'keep-all', fontWeight: '400' }}>
             아내와 남편이 함께 기록하는<br/>가장 특별한 280일의 임신 다이어리
           </p>
           <button 
             className="animate-pulse-btn"
             onClick={() => setMode("login")}
             style={{ 
-              padding: '18px 40px', fontSize: '1.1rem', borderRadius: '40px', 
-              backgroundColor: '#333', color: 'white', border: 'none', 
-              cursor: 'pointer', fontWeight: 'bold', boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
-              letterSpacing: '-0.02em'
+              padding: '16px 40px', fontSize: '1.1rem', borderRadius: '40px', 
+              background: 'linear-gradient(90deg, #B490FF 0%, #D4B5FF 100%)', color: 'white', border: 'none', 
+              cursor: 'pointer', fontWeight: 'bold', boxShadow: '0 8px 25px rgba(180, 144, 255, 0.3)',
+              display: 'inline-flex', alignItems: 'center', gap: '8px'
             }}>
-            다이어리 시작하기
+            다이어리 시작하기 <span>→</span>
           </button>
         </section>
 
-        {/* Story Section 1 */}
-        <section className="animate-fade-up" style={{ padding: '100px 30px', backgroundColor: '#FFF5F5', textAlign: 'center' }}>
-          <div style={{ fontSize: '3rem', marginBottom: '25px' }}>🍓</div>
-          <h2 style={{ fontSize: '1.8rem', color: '#222', marginBottom: '15px', letterSpacing: '-0.03em', fontWeight: '700', wordBreak: 'keep-all' }}>은근슬쩍 전하는 속마음</h2>
-          <p style={{ fontSize: '1.1rem', color: '#555', lineHeight: '1.7', wordBreak: 'keep-all' }}>
-            문득 먹고 싶은 간식이나 서운했던 감정들을<br/>일기장에 살며시 남겨보세요.
-          </p>
-        </section>
-
-        {/* Story Section 2 */}
-        <section className="animate-fade-up" style={{ padding: '100px 30px', backgroundColor: '#F4F7FB', textAlign: 'center' }}>
-          <div style={{ fontSize: '3rem', marginBottom: '25px' }}>✨</div>
-          <h2 style={{ fontSize: '1.8rem', color: '#222', marginBottom: '15px', letterSpacing: '-0.03em', fontWeight: '700', wordBreak: 'keep-all' }}>센스 만점 예비 아빠</h2>
-          <p style={{ fontSize: '1.1rem', color: '#555', lineHeight: '1.7', wordBreak: 'keep-all' }}>
-            퇴근길 손에 들린 딸기 한 팩.<br/>아내의 일기를 보고 말없이 감동을 선물해 보세요.
-          </p>
-        </section>
-
-        {/* Story Section 3 */}
-        <section className="animate-fade-up" style={{ padding: '100px 30px', backgroundColor: '#FDF8E2', textAlign: 'center' }}>
-          <div style={{ fontSize: '3rem', marginBottom: '25px' }}>💌</div>
-          <h2 style={{ fontSize: '1.8rem', color: '#222', marginBottom: '15px', letterSpacing: '-0.03em', fontWeight: '700', wordBreak: 'keep-all' }}>얼굴 보고 하지 못한 말</h2>
-          <p style={{ fontSize: '1.1rem', color: '#555', lineHeight: '1.7', wordBreak: 'keep-all' }}>
-            "오늘 하루도 너무 고마워."<br/>쑥스러워 삼켰던 진심을 다이어리로 전해보세요.
-          </p>
-        </section>
-
-        {/* Story Section 4 */}
-        <section className="animate-fade-up" style={{ padding: '100px 30px', backgroundColor: '#F4FAEB', textAlign: 'center' }}>
-          <div style={{ fontSize: '3rem', marginBottom: '25px' }}>👨‍👩‍👦</div>
-          <h2 style={{ fontSize: '1.8rem', color: '#222', marginBottom: '15px', letterSpacing: '-0.03em', fontWeight: '700', wordBreak: 'keep-all' }}>진짜 부모가 되어가는 시간</h2>
-          <p style={{ fontSize: '1.1rem', color: '#555', lineHeight: '1.7', wordBreak: 'keep-all' }}>
-            서로를 더 깊이 이해하고 위로하며,<br/>온전한 가족이 되어가는 280일의 여정입니다.
-          </p>
-        </section>
-
-        {/* Bottom CTA Section */}
-        <section style={{ padding: '80px 20px', backgroundColor: '#FFFFFF', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '1.5rem', color: '#222', marginBottom: '30px', fontWeight: '700' }}>지금 바로 우리만의 일기를 시작해보세요</h2>
-          <button 
-            onClick={() => setMode("login")}
+        {/* Carousel Section */}
+        <section className="animate-fade-up" style={{ animationDelay: '0.2s', paddingBottom: '30px' }}>
+          <div 
             style={{ 
-              padding: '18px 50px', fontSize: '1.1rem', borderRadius: '40px', 
-              backgroundColor: '#333', color: 'white', border: 'none', 
-              cursor: 'pointer', fontWeight: 'bold', boxShadow: '0 5px 15px rgba(0,0,0,0.1)'
-            }}>
-            시작하기
-          </button>
+              display: 'flex', overflowX: 'auto', scrollSnapType: 'x mandatory', gap: '20px', 
+              padding: '20px 40px', scrollbarWidth: 'none', msOverflowStyle: 'none' 
+            }}
+            onScroll={(e) => {
+              const scrollLeft = e.target.scrollLeft;
+              const cardWidth = window.innerWidth * 0.85 + 20; // card width + gap approx
+              setCurrentSlide(Math.round(scrollLeft / cardWidth));
+            }}
+            className="hide-scrollbar"
+          >
+            
+            {/* Card 1 */}
+            <div style={{ flex: '0 0 85%', scrollSnapAlign: 'center', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '30px', padding: '40px 25px', boxShadow: '0 10px 40px rgba(0,0,0,0.03)', textAlign: 'center' }}>
+              <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#FFF0F5', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', margin: '0 auto 25px' }}>🍓</div>
+              <h3 style={{ fontSize: '1.2rem', color: '#333', marginBottom: '15px', fontWeight: '700', wordBreak: 'keep-all' }}>은근슬쩍 전하는 속마음</h3>
+              <p style={{ fontSize: '0.95rem', color: '#666', lineHeight: '1.6', wordBreak: 'keep-all' }}>
+                온도 템도 산후 관리부터 사소한 갈등,<br/>임신 중 설마서 넘겨보세요.<br/>서운했던 감정들을 일기장에<br/>살며시 남겨보세요.
+              </p>
+              <div style={{ marginTop: '25px', display: 'inline-block', padding: '8px 20px', backgroundColor: '#FFF0F5', color: '#FF8A8A', borderRadius: '20px', fontSize: '0.85rem', fontWeight: 'bold' }}>마음 나누기</div>
+            </div>
+
+            {/* Card 2 */}
+            <div style={{ flex: '0 0 85%', scrollSnapAlign: 'center', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '30px', padding: '40px 25px', boxShadow: '0 10px 40px rgba(0,0,0,0.03)', textAlign: 'center' }}>
+              <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#FFF8EB', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', margin: '0 auto 25px' }}>✨</div>
+              <h3 style={{ fontSize: '1.2rem', color: '#333', marginBottom: '15px', fontWeight: '700', wordBreak: 'keep-all' }}>센스 만점 예비 아빠</h3>
+              <p style={{ fontSize: '0.95rem', color: '#666', lineHeight: '1.6', wordBreak: 'keep-all' }}>
+                퇴근길 손에 든 단 선물, 받기 힘든<br/>아내의 일기를 보고 무엇이<br/>필요한지 체크해 보세요.<br/>감동을 선물해 보세요.
+              </p>
+              <div style={{ marginTop: '25px', display: 'inline-block', padding: '8px 20px', backgroundColor: '#FFF8EB', color: '#FFA834', borderRadius: '20px', fontSize: '0.85rem', fontWeight: 'bold' }}>서로를 위한 기록</div>
+            </div>
+
+            {/* Card 3 */}
+            <div style={{ flex: '0 0 85%', scrollSnapAlign: 'center', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '30px', padding: '40px 25px', boxShadow: '0 10px 40px rgba(0,0,0,0.03)', textAlign: 'center' }}>
+              <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#F0F5FF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', margin: '0 auto 25px' }}>💌</div>
+              <h3 style={{ fontSize: '1.2rem', color: '#333', marginBottom: '15px', fontWeight: '700', wordBreak: 'keep-all' }}>얼굴 보고 하지 못한 말</h3>
+              <p style={{ fontSize: '0.95rem', color: '#666', lineHeight: '1.6', wordBreak: 'keep-all' }}>
+                "오늘 하루도 너무 고마워."<br/>쑥스러워 삼켰던 진심을<br/>다이어리를 통해 전해보세요.<br/>사랑이 더 깊어집니다.
+              </p>
+              <div style={{ marginTop: '25px', display: 'inline-block', padding: '8px 20px', backgroundColor: '#F0F5FF', color: '#5A8CFF', borderRadius: '20px', fontSize: '0.85rem', fontWeight: 'bold' }}>진심 전하기</div>
+            </div>
+
+            {/* Card 4 */}
+            <div style={{ flex: '0 0 85%', scrollSnapAlign: 'center', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '30px', padding: '40px 25px', boxShadow: '0 10px 40px rgba(0,0,0,0.03)', textAlign: 'center' }}>
+              <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#F0FBF4', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', margin: '0 auto 25px' }}>👨‍👩‍👦</div>
+              <h3 style={{ fontSize: '1.2rem', color: '#333', marginBottom: '15px', fontWeight: '700', wordBreak: 'keep-all' }}>진짜 부모가 되어가는 시간</h3>
+              <p style={{ fontSize: '0.95rem', color: '#666', lineHeight: '1.6', wordBreak: 'keep-all' }}>
+                서로를 더 깊이 이해하고 위로하며,<br/>온전한 가족이 되어가는<br/>280일의 아름다운 여정입니다.<br/>함께 준비해 보아요.
+              </p>
+              <div style={{ marginTop: '25px', display: 'inline-block', padding: '8px 20px', backgroundColor: '#F0FBF4', color: '#4CAF50', borderRadius: '20px', fontSize: '0.85rem', fontWeight: 'bold' }}>가족의 탄생</div>
+            </div>
+
+          </div>
+
+          {/* Pagination Indicators */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '10px' }}>
+            {[0, 1, 2, 3].map((idx) => (
+              <div key={idx} style={{ 
+                width: '8px', height: '8px', borderRadius: '50%', 
+                backgroundColor: currentSlide === idx ? '#B490FF' : '#E0E0E0',
+                transition: 'background-color 0.3s'
+              }} />
+            ))}
+          </div>
+          
+          <div style={{ textAlign: 'center', marginTop: '20px', color: '#999', fontSize: '0.85rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px' }}>
+            <span style={{ fontSize: '1.2rem' }}>👆</span> 옆으로 밀어 더 보기
+          </div>
         </section>
 
+        {/* Footer info */}
+        <section style={{ padding: '40px 20px', textAlign: 'center', marginTop: 'auto' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: '#555', fontSize: '0.95rem', fontWeight: 'bold', marginBottom: '15px' }}>
+            <span style={{ fontSize: '1.2rem' }}>🔒</span> 모든 기록은 안전하게 보호돼요
+          </div>
+          <p style={{ color: '#999', fontSize: '0.75rem', lineHeight: '1.5' }}>
+            © 2026 우리의 열달. 소중한 오늘, 함께하는 내일.<br/>
+            Crafted for Our Ten Months of Precious Journey.
+          </p>
+        </section>
+
+        {/* Hide scrollbar styles locally */}
+        <style dangerouslySetInnerHTML={{__html: `
+          .hide-scrollbar::-webkit-scrollbar { display: none; }
+        `}} />
       </main>
     );
   }
