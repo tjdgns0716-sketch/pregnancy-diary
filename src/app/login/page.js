@@ -22,16 +22,6 @@ export default function Login() {
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
 
-  // Apply gradient background to the entire body when in landing mode
-  useEffect(() => {
-    if (mode === "landing") {
-      document.body.style.background = "radial-gradient(circle at 50% 20%, #E8DEFF 0%, #F5F0FF 40%, #FFFDFD 100%)";
-    } else {
-      document.body.style.background = "";
-    }
-    return () => { document.body.style.background = ""; };
-  }, [mode]);
-
   const agreeTerms = false; // dummy replace block sync
   const agreePrivacy = false;
   const [agreeSensitive, setAgreeSensitive] = useState(false);
@@ -318,7 +308,11 @@ export default function Login() {
 
   if (mode === "landing") {
     return (
-      <main className="main-content" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'transparent' }}>
+      <>
+        {/* Full screen background for desktop & mobile */}
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: -1, background: 'radial-gradient(circle at 50% 20%, #E8DEFF 0%, #F5F0FF 40%, #FFFDFD 100%)' }} />
+        
+        <main className="main-content" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'transparent', boxShadow: 'none' }}>
         
         {/* Header / Hero */}
         <section className="animate-fade-up" style={{ padding: '80px 20px 40px', textAlign: 'center' }}>
@@ -445,6 +439,7 @@ export default function Login() {
           .hide-scrollbar::-webkit-scrollbar { display: none; }
         `}} />
       </main>
+      </>
     );
   }
 
