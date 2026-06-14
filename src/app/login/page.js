@@ -204,6 +204,17 @@ export default function Login() {
     setLoading(true);
     try {
       if (mode === "signup") {
+        if (!/^[0-9]{2}(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])$/.test(birthdate)) {
+          alert("생년월일은 6자리 숫자(YYMMDD) 형식으로 올바르게 입력해 주세요. (예: 900101)");
+          setLoading(false);
+          return;
+        }
+        if (!/^[0-9]{4}$/.test(phoneLast4)) {
+          alert("휴대폰 뒷번호는 4자리 숫자로 입력해 주세요.");
+          setLoading(false);
+          return;
+        }
+        
         const { data, error } = await supabase.auth.signUp({ 
           email, 
           password,
@@ -255,6 +266,14 @@ export default function Login() {
 
   const handleFindId = async (e) => {
     e.preventDefault();
+    if (!/^[0-9]{2}(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])$/.test(birthdate)) {
+      alert("생년월일은 6자리 숫자(YYMMDD) 형식으로 올바르게 입력해 주세요. (예: 900101)");
+      return;
+    }
+    if (!/^[0-9]{4}$/.test(phoneLast4)) {
+      alert("휴대폰 뒷번호는 4자리 숫자로 입력해 주세요.");
+      return;
+    }
     setLoading(true);
     try {
       const { data, error } = await supabase.rpc('find_user_emails', { 
@@ -669,18 +688,18 @@ export default function Login() {
               />
               <input 
                 type="text" 
-                placeholder="생년월일 8자리 (예: 19900101)" 
+                placeholder="생년월일 6자리 (예: 900101)" 
                 value={birthdate}
-                onChange={(e) => setBirthdate(e.target.value)}
+                onChange={(e) => setBirthdate(e.target.value.replace(/[^0-9]/g, ''))}
                 required
-                maxLength={8}
+                maxLength={6}
                 style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.9rem', fontFamily: 'inherit' }}
               />
               <input 
                 type="text" 
                 placeholder="휴대폰 뒷 4자리 (예: 1234)" 
                 value={phoneLast4}
-                onChange={(e) => setPhoneLast4(e.target.value)}
+                onChange={(e) => setPhoneLast4(e.target.value.replace(/[^0-9]/g, ''))}
                 required
                 maxLength={4}
                 style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.9rem', fontFamily: 'inherit' }}
@@ -722,18 +741,18 @@ export default function Login() {
               />
               <input 
                 type="text" 
-                placeholder="생년월일 8자리 (예: 19900101)" 
+                placeholder="생년월일 6자리 (예: 900101)" 
                 value={birthdate}
-                onChange={(e) => setBirthdate(e.target.value)}
+                onChange={(e) => setBirthdate(e.target.value.replace(/[^0-9]/g, ''))}
                 required
-                maxLength={8}
+                maxLength={6}
                 style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.9rem', fontFamily: 'inherit' }}
               />
               <input 
                 type="text" 
                 placeholder="휴대폰 뒷 4자리 (예: 1234)" 
                 value={phoneLast4}
-                onChange={(e) => setPhoneLast4(e.target.value)}
+                onChange={(e) => setPhoneLast4(e.target.value.replace(/[^0-9]/g, ''))}
                 required
                 maxLength={4}
                 style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.9rem', fontFamily: 'inherit' }}
