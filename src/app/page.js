@@ -990,111 +990,110 @@ export default function Home() {
           display: 'flex', justifyContent: 'center', alignItems: 'flex-end'
         }}>
           <div style={{
-            width: '100%', maxWidth: '480px', height: '80vh',
+            width: '100%', maxWidth: '480px', height: '85vh',
             backgroundColor: 'var(--card-bg)', borderTopLeftRadius: '20px', borderTopRightRadius: '20px',
-            padding: '20px', display: 'block',
-            boxShadow: '0 -4px 20px rgba(0,0,0,0.1)', overflowY: 'auto'
+            display: 'flex', flexDirection: 'column',
+            boxShadow: '0 -4px 20px rgba(0,0,0,0.1)', overflow: 'hidden'
           }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+            
+            {/* Sticky Header */}
+            <div style={{ padding: '20px 20px 10px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
               <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>일기 쓰기</span>
               <span onClick={() => setIsWriteModalOpen(false)} style={{ fontSize: '1.5rem', cursor: 'pointer' }}>×</span>
             </div>
-            
-            {/* Modal Actions */}
-            <div style={{ display: 'flex', gap: '10px', marginBottom: '15px', flexWrap: 'wrap', flexShrink: 0 }}>
-               <button 
-                 onClick={() => setShowBadgeSelector(!showBadgeSelector)}
-                 style={{ fontSize: '0.85rem', padding: '6px 12px', borderRadius: '15px', border: '1px solid var(--border-color)', backgroundColor: 'white', cursor: 'pointer' }}>
-                 + 기분 뱃지 추가
-               </button>
-               <button 
-                 onClick={() => setShowPrivateContentInput(!showPrivateContentInput)}
-                 style={{ fontSize: '0.85rem', padding: '6px 12px', borderRadius: '15px', border: showPrivateContentInput ? '1px solid var(--text-primary)' : '1px solid var(--border-color)', backgroundColor: showPrivateContentInput ? '#f0f0f0' : 'white', cursor: 'pointer', color: 'var(--text-primary)' }}>
-                 🔒 비밀 일기 추가
-               </button>
-            </div>
 
-            {/* Badge Selector Popup */}
-            {showBadgeSelector && (
-              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '15px', padding: '10px', backgroundColor: 'var(--card-bg)', borderRadius: '10px', border: '1px solid var(--border-color)', maxHeight: '160px', overflowY: 'auto', flexShrink: 0 }}>
-                {[
-                  // 신체/컨디션
-                  '😊 컨디션 최고!', '😢 감정 기복이 심해요', '😠 예민해요', '🥱 무기력해요', '😪 눕고만 싶어요', '😵 어지러워요/빈혈',
-                  // 증상
-                  '🤢 입덧으로 고생 중', '😴 잠이 쏟아져요', '👀 불면증이에요', 
-                  '🦶 다리가 붓고 무거워요', '🤕 허리/골반이 아파요', '🚽 화장실 자주 가요', '🤰 배가 뭉쳐요',
-                  // 음식/식욕
-                  '🍓 상큼한 게 땡겨요', '🍎 과일이 땡겨요', '🌶️ 매운 게 땡겨요', '🍰 달달한 게 땡겨요', '🍖 고기가 땡겨요', '🍕 기름진/밀가루 땡겨요', '🍚 밥맛이 없어요',
-                  // 아기/병원/이벤트
-                  '👶 태동이 느껴져요', '👣 역사적인 첫 태동!', '🩺 병원 다녀온 날', '💉 초음파/검사 한 날',
-                  // 일상/태교
-                  '💊 영양제 챙겨 먹음', '🏃‍♀️ 가볍게 산책했어요', '🧘‍♀️ 임산부 요가/스트레칭', '🛍️ 아기 용품 샀어요', '🍼 태교 동화/음악'
-                ].map(badge => (
-                  <span 
-                    key={badge} 
-                    onClick={() => {
-                      if (!selectedBadges.includes(badge)) {
-                        setSelectedBadges([...selectedBadges, badge]);
-                      }
-                      setShowBadgeSelector(false);
-                    }}
-                    style={{ fontSize: '0.8rem', backgroundColor: 'white', padding: '6px 12px', borderRadius: '15px', cursor: 'pointer', border: '1px solid var(--border-color)', whiteSpace: 'nowrap' }}>
-                    {badge}
-                  </span>
-                ))}
+            {/* Scrollable Body */}
+            <div style={{ padding: '0 20px', flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
+              
+              {/* Modal Actions */}
+              <div style={{ display: 'flex', gap: '10px', marginBottom: '15px', flexWrap: 'wrap', flexShrink: 0 }}>
+                 <button 
+                   onClick={() => setShowBadgeSelector(!showBadgeSelector)}
+                   style={{ fontSize: '0.85rem', padding: '6px 12px', borderRadius: '15px', border: '1px solid var(--border-color)', backgroundColor: 'white', cursor: 'pointer' }}>
+                   + 기분 뱃지 추가
+                 </button>
+                 <button 
+                   onClick={() => setShowPrivateContentInput(!showPrivateContentInput)}
+                   style={{ fontSize: '0.85rem', padding: '6px 12px', borderRadius: '15px', border: showPrivateContentInput ? '1px solid var(--text-primary)' : '1px solid var(--border-color)', backgroundColor: showPrivateContentInput ? '#f0f0f0' : 'white', cursor: 'pointer', color: 'var(--text-primary)' }}>
+                   🔒 비밀 일기 추가
+                 </button>
               </div>
-            )}
 
-            {/* Selected Badges Area */}
-            {selectedBadges.length > 0 && (
-              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '15px', flexShrink: 0 }}>
-                {selectedBadges.map(badge => (
-                  <span key={badge} style={{ fontSize: '0.8rem', backgroundColor: 'var(--accent-color)', color: 'white', padding: '4px 10px', borderRadius: '15px', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                    {badge}
-                    <span style={{ cursor: 'pointer', fontSize: '0.9rem' }} onClick={() => setSelectedBadges(selectedBadges.filter(b => b !== badge))}>×</span>
-                  </span>
-                ))}
-              </div>
-            )}
-
-            <textarea 
-              value={diaryContent}
-              onChange={(e) => setDiaryContent(e.target.value)}
-              style={{ 
-                width: '100%', backgroundColor: 'transparent', border: 'none', outline: 'none', resize: 'none', 
-                fontSize: '1.05rem', color: 'var(--text-primary)', fontFamily: 'inherit', minHeight: '160px',
-                lineHeight: '32px', padding: '0 5px',
-                backgroundImage: 'repeating-linear-gradient(transparent, transparent 31px, var(--border-color) 31px, var(--border-color) 32px)',
-                backgroundAttachment: 'local'
-              }}
-            />
-            
-            {showPrivateContentInput && (
-              <div style={{ marginTop: '10px', paddingTop: '15px', borderTop: '1px dashed var(--border-color)', display: 'flex', flexDirection: 'column', width: '100%' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '10px' }}>
-                  <span style={{ fontSize: '0.85rem' }}>🔒</span>
-                  <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 'bold' }}>나만의 비밀 이야기</span>
+              {/* Badge Selector Popup (No nested scrollbar, let it expand) */}
+              {showBadgeSelector && (
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '15px', padding: '10px', backgroundColor: 'rgba(0,0,0,0.03)', borderRadius: '10px', border: '1px solid var(--border-color)', flexShrink: 0 }}>
+                  {[
+                    '😊 컨디션 최고!', '😢 감정 기복이 심해요', '😠 예민해요', '🥱 무기력해요', '😪 눕고만 싶어요', '😵 어지러워요/빈혈',
+                    '🤢 입덧으로 고생 중', '😴 잠이 쏟아져요', '👀 불면증이에요', 
+                    '🦶 다리가 붓고 무거워요', '🤕 허리/골반이 아파요', '🚽 화장실 자주 가요', '🤰 배가 뭉쳐요',
+                    '🍓 상큼한 게 땡겨요', '🍎 과일이 땡겨요', '🌶️ 매운 게 땡겨요', '🍰 달달한 게 땡겨요', '🍖 고기가 땡겨요', '🍕 기름진/밀가루 땡겨요', '🍚 밥맛이 없어요',
+                    '👶 태동이 느껴져요', '👣 역사적인 첫 태동!', '🩺 병원 다녀온 날', '💉 초음파/검사 한 날',
+                    '💊 영양제 챙겨 먹음', '🏃‍♀️ 가볍게 산책했어요', '🧘‍♀️ 임산부 요가/스트레칭', '🛍️ 아기 용품 샀어요', '🍼 태교 동화/음악'
+                  ].map(badge => (
+                    <span 
+                      key={badge} 
+                      onClick={() => {
+                        if (!selectedBadges.includes(badge)) {
+                          setSelectedBadges([...selectedBadges, badge]);
+                        }
+                        setShowBadgeSelector(false);
+                      }}
+                      style={{ fontSize: '0.8rem', backgroundColor: 'white', padding: '6px 12px', borderRadius: '15px', cursor: 'pointer', border: '1px solid var(--border-color)', whiteSpace: 'nowrap' }}>
+                      {badge}
+                    </span>
+                  ))}
                 </div>
-                <textarea 
-                  value={privateContent}
-                  onChange={(e) => setPrivateContent(e.target.value)}
-                  placeholder="아빠에겐 보이지 않는 비밀 이야기를 적어보세요"
-                  style={{ 
-                    width: '100%', backgroundColor: 'transparent', border: 'none', outline: 'none', resize: 'none', 
-                    fontSize: '1.05rem', color: 'var(--text-primary)', fontFamily: 'inherit', minHeight: '128px',
-                    lineHeight: '32px', padding: '0 5px',
-                    backgroundImage: 'repeating-linear-gradient(transparent, transparent 31px, var(--border-color) 31px, var(--border-color) 32px)',
-                    backgroundAttachment: 'local'
-                  }}
-                />
-              </div>
-            )}
+              )}
 
-            <div style={{ display: 'flex', gap: '10px', marginTop: '20px', flexDirection: 'column', flexShrink: 0 }}>
+              {/* Selected Badges Area */}
+              {selectedBadges.length > 0 && (
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '15px', flexShrink: 0 }}>
+                  {selectedBadges.map(badge => (
+                    <span key={badge} style={{ fontSize: '0.8rem', backgroundColor: 'var(--accent-color)', color: 'white', padding: '4px 10px', borderRadius: '15px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                      {badge}
+                      <span style={{ cursor: 'pointer', fontSize: '0.9rem' }} onClick={() => setSelectedBadges(selectedBadges.filter(b => b !== badge))}>×</span>
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              <textarea 
+                value={diaryContent}
+                onChange={(e) => setDiaryContent(e.target.value)}
+                style={{ 
+                  width: '100%', backgroundColor: 'transparent', border: 'none', outline: 'none', resize: 'vertical', 
+                  fontSize: '1.05rem', color: 'var(--text-primary)', fontFamily: 'inherit', minHeight: '160px',
+                  lineHeight: '32px', padding: '0 5px', flexShrink: 0,
+                  backgroundImage: 'repeating-linear-gradient(transparent, transparent 31px, var(--border-color) 31px, var(--border-color) 32px)',
+                  backgroundAttachment: 'local'
+                }}
+              />
+              
+              {showPrivateContentInput && (
+                <div style={{ marginTop: '10px', paddingTop: '15px', borderTop: '1px dashed var(--border-color)', display: 'flex', flexDirection: 'column', width: '100%', flexShrink: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '10px' }}>
+                    <span style={{ fontSize: '0.85rem' }}>🔒</span>
+                    <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 'bold' }}>나만의 비밀 이야기</span>
+                  </div>
+                  <textarea 
+                    value={privateContent}
+                    onChange={(e) => setPrivateContent(e.target.value)}
+                    placeholder="아빠에겐 보이지 않는 비밀 이야기를 적어보세요"
+                    style={{ 
+                      width: '100%', backgroundColor: 'transparent', border: 'none', outline: 'none', resize: 'vertical', 
+                      fontSize: '1.05rem', color: 'var(--text-primary)', fontFamily: 'inherit', minHeight: '128px',
+                      lineHeight: '32px', padding: '0 5px',
+                      backgroundImage: 'repeating-linear-gradient(transparent, transparent 31px, var(--border-color) 31px, var(--border-color) 32px)',
+                      backgroundAttachment: 'local'
+                    }}
+                  />
+                </div>
+              )}
+
               {/* Image Preview Area */}
               {attachedImage && (
-                <div style={{ position: 'relative', width: '100%', borderRadius: '8px', overflow: 'hidden', marginBottom: '10px', backgroundColor: 'var(--bg-color)', display: 'flex', justifyContent: 'center' }}>
-                  <img src={attachedImage} alt="미리보기" style={{ maxWidth: '100%', maxHeight: '300px', objectFit: 'contain', borderRadius: '8px' }} />
+                <div style={{ position: 'relative', width: '100%', borderRadius: '8px', overflow: 'hidden', marginTop: '15px', marginBottom: '10px', backgroundColor: 'var(--bg-color)', display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
+                  <img src={attachedImage} alt="미리보기" style={{ maxWidth: '100%', maxHeight: '400px', objectFit: 'contain', borderRadius: '8px' }} />
                   <button 
                     onClick={() => setAttachedImage(null)}
                     style={{ position: 'absolute', top: '5px', right: '5px', background: 'rgba(0,0,0,0.5)', color: 'white', border: 'none', borderRadius: '50%', width: '24px', height: '24px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
@@ -1103,29 +1102,30 @@ export default function Home() {
                   </button>
                 </div>
               )}
+            </div>
 
-              <div style={{ display: 'flex', gap: '5px' }}>
-                <input 
-                  type="file" 
-                  accept="image/*" 
-                  onChange={handleImageUpload} 
-                  ref={fileInputRef}
-                  style={{ display: 'none' }} 
-                />
-                <button 
-                  onClick={() => fileInputRef.current?.click()}
-                  disabled={isUploading}
-                  style={{ flex: 1, padding: '15px', borderRadius: '10px', border: 'none', backgroundColor: '#e0dcd3', cursor: isUploading ? 'not-allowed' : 'pointer', fontSize: '0.9rem' }}
-                >
-                  {isUploading ? '업로드 중...' : (attachedImage ? '사진 변경' : '사진 첨부')}
-                </button>
-                <button 
-                  onClick={handleSaveDiary} 
-                  disabled={isUploading}
-                  style={{ flex: 1, padding: '15px', borderRadius: '10px', border: 'none', backgroundColor: 'var(--accent-color)', color: 'white', cursor: isUploading ? 'not-allowed' : 'pointer', opacity: isUploading ? 0.7 : 1, fontSize: '0.9rem', fontWeight: 'bold' }}>
-                  {selectedDayDiary ? "수정하기" : "저장하기"}
-                </button>
-              </div>
+            {/* Sticky Footer for Actions */}
+            <div style={{ padding: '15px 20px', borderTop: '1px solid var(--border-color)', backgroundColor: 'var(--card-bg)', flexShrink: 0, display: 'flex', gap: '5px' }}>
+              <input 
+                type="file" 
+                accept="image/*" 
+                onChange={handleImageUpload} 
+                ref={fileInputRef}
+                style={{ display: 'none' }} 
+              />
+              <button 
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isUploading}
+                style={{ flex: 1, padding: '15px', borderRadius: '10px', border: 'none', backgroundColor: '#e0dcd3', cursor: isUploading ? 'not-allowed' : 'pointer', fontSize: '0.9rem' }}
+              >
+                {isUploading ? '업로드 중...' : (attachedImage ? '사진 변경' : '사진 첨부')}
+              </button>
+              <button 
+                onClick={handleSaveDiary} 
+                disabled={isUploading}
+                style={{ flex: 1, padding: '15px', borderRadius: '10px', border: 'none', backgroundColor: 'var(--accent-color)', color: 'white', cursor: isUploading ? 'not-allowed' : 'pointer', opacity: isUploading ? 0.7 : 1, fontSize: '0.9rem', fontWeight: 'bold' }}>
+                {selectedDayDiary ? "수정하기" : "저장하기"}
+              </button>
             </div>
           </div>
         </div>
@@ -1140,21 +1140,24 @@ export default function Home() {
         }}>
           <div style={{
             width: '100%', maxWidth: '480px', backgroundColor: 'var(--card-bg)', 
-            maxHeight: '90vh', overflowY: 'auto',
+            maxHeight: '90vh', display: 'flex', flexDirection: 'column', overflow: 'hidden',
             borderTopLeftRadius: '20px', borderTopRightRadius: '20px',
-            padding: '20px', display: 'block',
             boxShadow: '0 -4px 20px rgba(0,0,0,0.1)'
           }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+            <div style={{ padding: '20px 20px 10px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
               <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>일정 추가</span>
               <span onClick={() => setIsScheduleModalOpen(false)} style={{ fontSize: '1.5rem', cursor: 'pointer' }}>×</span>
             </div>
-            <input type="text" value={scheduleTitle} onChange={(e) => setScheduleTitle(e.target.value)} placeholder="어떤 일정인가요? (내용을 지우고 저장하면 삭제됩니다)" style={{ padding: '15px', borderRadius: '8px', border: '1px solid var(--border-color)', marginBottom: '10px', fontSize: '1rem', fontFamily: 'inherit', width: '100%', boxSizing: 'border-box' }} />
-            <div style={{ display: 'flex', gap: '10px', marginBottom: '20px', width: '100%' }}>
-              <input type="date" value={scheduleDate || `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(selectedDate).padStart(2, '0')}`} onChange={(e) => setScheduleDate(e.target.value)} style={{ flex: 1, padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.95rem', fontFamily: 'inherit', color: 'var(--text-primary)', boxSizing: 'border-box' }} />
-              <input type="time" value={scheduleTime} onChange={(e) => setScheduleTime(e.target.value)} style={{ flex: 1, padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.95rem', fontFamily: 'inherit', color: 'var(--text-primary)', boxSizing: 'border-box' }} />
+            
+            <div style={{ padding: '0 20px', flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <input type="text" value={scheduleTitle} onChange={(e) => setScheduleTitle(e.target.value)} placeholder="어떤 일정인가요? (내용을 지우고 저장하면 삭제됩니다)" style={{ padding: '15px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '1rem', fontFamily: 'inherit', width: '100%', boxSizing: 'border-box' }} />
+              <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
+                <input type="date" value={scheduleDate || `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(selectedDate).padStart(2, '0')}`} onChange={(e) => setScheduleDate(e.target.value)} style={{ flex: 1, padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.95rem', fontFamily: 'inherit', color: 'var(--text-primary)', boxSizing: 'border-box' }} />
+                <input type="time" value={scheduleTime} onChange={(e) => setScheduleTime(e.target.value)} style={{ flex: 1, padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.95rem', fontFamily: 'inherit', color: 'var(--text-primary)', boxSizing: 'border-box' }} />
+              </div>
             </div>
-            <div style={{ display: 'flex', gap: '10px' }}>
+
+            <div style={{ padding: '15px 20px', display: 'flex', gap: '10px', flexShrink: 0, backgroundColor: 'var(--card-bg)', borderTop: '1px solid var(--border-color)' }}>
               {selectedDaySchedule && (
                 <button onClick={handleDeleteSchedule} style={{ padding: '15px', borderRadius: '10px', border: 'none', backgroundColor: '#f5d6d1', color: '#c96b63', cursor: 'pointer', fontWeight: 'bold' }}>
                   삭제
