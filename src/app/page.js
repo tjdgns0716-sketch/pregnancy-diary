@@ -827,10 +827,19 @@ export default function Home() {
                     cursor: currentUserRole === 'mother' ? 'pointer' : 'default'
                   }}>
                     <span style={{ fontSize: '1.2rem' }}>🗓️</span>
-                    <div>
+                    <div style={{ flex: 1 }}>
                       <p style={{ fontSize: '0.95rem', color: 'var(--text-primary)' }}>{selectedDaySchedule.title}</p>
                       {selectedDaySchedule.time && <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{formatTime(selectedDaySchedule.time)}</p>}
                     </div>
+                    {currentUserRole === 'mother' && (
+                      <button 
+                        onClick={(e) => { e.stopPropagation(); handleDeleteSchedule(); }} 
+                        style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#c96b63', fontSize: '1.2rem', padding: '5px' }} 
+                        title="일정 삭제"
+                      >
+                        🗑️
+                      </button>
+                    )}
                   </div>
                 )}
 
@@ -1150,7 +1159,7 @@ export default function Home() {
             </div>
             
             <div style={{ padding: '0 20px', flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <input type="text" value={scheduleTitle} onChange={(e) => setScheduleTitle(e.target.value)} placeholder="어떤 일정인가요? (내용을 지우고 저장하면 삭제됩니다)" style={{ padding: '15px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '1rem', fontFamily: 'inherit', width: '100%', boxSizing: 'border-box' }} />
+              <input type="text" value={scheduleTitle} onChange={(e) => setScheduleTitle(e.target.value)} placeholder="어떤 일정인가요?" style={{ padding: '15px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '1rem', fontFamily: 'inherit', width: '100%', boxSizing: 'border-box' }} />
               <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
                 <input type="date" value={scheduleDate || `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(selectedDate).padStart(2, '0')}`} onChange={(e) => setScheduleDate(e.target.value)} style={{ flex: 1, padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.95rem', fontFamily: 'inherit', color: 'var(--text-primary)', boxSizing: 'border-box' }} />
                 <input type="time" value={scheduleTime} onChange={(e) => setScheduleTime(e.target.value)} style={{ flex: 1, padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.95rem', fontFamily: 'inherit', color: 'var(--text-primary)', boxSizing: 'border-box' }} />
@@ -1158,11 +1167,6 @@ export default function Home() {
             </div>
 
             <div style={{ padding: '15px 20px', display: 'flex', gap: '10px', flexShrink: 0, backgroundColor: 'var(--card-bg)', borderTop: '1px solid var(--border-color)' }}>
-              {selectedDaySchedule && (
-                <button onClick={handleDeleteSchedule} style={{ padding: '15px', borderRadius: '10px', border: 'none', backgroundColor: '#f5d6d1', color: '#c96b63', cursor: 'pointer', fontWeight: 'bold' }}>
-                  삭제
-                </button>
-              )}
               <button onClick={handleSaveSchedule} style={{ flex: 1, padding: '15px', borderRadius: '10px', border: 'none', backgroundColor: 'var(--text-primary)', color: 'white', cursor: 'pointer', fontWeight: 'bold' }}>
                 {selectedDaySchedule ? "수정하기" : "등록하기"}
               </button>
