@@ -640,8 +640,8 @@ export default function Login() {
             </button>
 
             
-            <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textAlign: 'center', marginTop: '5px' }}>
-              소셜 로그인 시 <span onClick={() => openModal("서비스 이용약관", termsOfServiceText)} style={{ textDecoration: 'underline', cursor: 'pointer' }}>서비스 이용약관</span> 및 <span onClick={() => openModal("개인정보 수집 및 이용 동의", privacyPolicyText)} style={{ textDecoration: 'underline', cursor: 'pointer' }}>개인정보처리방침</span>에 동의한 것으로 간주합니다.
+            <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textAlign: 'center', marginTop: '5px', lineHeight: '1.4' }}>
+              소셜 로그인 시 <span onClick={() => openModal("서비스 이용약관", termsOfServiceText)} style={{ textDecoration: 'underline', cursor: 'pointer' }}>서비스 이용약관</span>, <span onClick={() => openModal("개인정보 수집 및 이용 동의", privacyPolicyText)} style={{ textDecoration: 'underline', cursor: 'pointer' }}>개인정보처리방침</span> 및 <span onClick={() => openModal("민감정보 수집 및 이용 동의", sensitiveInfoText)} style={{ textDecoration: 'underline', cursor: 'pointer' }}>민감정보 수집 동의</span>에 동의한 것으로 간주합니다.
             </p>
           </div>
 
