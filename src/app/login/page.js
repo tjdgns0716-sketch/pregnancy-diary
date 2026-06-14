@@ -318,13 +318,23 @@ export default function Login() {
         
         {/* Header / Hero */}
         <section className="animate-fade-up" style={{ 
-          height: '520px', 
+          height: '480px', 
           position: 'relative', 
-          backgroundImage: 'url(/images/hero.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'top center',
-          backgroundRepeat: 'no-repeat'
+          backgroundColor: '#FDECE4', /* Matches the peach wall color of the image */
+          overflow: 'hidden'
         }}>
+          
+          {/* Hero Image shifted to the right */}
+          <img src="/images/hero.png" alt="" style={{
+            position: 'absolute',
+            right: '-80px',
+            bottom: '0',
+            height: '110%',
+            zIndex: 1,
+            pointerEvents: 'none',
+            objectFit: 'contain',
+            objectPosition: 'right bottom'
+          }} />
           
           {/* Hamburger Menu (Mockup visual) */}
           <div style={{ position: 'absolute', top: '20px', right: '20px', cursor: 'pointer', zIndex: 20 }}>
@@ -355,12 +365,12 @@ export default function Login() {
 
         {/* Content Container matching mockup (White rounded box) */}
         <div style={{ 
-          backgroundColor: 'rgba(255, 255, 255, 0.85)', 
+          backgroundColor: 'rgba(255, 255, 255, 0.9)', 
           backdropFilter: 'blur(15px)', 
           borderRadius: '30px', 
-          margin: '-50px 15px 0 15px', 
+          margin: '-40px 15px 0 15px', 
           padding: '30px 0',
-          boxShadow: '0 -10px 40px rgba(0,0,0,0.03)',
+          boxShadow: '0 -10px 40px rgba(0,0,0,0.04)',
           display: 'flex',
           flexDirection: 'column',
           position: 'relative',
@@ -501,7 +511,7 @@ export default function Login() {
 
         {/* CSS overrides for Landing Mode */}
         <style dangerouslySetInnerHTML={{__html: `
-          body, .app-container { background: #FCF9F5 !important; }
+          body, .app-container { background: #FDF9F6 !important; }
           .hide-scrollbar::-webkit-scrollbar { display: none; }
         `}} />
       </main>
