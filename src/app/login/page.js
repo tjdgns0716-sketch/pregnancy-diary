@@ -455,13 +455,13 @@ export default function Login() {
               <div 
                 onClick={() => setRole("mother")}
                 style={{ flex: 1, aspectRatio: '1', backgroundColor: 'var(--card-bg)', border: '2px solid var(--accent-color)', borderRadius: '15px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: 'var(--shadow-sm)' }}>
-                <span style={{ fontSize: '3rem' }}>👩</span>
+                <img src="/mother_icon.jpg" alt="예비 엄마 아이콘" style={{ width: '80px', height: '80px', objectFit: 'contain' }} />
                 <span style={{ marginTop: '10px', fontWeight: 'bold', color: 'var(--text-primary)' }}>예비 엄마</span>
               </div>
               <div 
                 onClick={() => setRole("partner")}
                 style={{ flex: 1, aspectRatio: '1', backgroundColor: 'var(--card-bg)', border: '2px solid #5c5227', borderRadius: '15px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: 'var(--shadow-sm)' }}>
-                <span style={{ fontSize: '3rem' }}>👨</span>
+                <img src="/father_icon.jpg" alt="예비 아빠 아이콘" style={{ width: '80px', height: '80px', objectFit: 'contain' }} />
                 <span style={{ marginTop: '10px', fontWeight: 'bold', color: 'var(--text-primary)' }}>예비 아빠</span>
               </div>
             </div>
