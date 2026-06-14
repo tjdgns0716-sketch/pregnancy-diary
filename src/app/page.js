@@ -983,6 +983,7 @@ export default function Home() {
                 <textarea 
                   value={privateContent}
                   onChange={(e) => setPrivateContent(e.target.value)}
+                  placeholder="아빠에겐 보이지 않는 비밀 이야기를 적어보세요"
                   style={{ 
                     flex: 1, backgroundColor: 'transparent', border: 'none', outline: 'none', resize: 'none', 
                     fontSize: '1.05rem', color: 'var(--text-primary)', fontFamily: 'inherit', minHeight: '128px',
