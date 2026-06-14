@@ -557,13 +557,7 @@ export default function Login() {
               style={{ padding: '15px', borderRadius: '8px', border: '1px solid #ddd', backgroundColor: 'white', color: '#333', fontSize: '1rem', fontWeight: 'bold', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
               <span style={{ fontSize: '1.2rem' }}>G</span> 구글 계정으로 시작하기
             </button>
-            
-            <button 
-              onClick={() => handleOAuthLogin('kakao')}
-              disabled={loading}
-              style={{ padding: '15px', borderRadius: '8px', border: 'none', backgroundColor: '#FEE500', color: '#000000', fontSize: '1rem', fontWeight: 'bold', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
-              <span style={{ fontSize: '1.2rem' }}>💬</span> 카카오 계정으로 시작하기
-            </button>
+
             
             <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textAlign: 'center', marginTop: '5px' }}>
               소셜 로그인 시 서비스 이용약관 및 개인정보처리방침에 동의한 것으로 간주합니다.
