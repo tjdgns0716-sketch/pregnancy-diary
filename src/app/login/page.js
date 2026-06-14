@@ -318,53 +318,49 @@ export default function Login() {
         
         {/* Header / Hero */}
         <section className="animate-fade-up" style={{ 
-          height: '460px', 
+          height: '520px', 
           position: 'relative', 
           backgroundColor: '#FDF7F3',
           overflow: 'hidden'
         }}>
           
-          {/* Background Image shifted right, with left fade to blend perfectly */}
-          <div style={{
+          {/* Background Image: using img tag positioned properly */}
+          <img src="/images/hero.png" alt="" style={{
             position: 'absolute',
-            top: '-20px',
-            right: '-130px', 
-            width: '140%', 
-            height: '115%',
-            backgroundImage: 'url(/images/hero.png)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'right center',
-            backgroundRepeat: 'no-repeat',
-            WebkitMaskImage: 'linear-gradient(to right, transparent 5%, transparent 20%, black 50%)',
-            maskImage: 'linear-gradient(to right, transparent 5%, transparent 20%, black 50%)',
+            bottom: '-20px',
+            right: '-25%', 
+            height: '105%', 
+            width: 'auto',
             zIndex: 1,
-            pointerEvents: 'none'
+            pointerEvents: 'none',
+            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, transparent 15%, black 45%)',
           }} />
           
           {/* Hamburger Menu (Mockup visual) */}
           <div style={{ position: 'absolute', top: '20px', right: '20px', cursor: 'pointer', zIndex: 20 }}>
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M4 12H20M4 6H20M4 18H20" stroke="#888" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 12H20M4 6H20M4 18H20" stroke="#888" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>
 
           {/* Text Overlay */}
-          <div style={{ position: 'absolute', top: '15%', left: '20px', zIndex: 10, maxWidth: '65%' }}>
-            <div className="animate-float" style={{ fontSize: '3rem', marginBottom: '10px' }}>💜</div>
-            <h1 style={{ fontSize: '2.5rem', color: '#333', marginBottom: '15px', letterSpacing: '-0.03em', fontWeight: '800' }}>우리의 열달</h1>
-            <p style={{ fontSize: '1.05rem', color: '#555', lineHeight: '1.6', marginBottom: '30px', wordBreak: 'keep-all', fontWeight: '500' }}>
+          <div style={{ position: 'absolute', top: '10%', left: '25px', zIndex: 10, maxWidth: '75%' }}>
+            <div className="animate-float" style={{ fontSize: '2.5rem', marginBottom: '8px' }}>💜</div>
+            <h1 style={{ fontSize: '3rem', color: '#333', marginBottom: '10px', letterSpacing: '-0.03em', fontWeight: '800' }}>우리의 열달</h1>
+            <p style={{ fontSize: '1.05rem', color: '#666', lineHeight: '1.6', marginBottom: '35px', wordBreak: 'keep-all', fontWeight: '500' }}>
               아내와 남편이 함께 기록하는<br/>가장 특별한 280일의 임신 다이어리
             </p>
             <button 
               className="animate-pulse-btn"
               onClick={() => setMode("login")}
               style={{ 
-                padding: '14px 28px', fontSize: '1.05rem', borderRadius: '40px', 
-                background: 'linear-gradient(90deg, #B490FF 0%, #D4B5FF 100%)', color: 'white', border: 'none', 
-                cursor: 'pointer', fontWeight: 'bold', boxShadow: '0 8px 25px rgba(180, 144, 255, 0.4)',
-                display: 'inline-flex', alignItems: 'center', gap: '8px'
+                padding: '16px 35px', fontSize: '1.15rem', borderRadius: '40px', 
+                background: 'linear-gradient(90deg, #A886FF 0%, #B89CFF 100%)', color: 'white', border: 'none', 
+                cursor: 'pointer', fontWeight: 'bold', boxShadow: '0 10px 25px rgba(168, 134, 255, 0.4)',
+                display: 'inline-flex', alignItems: 'center', gap: '10px',
+                letterSpacing: '0.02em'
               }}>
-              다이어리 시작하기 <span style={{ fontWeight: 'normal' }}>→</span>
+              다이어리 시작하기 <span style={{ fontWeight: 'normal', fontSize: '1.2rem' }}>→</span>
             </button>
           </div>
         </section>
@@ -414,60 +410,71 @@ export default function Login() {
             className="hide-scrollbar"
           >
             
-            {/* Card 1 */}
-            <div style={{ flex: '0 0 85%', maxWidth: '400px', scrollSnapAlign: 'center', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '30px', padding: '40px 25px', boxShadow: '0 10px 40px rgba(0,0,0,0.03)', textAlign: 'center', userSelect: 'none' }}>
-              <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#FFF0F5', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', margin: '0 auto 25px' }}>🍓</div>
-              <h3 style={{ fontSize: '1.2rem', color: '#333', marginBottom: '15px', fontWeight: '700', wordBreak: 'keep-all' }}>은근슬쩍 전하는 속마음</h3>
-              <p style={{ fontSize: '0.95rem', color: '#666', lineHeight: '1.6', wordBreak: 'keep-all' }}>
-                온도 습도 산후 관리부터 사소한 갈등,<br/>임신 중 설마하고 넘겨보세요.<br/>서운했던 감정들을 일기장에<br/>살며시 남겨보세요.
-              </p>
-              <div style={{ marginTop: '25px', display: 'inline-block', padding: '8px 20px', backgroundColor: '#FFF0F5', color: '#FF8A8A', borderRadius: '20px', fontSize: '0.85rem', fontWeight: 'bold' }}>마음 나누기</div>
+            {/* Card 1: Calendar */}
+            <div style={{ flex: '0 0 88%', maxWidth: '400px', scrollSnapAlign: 'center', position: 'relative', userSelect: 'none' }}>
+              <div style={{ height: '260px', backgroundColor: '#FEF4E8', borderRadius: '20px', position: 'relative', overflow: 'hidden', padding: '15px' }}>
+                {/* CSS Calendar Mockup */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '8px', textAlign: 'center', fontSize: '0.75rem', color: '#999', marginTop: '20px' }}>
+                  <span style={{color:'#ff6b6b'}}>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span style={{color:'#4dabf7'}}>토</span>
+                  <div/><div/><div>1</div><div>2</div><div>3</div><div>4</div><div style={{color:'#4dabf7'}}>5</div>
+                  <div style={{color:'#ff6b6b'}}>6</div><div>7</div>
+                  <div style={{backgroundColor:'#FFEAEA', borderRadius:'50%', width:'24px', height:'24px', margin:'0 auto', color:'#FF6B6B', display:'flex', alignItems:'center', justifyContent:'center'}}>8</div>
+                  <div>9</div><div>10</div><div>11</div><div style={{color:'#4dabf7'}}>12</div>
+                  <div style={{color:'#ff6b6b'}}>13</div><div>14</div><div>15</div><div>16</div><div>17</div><div>18</div><div style={{color:'#4dabf7'}}>19</div>
+                  <div style={{color:'#ff6b6b'}}>20</div><div>21</div><div>22</div><div>23</div><div>24</div><div>25</div>
+                  <div style={{position:'relative'}}>
+                    <div style={{backgroundColor:'transparent', borderRadius:'50%', width:'24px', height:'24px', margin:'0 auto', border:'1.5px solid #FF6B6B'}}/>
+                    <span style={{position:'absolute', top:'3px', left:'0', right:'0', color:'#FF6B6B'}}>26</span>
+                  </div>
+                  <div style={{color:'#4dabf7'}}>27</div>
+                  <div style={{color:'#ff6b6b'}}>28</div><div>29</div><div>30</div><div>31</div><div/><div/><div/>
+                </div>
+                {/* Yellow sticky note */}
+                <div style={{ position: 'absolute', bottom: '15px', right: '25px', width: '130px', height: '110px', backgroundColor: '#FFF59D', borderRadius: '5px', padding: '15px', boxShadow: '2px 5px 10px rgba(0,0,0,0.05)', transform: 'rotate(-4deg)', fontSize: '0.85rem', color: '#555', fontFamily: 'serif', lineHeight: '1.4' }}>
+                  사랑해<br/>집에 올 때<br/>맛있는 거 사올게. <span style={{color: '#ff6b6b'}}>♡</span>
+                </div>
+              </div>
+              {/* Text Box */}
+              <div style={{ backgroundColor: 'white', borderRadius: '20px', padding: '25px 20px', marginTop: '-30px', position: 'relative', zIndex: 2, boxShadow: '0 5px 20px rgba(0,0,0,0.03)', textAlign: 'left' }}>
+                <h3 style={{ fontSize: '1.15rem', fontWeight: 'bold', color: '#333', marginBottom: '10px' }}>검진 일정과 메모</h3>
+                <p style={{ fontSize: '0.9rem', color: '#777', lineHeight: '1.5', wordBreak: 'keep-all' }}>예정된 검진을 기록하고,<br/>서로를 위한 따뜻한 메모를 남겨요.</p>
+                <div style={{ position: 'absolute', right: '20px', bottom: '25px', width: '38px', height: '38px', borderRadius: '50%', backgroundColor: '#CBB2FF', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '1.2rem' }}>→</div>
+              </div>
             </div>
 
-            {/* Card 2 */}
-            <div style={{ flex: '0 0 85%', maxWidth: '400px', scrollSnapAlign: 'center', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '30px', padding: '40px 25px', boxShadow: '0 10px 40px rgba(0,0,0,0.03)', textAlign: 'center', userSelect: 'none' }}>
-              <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#FFF8EB', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', margin: '0 auto 25px' }}>✨</div>
-              <h3 style={{ fontSize: '1.2rem', color: '#333', marginBottom: '15px', fontWeight: '700', wordBreak: 'keep-all' }}>센스 만점 예비 아빠</h3>
-              <p style={{ fontSize: '0.95rem', color: '#666', lineHeight: '1.6', wordBreak: 'keep-all' }}>
-                퇴근길 손에 든 단 선물, 받기 힘든<br/>아내의 일기를 보고 무엇이<br/>필요한지 체크해 보세요.<br/>감동을 선물해 보세요.
-              </p>
-              <div style={{ marginTop: '25px', display: 'inline-block', padding: '8px 20px', backgroundColor: '#FFF8EB', color: '#FFA834', borderRadius: '20px', fontSize: '0.85rem', fontWeight: 'bold' }}>서로를 위한 기록</div>
-            </div>
-
-            {/* Card 3 */}
-            <div style={{ flex: '0 0 85%', maxWidth: '400px', scrollSnapAlign: 'center', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '30px', padding: '40px 25px', boxShadow: '0 10px 40px rgba(0,0,0,0.03)', textAlign: 'center', userSelect: 'none' }}>
-              <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#F0F5FF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', margin: '0 auto 25px' }}>💌</div>
-              <h3 style={{ fontSize: '1.2rem', color: '#333', marginBottom: '15px', fontWeight: '700', wordBreak: 'keep-all' }}>얼굴 보고 하지 못한 말</h3>
-              <p style={{ fontSize: '0.95rem', color: '#666', lineHeight: '1.6', wordBreak: 'keep-all' }}>
-                "오늘 하루도 너무 고마워."<br/>쑥스러워 삼켰던 진심을<br/>다이어리를 통해 전해보세요.<br/>사랑이 더 깊어집니다.
-              </p>
-              <div style={{ marginTop: '25px', display: 'inline-block', padding: '8px 20px', backgroundColor: '#F0F5FF', color: '#5A8CFF', borderRadius: '20px', fontSize: '0.85rem', fontWeight: 'bold' }}>진심 전하기</div>
-            </div>
-
-            {/* Card 4 */}
-            <div style={{ flex: '0 0 85%', maxWidth: '400px', scrollSnapAlign: 'center', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '30px', padding: '40px 25px', boxShadow: '0 10px 40px rgba(0,0,0,0.03)', textAlign: 'center', userSelect: 'none' }}>
-              <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#F0FBF4', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', margin: '0 auto 25px' }}>👨‍👩‍👦</div>
-              <h3 style={{ fontSize: '1.2rem', color: '#333', marginBottom: '15px', fontWeight: '700', wordBreak: 'keep-all' }}>진짜 부모가 되어가는 시간</h3>
-              <p style={{ fontSize: '0.95rem', color: '#666', lineHeight: '1.6', wordBreak: 'keep-all' }}>
-                서로를 더 깊이 이해하고 위로하며,<br/>온전한 가족이 되어가는<br/>280일의 아름다운 여정입니다.<br/>함께 준비해 보아요.
-              </p>
-              <div style={{ marginTop: '25px', display: 'inline-block', padding: '8px 20px', backgroundColor: '#F0FBF4', color: '#4CAF50', borderRadius: '20px', fontSize: '0.85rem', fontWeight: 'bold' }}>가족의 탄생</div>
+            {/* Card 2: Diary & Ultrasound */}
+            <div style={{ flex: '0 0 88%', maxWidth: '400px', scrollSnapAlign: 'center', position: 'relative', userSelect: 'none' }}>
+              <div style={{ height: '260px', backgroundColor: '#F0BA8B', borderRadius: '20px', position: 'relative', overflow: 'hidden', padding: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                {/* Diary page */}
+                <div style={{ width: '90%', height: '110%', backgroundColor: '#FFFDF9', borderRadius: '5px', boxShadow: '-5px 0 15px rgba(0,0,0,0.1)', padding: '25px 20px', borderLeft: '10px solid #D69062', position: 'relative' }}>
+                  <p style={{ fontFamily: 'serif', fontSize: '1.05rem', color: '#444', lineHeight: '1.8', textAlign: 'left' }}>
+                    오늘도 아기가<br/>건강하게 잘 자라고<br/>있는 것 같아<br/>참 고맙다. <span style={{color: '#ff6b6b'}}>♡</span>
+                  </p>
+                  {/* Ultrasound mock */}
+                  <div style={{ position: 'absolute', bottom: '30px', right: '10px', width: '130px', height: '90px', backgroundColor: '#222', border: '5px solid white', boxShadow: '0 5px 10px rgba(0,0,0,0.1)', transform: 'rotate(4deg)', overflow: 'hidden' }}>
+                     <div style={{ position:'absolute', top:'20%', left:'30%', width:'50px', height:'50px', backgroundColor:'rgba(255,255,255,0.15)', borderRadius:'50%', filter:'blur(4px)' }} />
+                     <div style={{ position:'absolute', top:'40%', left:'50%', width:'40px', height:'25px', backgroundColor:'rgba(255,255,255,0.2)', borderRadius:'50%', filter:'blur(2px)' }} />
+                     <div style={{ position:'absolute', top:'-8px', left:'35px', width:'50px', height:'16px', backgroundColor:'rgba(255,160,160,0.8)', transform:'rotate(-6deg)' }} />
+                  </div>
+                </div>
+              </div>
+              {/* Text Box */}
+              <div style={{ backgroundColor: 'white', borderRadius: '20px', padding: '25px 20px', marginTop: '-30px', position: 'relative', zIndex: 2, boxShadow: '0 5px 20px rgba(0,0,0,0.03)', textAlign: 'left' }}>
+                <h3 style={{ fontSize: '1.15rem', fontWeight: 'bold', color: '#333', marginBottom: '10px' }}>마음을 남기는 일기</h3>
+                <p style={{ fontSize: '0.9rem', color: '#777', lineHeight: '1.5', wordBreak: 'keep-all' }}>하루의 감정과 생각을 적으며<br/>소중한 순간을 오래 간직해요.</p>
+              </div>
             </div>
 
           </div>
 
           {/* Pagination Indicators */}
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '10px' }}>
-            {[0, 1, 2, 3].map((idx) => (
-              <div key={idx} style={{ 
-                width: '8px', height: '8px', borderRadius: '50%', 
-                backgroundColor: currentSlide === idx ? '#B490FF' : '#E0E0E0',
-                transition: 'background-color 0.3s'
-              }} />
-            ))}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '5px' }}>
+            <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: currentSlide === 0 ? '#B490FF' : '#E0E0E0', transition: 'background-color 0.3s' }} />
+            <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: currentSlide === 1 ? '#B490FF' : '#E0E0E0', transition: 'background-color 0.3s' }} />
+            <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#E0E0E0', transition: 'background-color 0.3s' }} />
           </div>
           
-          <div style={{ textAlign: 'center', marginTop: '20px', color: '#999', fontSize: '0.85rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px' }}>
+          <div style={{ textAlign: 'center', marginTop: '15px', color: '#999', fontSize: '0.85rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px' }}>
             <span style={{ fontSize: '1.2rem' }}>👆</span> 옆으로 밀어 더 보기
           </div>
         </section>
