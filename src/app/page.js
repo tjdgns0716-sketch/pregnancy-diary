@@ -965,8 +965,13 @@ export default function Home() {
             <textarea 
               value={diaryContent}
               onChange={(e) => setDiaryContent(e.target.value)}
-              placeholder="오늘 아빠와 공유하고 싶은 이야기는 무엇인가요?"
-              style={{ flex: 1, backgroundColor: 'transparent', border: 'none', outline: 'none', resize: 'none', fontSize: '1rem', color: 'var(--text-primary)', fontFamily: 'inherit', minHeight: '100px' }}
+              style={{ 
+                flex: 1, backgroundColor: 'transparent', border: 'none', outline: 'none', resize: 'none', 
+                fontSize: '1.05rem', color: 'var(--text-primary)', fontFamily: 'inherit', minHeight: '160px',
+                lineHeight: '32px', padding: '0 5px',
+                backgroundImage: 'repeating-linear-gradient(transparent, transparent 31px, var(--border-color) 31px, var(--border-color) 32px)',
+                backgroundAttachment: 'local'
+              }}
             />
             
             {showPrivateContentInput && (
@@ -978,8 +983,13 @@ export default function Home() {
                 <textarea 
                   value={privateContent}
                   onChange={(e) => setPrivateContent(e.target.value)}
-                  placeholder="아빠에게는 보이지 않는, 오직 나만 볼 수 있는 일기입니다."
-                  style={{ flex: 1, backgroundColor: 'transparent', border: 'none', outline: 'none', resize: 'none', fontSize: '1rem', color: 'var(--text-primary)', fontFamily: 'inherit', minHeight: '100px' }}
+                  style={{ 
+                    flex: 1, backgroundColor: 'transparent', border: 'none', outline: 'none', resize: 'none', 
+                    fontSize: '1.05rem', color: 'var(--text-primary)', fontFamily: 'inherit', minHeight: '128px',
+                    lineHeight: '32px', padding: '0 5px',
+                    backgroundImage: 'repeating-linear-gradient(transparent, transparent 31px, var(--border-color) 31px, var(--border-color) 32px)',
+                    backgroundAttachment: 'local'
+                  }}
                 />
               </div>
             )}
