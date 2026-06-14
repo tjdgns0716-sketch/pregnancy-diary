@@ -318,16 +318,26 @@ export default function Login() {
         
         {/* Header / Hero */}
         <section className="animate-fade-up" style={{ 
+          height: '460px', 
           position: 'relative', 
-          width: '100%',
-          backgroundColor: '#FDF7F3'
+          backgroundColor: '#FDF7F3',
+          overflow: 'hidden'
         }}>
           
-          {/* Background Image scaling exactly to width */}
-          <img src="/images/hero.png" alt="" style={{
-            width: '100%',
-            height: 'auto',
-            display: 'block',
+          {/* Background Image shifted right, with left fade to blend perfectly */}
+          <div style={{
+            position: 'absolute',
+            top: '-20px',
+            right: '-130px', 
+            width: '140%', 
+            height: '115%',
+            backgroundImage: 'url(/images/hero.png)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'right center',
+            backgroundRepeat: 'no-repeat',
+            WebkitMaskImage: 'linear-gradient(to right, transparent 5%, transparent 20%, black 50%)',
+            maskImage: 'linear-gradient(to right, transparent 5%, transparent 20%, black 50%)',
+            zIndex: 1,
             pointerEvents: 'none'
           }} />
           
@@ -364,7 +374,7 @@ export default function Login() {
           backgroundColor: 'rgba(255, 255, 255, 0.9)', 
           backdropFilter: 'blur(15px)', 
           borderRadius: '30px', 
-          margin: '-15% 15px 0 15px', 
+          margin: '-40px 15px 0 15px', 
           padding: '30px 0',
           boxShadow: '0 -10px 40px rgba(0,0,0,0.04)',
           display: 'flex',
