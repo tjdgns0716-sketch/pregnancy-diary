@@ -318,14 +318,18 @@ export default function Login() {
         
         {/* Header / Hero */}
         <section className="animate-fade-up" style={{ 
-          height: '500px', 
           position: 'relative', 
-          backgroundImage: 'url(/images/hero.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'top center',
-          backgroundRepeat: 'no-repeat',
-          overflow: 'hidden'
+          width: '100%',
+          backgroundColor: '#FDF7F3'
         }}>
+          
+          {/* Background Image scaling exactly to width */}
+          <img src="/images/hero.png" alt="" style={{
+            width: '100%',
+            height: 'auto',
+            display: 'block',
+            pointerEvents: 'none'
+          }} />
           
           {/* Hamburger Menu (Mockup visual) */}
           <div style={{ position: 'absolute', top: '20px', right: '20px', cursor: 'pointer', zIndex: 20 }}>
@@ -334,7 +338,8 @@ export default function Login() {
             </svg>
           </div>
 
-          <div style={{ position: 'absolute', top: '70px', left: '20px', zIndex: 10, maxWidth: '65%' }}>
+          {/* Text Overlay */}
+          <div style={{ position: 'absolute', top: '15%', left: '20px', zIndex: 10, maxWidth: '65%' }}>
             <div className="animate-float" style={{ fontSize: '3rem', marginBottom: '10px' }}>💜</div>
             <h1 style={{ fontSize: '2.5rem', color: '#333', marginBottom: '15px', letterSpacing: '-0.03em', fontWeight: '800' }}>우리의 열달</h1>
             <p style={{ fontSize: '1.05rem', color: '#555', lineHeight: '1.6', marginBottom: '30px', wordBreak: 'keep-all', fontWeight: '500' }}>
@@ -359,7 +364,7 @@ export default function Login() {
           backgroundColor: 'rgba(255, 255, 255, 0.9)', 
           backdropFilter: 'blur(15px)', 
           borderRadius: '30px', 
-          margin: '-40px 15px 0 15px', 
+          margin: '-15% 15px 0 15px', 
           padding: '30px 0',
           boxShadow: '0 -10px 40px rgba(0,0,0,0.04)',
           display: 'flex',
