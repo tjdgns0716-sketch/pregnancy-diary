@@ -826,13 +826,15 @@ export default function Home() {
               {selectedDayDiary.image_url && (
                 <div style={{ 
                   width: '100%', 
-                  height: '240px', 
                   position: 'relative', 
                   borderRadius: '8px', 
                   overflow: 'hidden',
                   marginBottom: '15px',
+                  backgroundColor: 'var(--bg-color)',
+                  display: 'flex',
+                  justifyContent: 'center'
                 }}>
-                  <img src={selectedDayDiary.image_url} alt="첨부 사진" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img src={selectedDayDiary.image_url} alt="첨부 사진" style={{ maxWidth: '100%', maxHeight: '400px', objectFit: 'contain', borderRadius: '8px' }} />
                 </div>
               )}
 
@@ -1024,8 +1026,8 @@ export default function Home() {
             <div style={{ display: 'flex', gap: '10px', marginTop: '20px', flexDirection: 'column' }}>
               {/* Image Preview Area */}
               {attachedImage && (
-                <div style={{ position: 'relative', width: '100%', height: '150px', borderRadius: '8px', overflow: 'hidden', marginBottom: '10px' }}>
-                  <img src={attachedImage} alt="미리보기" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <div style={{ position: 'relative', width: '100%', borderRadius: '8px', overflow: 'hidden', marginBottom: '10px', backgroundColor: 'var(--bg-color)', display: 'flex', justifyContent: 'center' }}>
+                  <img src={attachedImage} alt="미리보기" style={{ maxWidth: '100%', maxHeight: '300px', objectFit: 'contain', borderRadius: '8px' }} />
                   <button 
                     onClick={() => setAttachedImage(null)}
                     style={{ position: 'absolute', top: '5px', right: '5px', background: 'rgba(0,0,0,0.5)', color: 'white', border: 'none', borderRadius: '50%', width: '24px', height: '24px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
