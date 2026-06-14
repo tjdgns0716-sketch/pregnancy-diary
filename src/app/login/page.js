@@ -317,19 +317,26 @@ export default function Login() {
       <main className="main-content" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'transparent', boxShadow: 'none' }}>
         
         {/* Header / Hero */}
-        <section className="animate-fade-up" style={{ padding: '60px 20px 40px', position: 'relative' }}>
+        <section className="animate-fade-up" style={{ 
+          height: '520px', 
+          position: 'relative', 
+          backgroundImage: 'url(/images/hero.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'top center',
+          backgroundRepeat: 'no-repeat'
+        }}>
           
           {/* Hamburger Menu (Mockup visual) */}
-          <div style={{ position: 'absolute', top: '20px', right: '20px', cursor: 'pointer' }}>
+          <div style={{ position: 'absolute', top: '20px', right: '20px', cursor: 'pointer', zIndex: 20 }}>
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M4 12H20M4 6H20M4 18H20" stroke="#888" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>
 
-          <div style={{ position: 'relative', zIndex: 10, maxWidth: '60%' }}>
+          <div style={{ position: 'absolute', top: '70px', left: '20px', zIndex: 10, maxWidth: '65%' }}>
             <div className="animate-float" style={{ fontSize: '3rem', marginBottom: '10px' }}>💜</div>
             <h1 style={{ fontSize: '2.5rem', color: '#333', marginBottom: '15px', letterSpacing: '-0.03em', fontWeight: '800' }}>우리의 열달</h1>
-            <p style={{ fontSize: '1rem', color: '#666', lineHeight: '1.6', marginBottom: '30px', wordBreak: 'keep-all', fontWeight: '400' }}>
+            <p style={{ fontSize: '1.05rem', color: '#555', lineHeight: '1.6', marginBottom: '30px', wordBreak: 'keep-all', fontWeight: '500' }}>
               아내와 남편이 함께 기록하는<br/>가장 특별한 280일의 임신 다이어리
             </p>
             <button 
@@ -344,29 +351,20 @@ export default function Login() {
               다이어리 시작하기 <span style={{ fontWeight: 'normal' }}>→</span>
             </button>
           </div>
-
-          {/* Hero Image (User will provide this image at public/images/hero.png) */}
-          <img src="/images/hero.png" alt="" style={{
-            position: 'absolute',
-            right: '-10px',
-            top: '50px',
-            width: '260px',
-            zIndex: 1,
-            pointerEvents: 'none',
-            objectFit: 'contain'
-          }} />
         </section>
 
         {/* Content Container matching mockup (White rounded box) */}
         <div style={{ 
-          backgroundColor: 'rgba(255, 255, 255, 0.55)', 
-          backdropFilter: 'blur(10px)', 
+          backgroundColor: 'rgba(255, 255, 255, 0.85)', 
+          backdropFilter: 'blur(15px)', 
           borderRadius: '30px', 
-          margin: '0 15px',
+          margin: '-50px 15px 0 15px', 
           padding: '30px 0',
-          boxShadow: '0 10px 40px rgba(0,0,0,0.02)',
+          boxShadow: '0 -10px 40px rgba(0,0,0,0.03)',
           display: 'flex',
-          flexDirection: 'column'
+          flexDirection: 'column',
+          position: 'relative',
+          zIndex: 20
         }}>
 
         {/* Carousel Section */}
@@ -501,8 +499,9 @@ export default function Login() {
           </p>
         </section>
 
-        {/* Hide scrollbar styles locally */}
+        {/* CSS overrides for Landing Mode */}
         <style dangerouslySetInnerHTML={{__html: `
+          body, .app-container { background: #FCF9F5 !important; }
           .hide-scrollbar::-webkit-scrollbar { display: none; }
         `}} />
       </main>
