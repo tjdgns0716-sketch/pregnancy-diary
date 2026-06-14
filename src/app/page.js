@@ -649,6 +649,7 @@ export default function Home() {
           {dates.map(date => {
             const isSelected = date === selectedDate;
             const isDueDate = dueDate && new Date(dueDate).getFullYear() === currentYear && new Date(dueDate).getMonth() + 1 === currentMonth && new Date(dueDate).getDate() === date;
+            const isToday = currentYear === today.getFullYear() && currentMonth === today.getMonth() + 1 && date === today.getDate();
             const hasPrivD = hasPrivateDiary.includes(date);
             const hasPubD = hasPublicDiary.includes(date);
             const hasS = hasSchedule.includes(date);
@@ -668,14 +669,15 @@ export default function Home() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   backgroundColor: isSelected ? (currentUserRole === 'mother' ? 'var(--accent-color)' : '#a39763') : (isDueDate ? '#fff0f5' : 'transparent'),
-                  color: isSelected ? 'white' : 'var(--text-primary)',
+                  color: isSelected ? 'white' : (isToday ? 'var(--text-primary)' : 'var(--text-primary)'),
                   borderRadius: '8px',
                   cursor: 'pointer',
                   position: 'relative',
-                  border: isDueDate && !isSelected ? '1px dashed var(--accent-color)' : 'none'
+                  border: isToday && !isSelected ? '1px solid var(--accent-color)' : (isDueDate && !isSelected ? '1px dashed var(--accent-color)' : 'none')
                 }}
               >
-                <span style={{ fontSize: '0.9rem' }}>{date}</span>
+                <span style={{ fontSize: '0.9rem', fontWeight: isToday ? 'bold' : 'normal' }}>{date}</span>
+                {isToday && <span style={{ position: 'absolute', top: '2px', left: '2px', fontSize: '0.55rem', color: isSelected ? 'rgba(255,255,255,0.9)' : 'var(--accent-color)', fontWeight: 'bold' }}>오늘</span>}
                 {isDueDate && <span style={{ position: 'absolute', top: '2px', right: '2px', fontSize: '0.6rem' }}>👼</span>}
                 <div style={{ position: 'absolute', bottom: '4px', display: 'flex', gap: '2px' }}>
                   {showDiaryDot && <div style={{ width: '4px', height: '4px', backgroundColor: isSelected ? 'white' : 'var(--text-secondary)', borderRadius: '50%' }} />}
