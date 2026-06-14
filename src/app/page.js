@@ -1226,6 +1226,17 @@ export default function Home() {
                 <input type="date" value={scheduleDate || `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(selectedDate).padStart(2, '0')}`} onChange={(e) => setScheduleDate(e.target.value)} style={{ flex: 1, padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.95rem', fontFamily: 'inherit', color: 'var(--text-primary)', boxSizing: 'border-box' }} />
                 <input type="time" value={scheduleTime} onChange={(e) => setScheduleTime(e.target.value)} style={{ flex: 1, padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.95rem', fontFamily: 'inherit', color: 'var(--text-primary)', boxSizing: 'border-box' }} />
               </div>
+              <div style={{ width: '100%', marginTop: '5px' }}>
+                <select value={scheduleAlarmMinutes} onChange={(e) => setScheduleAlarmMinutes(parseInt(e.target.value))} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.95rem', fontFamily: 'inherit', color: 'var(--text-primary)', backgroundColor: 'white' }}>
+                  <option value={0}>알람 안 함</option>
+                  <option value={0} disabled>---</option>
+                  <option value={5}>5분 전 알람</option>
+                  <option value={10}>10분 전 알람</option>
+                  <option value={15}>15분 전 알람</option>
+                  <option value={30}>30분 전 알람</option>
+                  <option value={60}>1시간 전 알람</option>
+                </select>
+              </div>
             </div>
 
             <div style={{ padding: '15px 20px', display: 'flex', gap: '10px', flexShrink: 0, backgroundColor: 'var(--card-bg)', borderTop: '1px solid var(--border-color)' }}>
