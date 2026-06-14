@@ -992,7 +992,7 @@ export default function Home() {
           <div style={{
             width: '100%', maxWidth: '480px', height: '80vh',
             backgroundColor: 'var(--card-bg)', borderTopLeftRadius: '20px', borderTopRightRadius: '20px',
-            padding: '20px', display: 'flex', flexDirection: 'column',
+            padding: '20px', display: 'block',
             boxShadow: '0 -4px 20px rgba(0,0,0,0.1)', overflowY: 'auto'
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
@@ -1061,7 +1061,7 @@ export default function Home() {
               value={diaryContent}
               onChange={(e) => setDiaryContent(e.target.value)}
               style={{ 
-                flex: '1 0 auto', backgroundColor: 'transparent', border: 'none', outline: 'none', resize: 'none', 
+                width: '100%', backgroundColor: 'transparent', border: 'none', outline: 'none', resize: 'none', 
                 fontSize: '1.05rem', color: 'var(--text-primary)', fontFamily: 'inherit', minHeight: '160px',
                 lineHeight: '32px', padding: '0 5px',
                 backgroundImage: 'repeating-linear-gradient(transparent, transparent 31px, var(--border-color) 31px, var(--border-color) 32px)',
@@ -1070,7 +1070,7 @@ export default function Home() {
             />
             
             {showPrivateContentInput && (
-              <div style={{ marginTop: '10px', paddingTop: '15px', borderTop: '1px dashed var(--border-color)', display: 'flex', flexDirection: 'column', flex: '1 0 auto' }}>
+              <div style={{ marginTop: '10px', paddingTop: '15px', borderTop: '1px dashed var(--border-color)', display: 'flex', flexDirection: 'column', width: '100%' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '10px' }}>
                   <span style={{ fontSize: '0.85rem' }}>🔒</span>
                   <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 'bold' }}>나만의 비밀 이야기</span>
@@ -1080,7 +1080,7 @@ export default function Home() {
                   onChange={(e) => setPrivateContent(e.target.value)}
                   placeholder="아빠에겐 보이지 않는 비밀 이야기를 적어보세요"
                   style={{ 
-                    flex: '1 0 auto', backgroundColor: 'transparent', border: 'none', outline: 'none', resize: 'none', 
+                    width: '100%', backgroundColor: 'transparent', border: 'none', outline: 'none', resize: 'none', 
                     fontSize: '1.05rem', color: 'var(--text-primary)', fontFamily: 'inherit', minHeight: '128px',
                     lineHeight: '32px', padding: '0 5px',
                     backgroundImage: 'repeating-linear-gradient(transparent, transparent 31px, var(--border-color) 31px, var(--border-color) 32px)',
@@ -1142,7 +1142,7 @@ export default function Home() {
             width: '100%', maxWidth: '480px', backgroundColor: 'var(--card-bg)', 
             maxHeight: '90vh', overflowY: 'auto',
             borderTopLeftRadius: '20px', borderTopRightRadius: '20px',
-            padding: '20px', display: 'flex', flexDirection: 'column',
+            padding: '20px', display: 'block',
             boxShadow: '0 -4px 20px rgba(0,0,0,0.1)'
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
