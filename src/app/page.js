@@ -526,7 +526,7 @@ export default function Home() {
             ⚙️
           </button>
           <button 
-            onClick={() => setShowTutorial(true)}
+            onClick={() => { setTutorialStep(0); setShowTutorial(true); }}
             style={{ background: 'none', border: 'none', fontSize: '1.4rem', cursor: 'pointer', color: 'var(--text-secondary)', padding: '5px' }}
             title="도움말 (튜토리얼 보기)"
           >
@@ -1297,32 +1297,47 @@ export default function Home() {
             
             <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
               {[...Array(currentUserRole === 'mother' ? 7 : 4).keys()].map((step) => (
-                <div key={step} style={{
+                <div key={step} onClick={() => setTutorialStep(step)} style={{
                   width: '8px', height: '8px', borderRadius: '50%',
                   backgroundColor: tutorialStep === step ? 'var(--accent-color)' : 'var(--border-color)',
-                  transition: 'background-color 0.3s'
+                  transition: 'background-color 0.3s',
+                  cursor: 'pointer'
                 }} />
               ))}
             </div>
 
-            <button 
-              onClick={() => {
-                const totalSteps = currentUserRole === 'mother' ? 7 : 4;
-                if (tutorialStep < totalSteps - 1) {
-                  setTutorialStep(tutorialStep + 1);
-                } else {
-                  localStorage.setItem(`diary_tutorial_seen_${currentUserRole}_${currentUser.id}`, 'true');
-                  setShowTutorial(false);
-                }
-              }}
-              style={{
-                width: '100%', padding: '14px', borderRadius: '10px',
-                backgroundColor: 'var(--text-primary)', color: 'white',
-                fontWeight: 'bold', border: 'none', cursor: 'pointer', fontSize: '1rem'
-              }}
-            >
-              {tutorialStep < (currentUserRole === 'mother' ? 6 : 3) ? "다음" : "다이어리 시작하기"}
-            </button>
+            <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
+              {tutorialStep > 0 && (
+                <button 
+                  onClick={() => setTutorialStep(tutorialStep - 1)}
+                  style={{
+                    flex: 1, padding: '14px', borderRadius: '10px',
+                    backgroundColor: 'var(--bg-color)', color: 'var(--text-primary)',
+                    fontWeight: 'bold', border: '1px solid var(--border-color)', cursor: 'pointer', fontSize: '1rem'
+                  }}
+                >
+                  이전
+                </button>
+              )}
+              <button 
+                onClick={() => {
+                  const totalSteps = currentUserRole === 'mother' ? 7 : 4;
+                  if (tutorialStep < totalSteps - 1) {
+                    setTutorialStep(tutorialStep + 1);
+                  } else {
+                    localStorage.setItem(`diary_tutorial_seen_${currentUserRole}_${currentUser.id}`, 'true');
+                    setShowTutorial(false);
+                  }
+                }}
+                style={{
+                  flex: tutorialStep > 0 ? 2 : 1, padding: '14px', borderRadius: '10px',
+                  backgroundColor: 'var(--text-primary)', color: 'white',
+                  fontWeight: 'bold', border: 'none', cursor: 'pointer', fontSize: '1rem'
+                }}
+              >
+                {tutorialStep < (currentUserRole === 'mother' ? 6 : 3) ? "다음" : "다이어리 시작하기"}
+              </button>
+            </div>
           </div>
         </div>
       )}
