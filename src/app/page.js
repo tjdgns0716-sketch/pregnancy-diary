@@ -243,22 +243,36 @@ export default function Home() {
     setMonthDiaries(diaries || []);
   };
 
-  const handleDeleteDiary = async () => {
+  const handleDeletePublicDiary = async () => {
     if (!selectedDayDiary) return;
-    if (window.confirm("정말 이 날의 일기를 삭제하시겠습니까?")) {
+    if (window.confirm("공개 일기(내용, 사진, 뱃지)를 삭제하시겠습니까?")) {
       setIsUploading(true);
-      const { error } = await supabase.from('diaries').delete().eq('id', selectedDayDiary.id);
+      const { error } = await supabase.from('diaries').update({ content: null, image_url: null, badges: [] }).eq('id', selectedDayDiary.id);
       if (error) { alert("삭제 실패: " + error.message); setIsUploading(false); return; }
-      
-      setIsWriteModalOpen(false);
       const { data: diaries } = await supabase.from('diaries').select('*').eq('pregnancy_id', pregnancyId).gte('date', `${currentYear}-${String(currentMonth).padStart(2, '0')}-01`).lte('date', `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(daysInMonth).padStart(2, '0')}`);
       setMonthDiaries(diaries || []);
-      
-      if (selectedDayPostIt) {
-        await supabase.from('post_its').delete().eq('diary_id', selectedDayDiary.id);
-        setSelectedDayPostIt(null);
-      }
       setIsUploading(false);
+    }
+  };
+
+  const handleDeletePrivateDiary = async () => {
+    if (!selectedDayDiary) return;
+    if (window.confirm("비밀 일기를 삭제하시겠습니까?")) {
+      setIsUploading(true);
+      const { error } = await supabase.from('diaries').update({ private_content: null }).eq('id', selectedDayDiary.id);
+      if (error) { alert("삭제 실패: " + error.message); setIsUploading(false); return; }
+      const { data: diaries } = await supabase.from('diaries').select('*').eq('pregnancy_id', pregnancyId).gte('date', `${currentYear}-${String(currentMonth).padStart(2, '0')}-01`).lte('date', `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(daysInMonth).padStart(2, '0')}`);
+      setMonthDiaries(diaries || []);
+      setIsUploading(false);
+    }
+  };
+
+  const handleDeletePostIt = async () => {
+    if (!selectedDayPostIt) return;
+    if (window.confirm("쪽지를 삭제하시겠습니까?")) {
+      const { error } = await supabase.from('post_its').delete().eq('id', selectedDayPostIt.id);
+      if (error) { alert("삭제 실패: " + error.message); return; }
+      setSelectedDayPostIt(null);
     }
   };
 
@@ -743,15 +757,6 @@ export default function Home() {
                   >
                     ✏️
                   </button>
-                  {selectedDayDiary && (
-                    <button 
-                      onClick={handleDeleteDiary}
-                      style={{ width: '32px', height: '32px', borderRadius: '16px', border: 'none', backgroundColor: '#f5d6d1', color: '#c96b63', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: 'var(--shadow-sm)', fontSize: '1rem' }}
-                      title="일기 삭제"
-                    >
-                      🗑️
-                    </button>
-                  )}
                 </div>
               )}
             </div>
@@ -814,6 +819,17 @@ export default function Home() {
               border: '1px solid var(--border-color)',
               marginBottom: '20px'
             }}>
+              {/* Public Area Header */}
+              {((selectedDayDiary.content || selectedDayDiary.image_url || (selectedDayDiary.badges && selectedDayDiary.badges.length > 0))) && (
+                <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
+                  {currentUserRole === 'mother' && (
+                    <button onClick={handleDeletePublicDiary} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#c96b63', fontSize: '0.85rem' }} title="공개 기록 지우기">
+                      🗑️ 지우기
+                    </button>
+                  )}
+                </div>
+              )}
+
               {/* Mood Badges */}
               {selectedDayDiary.badges && selectedDayDiary.badges.length > 0 && (
                 <div style={{ marginBottom: '15px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
@@ -850,9 +866,14 @@ export default function Home() {
               {/* Private Content */}
               {selectedDayDiary.private_content && currentUserRole === 'mother' && (
                 <div style={{ marginTop: (selectedDayDiary.content || (selectedDayDiary.badges && selectedDayDiary.badges.length > 0)) ? '20px' : '0', paddingTop: (selectedDayDiary.content || (selectedDayDiary.badges && selectedDayDiary.badges.length > 0)) ? '20px' : '0', borderTop: (selectedDayDiary.content || (selectedDayDiary.badges && selectedDayDiary.badges.length > 0)) ? '1px dashed var(--border-color)' : 'none' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '10px' }}>
-                    <span style={{ fontSize: '0.85rem' }}>🔒</span>
-                    <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 'bold' }}>나만의 비밀 일기</span>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                      <span style={{ fontSize: '0.85rem' }}>🔒</span>
+                      <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 'bold' }}>나만의 비밀 일기</span>
+                    </div>
+                    <button onClick={handleDeletePrivateDiary} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#c96b63', fontSize: '0.85rem' }} title="비밀 일기 지우기">
+                      🗑️ 지우기
+                    </button>
                   </div>
                   <p style={{ lineHeight: '1.6', fontSize: '0.95rem', whiteSpace: 'pre-wrap', color: 'var(--text-primary)' }}>
                     {selectedDayDiary.private_content}
@@ -875,7 +896,13 @@ export default function Home() {
                   {selectedDayPostIt && !isEditingPostIt ? (
                     <>
                       {currentUserRole === 'partner' && (
-                        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '5px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginBottom: '5px' }}>
+                          <button 
+                            onClick={handleDeletePostIt}
+                            style={{ fontSize: '0.75rem', color: '#c96b63', background: 'none', border: 'none', cursor: 'pointer', padding: '0', textDecoration: 'underline' }}
+                          >
+                            삭제
+                          </button>
                           <button 
                             onClick={() => {
                               setPostItContent(selectedDayPostIt.content);
