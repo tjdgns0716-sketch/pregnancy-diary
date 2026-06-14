@@ -75,6 +75,7 @@ export default function Home() {
   const [scheduleTitle, setScheduleTitle] = useState("");
   const [scheduleDate, setScheduleDate] = useState("");
   const [scheduleTime, setScheduleTime] = useState("");
+  const [scheduleAlarmMinutes, setScheduleAlarmMinutes] = useState(0);
   const [postItContent, setPostItContent] = useState("");
 
   useEffect(() => {
@@ -90,6 +91,15 @@ export default function Home() {
         setCurrentUserRole(profile.role);
         setCurrentUser(user);
         setCoupleId(profile.couple_id);
+        
+        // Listen for Expo Push Token from React Native WebView
+        const handleExpoToken = async () => {
+          if (window.EXPO_PUSH_TOKEN) {
+            await supabase.from("profiles").update({ expo_push_token: window.EXPO_PUSH_TOKEN }).eq("id", user.id);
+          }
+        };
+        window.addEventListener('expoTokenReady', handleExpoToken);
+        if (window.EXPO_PUSH_TOKEN) handleExpoToken();
         
         // Load theme from localStorage for this specific user
         const savedTheme = localStorage.getItem(`diary_theme_${user.id}`);
@@ -213,6 +223,24 @@ export default function Home() {
   const hasPrivateDiary = monthDiaries.filter(d => d.private_content).map(d => parseInt(d.date.split('-')[2]));
   const hasPublicDiary = monthDiaries.filter(d => d.content || d.image_url || (d.badges && d.badges.length > 0)).map(d => parseInt(d.date.split('-')[2]));
   const hasSchedule = monthSchedules.map(s => parseInt(s.date.split('-')[2]));
+
+  const sendPushNotification = async (targetUserId, title, body) => {
+    try {
+      const { data: profile } = await supabase.from('profiles').select('expo_push_token').eq('id', targetUserId).single();
+      if (profile && profile.expo_push_token) {
+        await fetch('https://exp.host/--/api/v2/push/send', {
+          method: 'POST',
+          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            to: profile.expo_push_token,
+            sound: 'default',
+            title: title,
+            body: body,
+          }),
+        });
+      }
+    } catch (e) { console.log('Push error', e); }
+  };
 
   const handleSaveDiary = async () => {
     if (!diaryContent.trim() && !privateContent.trim() && selectedBadges.length === 0 && !attachedImage) return;
