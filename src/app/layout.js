@@ -8,11 +8,25 @@ const gowunDodum = Gowun_Dodum({
 });
 
 export const metadata = {
-  title: "Dear Baby - 우리의 열달",
-  description: "파트너와 함께 쓰는 프라이빗 임신 일지",
+  title: "우리의 열달 🤍",
+  description: "아내와 남편이 함께 기록하는 가장 특별한 280일의 임신 다이어리",
   manifest: "/manifest.json",
   icons: {
     apple: "/icon-192x192.png",
+  },
+  openGraph: {
+    title: "우리의 열달 🤍",
+    description: "아내와 남편이 함께 기록하는 280일의 임신 다이어리",
+    siteName: "우리의 열달",
+    images: [
+      {
+        url: "/mother_icon.jpg",
+        width: 800,
+        height: 800,
+      },
+    ],
+    locale: "ko_KR",
+    type: "website",
   },
 };
 
