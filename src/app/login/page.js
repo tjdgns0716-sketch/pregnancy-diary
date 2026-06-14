@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { supabase } from "../../lib/supabase";
 import { useRouter } from "next/navigation";
 
@@ -15,8 +15,25 @@ export default function Login() {
   const [dueDate, setDueDate] = useState("");
   const [loading, setLoading] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [agreeTerms, setAgreeTerms] = useState(false);
-  const [agreePrivacy, setAgreePrivacy] = useState(false);
+  
+  // Drag to scroll refs and states
+  const scrollRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+
+  // Apply gradient background to the entire body when in landing mode
+  useEffect(() => {
+    if (mode === "landing") {
+      document.body.style.background = "radial-gradient(circle at 50% 20%, #E8DEFF 0%, #F5F0FF 40%, #FFFDFD 100%)";
+    } else {
+      document.body.style.background = "";
+    }
+    return () => { document.body.style.background = ""; };
+  }, [mode]);
+
+  const agreeTerms = false; // dummy replace block sync
+  const agreePrivacy = false;
   const [agreeSensitive, setAgreeSensitive] = useState(false);
   
   // Modal states for Terms and Privacy
@@ -301,7 +318,7 @@ export default function Login() {
 
   if (mode === "landing") {
     return (
-      <main className="main-content" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'radial-gradient(circle at 50% 20%, #E8DEFF 0%, #F5F0FF 40%, #FFFDFD 100%)' }}>
+      <main className="main-content" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'transparent' }}>
         
         {/* Header / Hero */}
         <section className="animate-fade-up" style={{ padding: '80px 20px 40px', textAlign: 'center' }}>
@@ -326,30 +343,46 @@ export default function Login() {
         {/* Carousel Section */}
         <section className="animate-fade-up" style={{ animationDelay: '0.2s', paddingBottom: '30px' }}>
           <div 
+            ref={scrollRef}
             style={{ 
-              display: 'flex', overflowX: 'auto', scrollSnapType: 'x mandatory', gap: '20px', 
-              padding: '20px 40px', scrollbarWidth: 'none', msOverflowStyle: 'none' 
+              display: 'flex', overflowX: 'auto', scrollSnapType: isDragging ? 'none' : 'x mandatory', gap: '20px', 
+              padding: '20px 40px', scrollbarWidth: 'none', msOverflowStyle: 'none', cursor: isDragging ? 'grabbing' : 'grab'
+            }}
+            onMouseDown={(e) => {
+              setIsDragging(true);
+              setStartX(e.pageX - scrollRef.current.offsetLeft);
+              setScrollLeft(scrollRef.current.scrollLeft);
+            }}
+            onMouseLeave={() => setIsDragging(false)}
+            onMouseUp={() => setIsDragging(false)}
+            onMouseMove={(e) => {
+              if (!isDragging) return;
+              e.preventDefault();
+              const x = e.pageX - scrollRef.current.offsetLeft;
+              const walk = (x - startX) * 1.5; // scroll-fast
+              scrollRef.current.scrollLeft = scrollLeft - walk;
             }}
             onScroll={(e) => {
+              if (isDragging) return;
               const scrollLeft = e.target.scrollLeft;
-              const cardWidth = window.innerWidth * 0.85 + 20; // card width + gap approx
+              const cardWidth = window.innerWidth > 480 ? 480 * 0.85 + 20 : window.innerWidth * 0.85 + 20; 
               setCurrentSlide(Math.round(scrollLeft / cardWidth));
             }}
             className="hide-scrollbar"
           >
             
             {/* Card 1 */}
-            <div style={{ flex: '0 0 85%', scrollSnapAlign: 'center', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '30px', padding: '40px 25px', boxShadow: '0 10px 40px rgba(0,0,0,0.03)', textAlign: 'center' }}>
+            <div style={{ flex: '0 0 85%', maxWidth: '400px', scrollSnapAlign: 'center', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '30px', padding: '40px 25px', boxShadow: '0 10px 40px rgba(0,0,0,0.03)', textAlign: 'center', userSelect: 'none' }}>
               <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#FFF0F5', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', margin: '0 auto 25px' }}>🍓</div>
               <h3 style={{ fontSize: '1.2rem', color: '#333', marginBottom: '15px', fontWeight: '700', wordBreak: 'keep-all' }}>은근슬쩍 전하는 속마음</h3>
               <p style={{ fontSize: '0.95rem', color: '#666', lineHeight: '1.6', wordBreak: 'keep-all' }}>
-                온도 템도 산후 관리부터 사소한 갈등,<br/>임신 중 설마서 넘겨보세요.<br/>서운했던 감정들을 일기장에<br/>살며시 남겨보세요.
+                온도 습도 산후 관리부터 사소한 갈등,<br/>임신 중 설마하고 넘겨보세요.<br/>서운했던 감정들을 일기장에<br/>살며시 남겨보세요.
               </p>
               <div style={{ marginTop: '25px', display: 'inline-block', padding: '8px 20px', backgroundColor: '#FFF0F5', color: '#FF8A8A', borderRadius: '20px', fontSize: '0.85rem', fontWeight: 'bold' }}>마음 나누기</div>
             </div>
 
             {/* Card 2 */}
-            <div style={{ flex: '0 0 85%', scrollSnapAlign: 'center', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '30px', padding: '40px 25px', boxShadow: '0 10px 40px rgba(0,0,0,0.03)', textAlign: 'center' }}>
+            <div style={{ flex: '0 0 85%', maxWidth: '400px', scrollSnapAlign: 'center', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '30px', padding: '40px 25px', boxShadow: '0 10px 40px rgba(0,0,0,0.03)', textAlign: 'center', userSelect: 'none' }}>
               <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#FFF8EB', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', margin: '0 auto 25px' }}>✨</div>
               <h3 style={{ fontSize: '1.2rem', color: '#333', marginBottom: '15px', fontWeight: '700', wordBreak: 'keep-all' }}>센스 만점 예비 아빠</h3>
               <p style={{ fontSize: '0.95rem', color: '#666', lineHeight: '1.6', wordBreak: 'keep-all' }}>
@@ -359,7 +392,7 @@ export default function Login() {
             </div>
 
             {/* Card 3 */}
-            <div style={{ flex: '0 0 85%', scrollSnapAlign: 'center', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '30px', padding: '40px 25px', boxShadow: '0 10px 40px rgba(0,0,0,0.03)', textAlign: 'center' }}>
+            <div style={{ flex: '0 0 85%', maxWidth: '400px', scrollSnapAlign: 'center', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '30px', padding: '40px 25px', boxShadow: '0 10px 40px rgba(0,0,0,0.03)', textAlign: 'center', userSelect: 'none' }}>
               <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#F0F5FF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', margin: '0 auto 25px' }}>💌</div>
               <h3 style={{ fontSize: '1.2rem', color: '#333', marginBottom: '15px', fontWeight: '700', wordBreak: 'keep-all' }}>얼굴 보고 하지 못한 말</h3>
               <p style={{ fontSize: '0.95rem', color: '#666', lineHeight: '1.6', wordBreak: 'keep-all' }}>
@@ -369,7 +402,7 @@ export default function Login() {
             </div>
 
             {/* Card 4 */}
-            <div style={{ flex: '0 0 85%', scrollSnapAlign: 'center', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '30px', padding: '40px 25px', boxShadow: '0 10px 40px rgba(0,0,0,0.03)', textAlign: 'center' }}>
+            <div style={{ flex: '0 0 85%', maxWidth: '400px', scrollSnapAlign: 'center', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '30px', padding: '40px 25px', boxShadow: '0 10px 40px rgba(0,0,0,0.03)', textAlign: 'center', userSelect: 'none' }}>
               <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#F0FBF4', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', margin: '0 auto 25px' }}>👨‍👩‍👦</div>
               <h3 style={{ fontSize: '1.2rem', color: '#333', marginBottom: '15px', fontWeight: '700', wordBreak: 'keep-all' }}>진짜 부모가 되어가는 시간</h3>
               <p style={{ fontSize: '0.95rem', color: '#666', lineHeight: '1.6', wordBreak: 'keep-all' }}>
