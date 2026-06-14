@@ -682,7 +682,16 @@ export default function Login() {
                   {foundEmails.map((em, idx) => (
                     <p key={idx} style={{ fontSize: '1.1rem', color: 'var(--text-primary)', fontWeight: 'bold', margin: '5px 0' }}>{em.masked_email}</p>
                   ))}
-                  <button type="button" onClick={() => setMode("login")} style={{ marginTop: '10px', padding: '8px 15px', borderRadius: '20px', border: '1px solid var(--border-color)', backgroundColor: 'white', color: 'var(--text-primary)', fontSize: '0.85rem', cursor: 'pointer' }}>로그인하러 가기</button>
+                  
+                  <div style={{ marginTop: '15px', paddingTop: '15px', borderTop: '1px solid #ddd', textAlign: 'left' }}>
+                    <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.4', marginBottom: '10px' }}>
+                      * 가려진 부분(***)이 기억나지 않으시는 경우, <strong style={{color: 'var(--text-primary)'}}>[1:1 문의]</strong>에 현재 보이는 가려진 이메일 주소, 이름, 생년월일, 휴대폰 뒷 4자리를 남겨주시면 관리자가 확인 후 안내해 드립니다.
+                    </p>
+                    <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+                      <button type="button" onClick={() => router.push('/support')} style={{ padding: '8px 15px', borderRadius: '20px', border: '1px solid var(--border-color)', backgroundColor: 'white', color: 'var(--text-primary)', fontSize: '0.85rem', cursor: 'pointer' }}>1:1 문의하기</button>
+                      <button type="button" onClick={() => setMode("login")} style={{ padding: '8px 15px', borderRadius: '20px', border: 'none', backgroundColor: 'var(--text-primary)', color: 'white', fontSize: '0.85rem', cursor: 'pointer' }}>로그인하기</button>
+                    </div>
+                  </div>
                 </div>
               )}
               {foundEmails && foundEmails.length === 0 && (
