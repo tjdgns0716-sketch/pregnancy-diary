@@ -317,24 +317,57 @@ export default function Login() {
       <main className="main-content" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'transparent', boxShadow: 'none' }}>
         
         {/* Header / Hero */}
-        <section className="animate-fade-up" style={{ padding: '80px 20px 40px', textAlign: 'center' }}>
-          <div className="animate-float" style={{ fontSize: '4rem', marginBottom: '15px', display: 'inline-block' }}>💜</div>
-          <h1 style={{ fontSize: '2.5rem', color: '#333', marginBottom: '15px', letterSpacing: '-0.03em', fontWeight: '800' }}>우리의 열달</h1>
-          <p style={{ fontSize: '1.1rem', color: '#666', lineHeight: '1.6', marginBottom: '40px', wordBreak: 'keep-all', fontWeight: '400' }}>
-            아내와 남편이 함께 기록하는<br/>가장 특별한 280일의 임신 다이어리
-          </p>
-          <button 
-            className="animate-pulse-btn"
-            onClick={() => setMode("login")}
-            style={{ 
-              padding: '16px 40px', fontSize: '1.1rem', borderRadius: '40px', 
-              background: 'linear-gradient(90deg, #B490FF 0%, #D4B5FF 100%)', color: 'white', border: 'none', 
-              cursor: 'pointer', fontWeight: 'bold', boxShadow: '0 8px 25px rgba(180, 144, 255, 0.3)',
-              display: 'inline-flex', alignItems: 'center', gap: '8px'
-            }}>
-            다이어리 시작하기 <span>→</span>
-          </button>
+        <section className="animate-fade-up" style={{ padding: '60px 20px 40px', position: 'relative' }}>
+          
+          {/* Hamburger Menu (Mockup visual) */}
+          <div style={{ position: 'absolute', top: '20px', right: '20px', cursor: 'pointer' }}>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 12H20M4 6H20M4 18H20" stroke="#888" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </div>
+
+          <div style={{ position: 'relative', zIndex: 10, maxWidth: '60%' }}>
+            <div className="animate-float" style={{ fontSize: '3rem', marginBottom: '10px' }}>💜</div>
+            <h1 style={{ fontSize: '2.5rem', color: '#333', marginBottom: '15px', letterSpacing: '-0.03em', fontWeight: '800' }}>우리의 열달</h1>
+            <p style={{ fontSize: '1rem', color: '#666', lineHeight: '1.6', marginBottom: '30px', wordBreak: 'keep-all', fontWeight: '400' }}>
+              아내와 남편이 함께 기록하는<br/>가장 특별한 280일의 임신 다이어리
+            </p>
+            <button 
+              className="animate-pulse-btn"
+              onClick={() => setMode("login")}
+              style={{ 
+                padding: '14px 28px', fontSize: '1.05rem', borderRadius: '40px', 
+                background: 'linear-gradient(90deg, #B490FF 0%, #D4B5FF 100%)', color: 'white', border: 'none', 
+                cursor: 'pointer', fontWeight: 'bold', boxShadow: '0 8px 25px rgba(180, 144, 255, 0.4)',
+                display: 'inline-flex', alignItems: 'center', gap: '8px'
+              }}>
+              다이어리 시작하기 <span style={{ fontWeight: 'normal' }}>→</span>
+            </button>
+          </div>
+
+          {/* Hero Image (User will provide this image at public/images/hero.png) */}
+          <img src="/images/hero.png" alt="" style={{
+            position: 'absolute',
+            right: '-10px',
+            top: '50px',
+            width: '260px',
+            zIndex: 1,
+            pointerEvents: 'none',
+            objectFit: 'contain'
+          }} />
         </section>
+
+        {/* Content Container matching mockup (White rounded box) */}
+        <div style={{ 
+          backgroundColor: 'rgba(255, 255, 255, 0.55)', 
+          backdropFilter: 'blur(10px)', 
+          borderRadius: '30px', 
+          margin: '0 15px',
+          padding: '30px 0',
+          boxShadow: '0 10px 40px rgba(0,0,0,0.02)',
+          display: 'flex',
+          flexDirection: 'column'
+        }}>
 
         {/* Carousel Section */}
         <section className="animate-fade-up" style={{ animationDelay: '0.2s', paddingBottom: '30px' }}>
@@ -424,12 +457,44 @@ export default function Login() {
             <span style={{ fontSize: '1.2rem' }}>👆</span> 옆으로 밀어 더 보기
           </div>
         </section>
+        </div>
+
+        {/* Feature Badges (Horizontal Scroll) */}
+        <section className="animate-fade-up" style={{ animationDelay: '0.4s', padding: '30px 20px', marginTop: '10px' }}>
+          <div style={{ display: 'flex', gap: '15px', overflowX: 'auto', paddingBottom: '10px', msOverflowStyle: 'none', scrollbarWidth: 'none' }} className="hide-scrollbar">
+            
+            {/* Feature 1 */}
+            <div style={{ minWidth: '150px', backgroundColor: 'rgba(255,255,255,0.6)', padding: '15px', borderRadius: '20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: '#EBE0FF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}>🔒</div>
+              <div>
+                <div style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#333' }}>안전한 보안</div>
+                <div style={{ fontSize: '0.7rem', color: '#777', marginTop: '2px', wordBreak: 'keep-all' }}>소중한 기록을<br/>안전하게 보호해요.</div>
+              </div>
+            </div>
+
+            {/* Feature 2 */}
+            <div style={{ minWidth: '150px', backgroundColor: 'rgba(255,255,255,0.6)', padding: '15px', borderRadius: '20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: '#FFE6E6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}>❤️</div>
+              <div>
+                <div style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#333' }}>부부가 함께</div>
+                <div style={{ fontSize: '0.7rem', color: '#777', marginTop: '2px', wordBreak: 'keep-all' }}>서로의 마음을<br/>함께 기록해요.</div>
+              </div>
+            </div>
+
+            {/* Feature 3 */}
+            <div style={{ minWidth: '150px', backgroundColor: 'rgba(255,255,255,0.6)', padding: '15px', borderRadius: '20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: '#FFF4D9', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}>✨</div>
+              <div>
+                <div style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#333' }}>소중한 추억</div>
+                <div style={{ fontSize: '0.7rem', color: '#777', marginTop: '2px', wordBreak: 'keep-all' }}>280일의 순간을<br/>평생 간직하세요.</div>
+              </div>
+            </div>
+
+          </div>
+        </section>
 
         {/* Footer info */}
-        <section style={{ padding: '40px 20px', textAlign: 'center', marginTop: 'auto' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: '#555', fontSize: '0.95rem', fontWeight: 'bold', marginBottom: '15px' }}>
-            <span style={{ fontSize: '1.2rem' }}>🔒</span> 모든 기록은 안전하게 보호돼요
-          </div>
+        <section style={{ padding: '0 20px 40px', textAlign: 'center', marginTop: 'auto' }}>
           <p style={{ color: '#999', fontSize: '0.75rem', lineHeight: '1.5' }}>
             © 2026 우리의 열달. 소중한 오늘, 함께하는 내일.<br/>
             Crafted for Our Ten Months of Precious Journey.
