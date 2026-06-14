@@ -785,7 +785,7 @@ export default function Home() {
               )}
             </div>
             
-            {selectedDayDiary || selectedDaySchedule || isSelectedDueDate ? (
+            {selectedDayDiary || selectedDaySchedule || selectedDayPostIt || isSelectedDueDate || currentUserRole === 'partner' ? (
               <>
                 {isSelectedDueDate && (
                   <div style={{
@@ -844,8 +844,8 @@ export default function Home() {
                 )}
 
                 {(() => {
-                  const hasPublic = selectedDayDiary && (selectedDayDiary.content || selectedDayDiary.image_url || (selectedDayDiary.badges && selectedDayDiary.badges.length > 0));
-                  const hasPrivate = selectedDayDiary && selectedDayDiary.private_content && currentUserRole === 'mother';
+                  const hasPublic = selectedDayDiary && (selectedDayDiary?.content || selectedDayDiary?.image_url || (selectedDayDiary?.badges && selectedDayDiary?.badges.length > 0));
+                  const hasPrivate = selectedDayDiary && selectedDayDiary?.private_content && currentUserRole === 'mother';
                   const hasPostItUI = currentUserRole === 'partner' || selectedDayPostIt;
                   
                   if (!hasPublic && !hasPrivate && !hasPostItUI) return null;
@@ -860,7 +860,7 @@ export default function Home() {
               marginBottom: '20px'
             }}>
               {/* Public Area Header */}
-              {((selectedDayDiary.content || selectedDayDiary.image_url || (selectedDayDiary.badges && selectedDayDiary.badges.length > 0))) && (
+              {((selectedDayDiary?.content || selectedDayDiary?.image_url || (selectedDayDiary?.badges && selectedDayDiary?.badges.length > 0))) && (
                 <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
                   {currentUserRole === 'mother' && (
                     <button onClick={handleDeletePublicDiary} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#c96b63', fontSize: '0.85rem' }} title="공개 기록 지우기">
@@ -871,7 +871,7 @@ export default function Home() {
               )}
 
               {/* Mood Badges */}
-              {selectedDayDiary.badges && selectedDayDiary.badges.length > 0 && (
+              {selectedDayDiary?.badges && selectedDayDiary?.badges.length > 0 && (
                 <div style={{ marginBottom: '15px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                   {selectedDayDiary.badges.map(badge => (
                     <span key={badge} style={{ fontSize: '0.8rem', backgroundColor: '#f0f0f0', padding: '4px 10px', borderRadius: '15px', color: 'var(--text-secondary)' }}>
@@ -881,14 +881,14 @@ export default function Home() {
                 </div>
               )}
 
-              {selectedDayDiary.content && (
-                <p style={{ lineHeight: '1.6', fontSize: '0.95rem', whiteSpace: 'pre-wrap', marginBottom: selectedDayDiary.image_url ? '15px' : '0' }}>
+              {selectedDayDiary?.content && (
+                <p style={{ lineHeight: '1.6', fontSize: '0.95rem', whiteSpace: 'pre-wrap', marginBottom: selectedDayDiary?.image_url ? '15px' : '0' }}>
                   {selectedDayDiary.content}
                 </p>
               )}
 
               {/* Photo Area */}
-              {selectedDayDiary.image_url && (
+              {selectedDayDiary?.image_url && (
                 <div style={{ 
                   width: '100%', 
                   position: 'relative', 
@@ -904,8 +904,8 @@ export default function Home() {
               )}
 
               {/* Private Content */}
-              {selectedDayDiary.private_content && currentUserRole === 'mother' && (
-                <div style={{ marginTop: (selectedDayDiary.content || (selectedDayDiary.badges && selectedDayDiary.badges.length > 0)) ? '20px' : '0', paddingTop: (selectedDayDiary.content || (selectedDayDiary.badges && selectedDayDiary.badges.length > 0)) ? '20px' : '0', borderTop: (selectedDayDiary.content || (selectedDayDiary.badges && selectedDayDiary.badges.length > 0)) ? '1px dashed var(--border-color)' : 'none' }}>
+              {selectedDayDiary?.private_content && currentUserRole === 'mother' && (
+                <div style={{ marginTop: (selectedDayDiary?.content || (selectedDayDiary?.badges && selectedDayDiary?.badges.length > 0)) ? '20px' : '0', paddingTop: (selectedDayDiary?.content || (selectedDayDiary?.badges && selectedDayDiary?.badges.length > 0)) ? '20px' : '0', borderTop: (selectedDayDiary?.content || (selectedDayDiary?.badges && selectedDayDiary?.badges.length > 0)) ? '1px dashed var(--border-color)' : 'none' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                       <span style={{ fontSize: '0.85rem' }}>🔒</span>
