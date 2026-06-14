@@ -358,7 +358,7 @@ export default function Home() {
     setIsExportModalOpen(false);
     setExportIncludesPrivate(includePrivate);
     setIsExporting(true);
-    const { data: allDiaries } = await supabase.from('diaries').select('*').eq('pregnancy_id', pregnancyId).order('date', { ascending: true });
+    const { data: allDiaries } = await supabase.from('diaries').select('*, post_its(*)').eq('pregnancy_id', pregnancyId).order('date', { ascending: true });
     setAllDiariesToExport(allDiaries || []);
     
     // Give DOM time to render all diaries
@@ -917,7 +917,6 @@ export default function Home() {
                       <p style={{ fontSize: '0.85rem', color: '#5c5227', fontStyle: 'italic', lineHeight: '1.5', whiteSpace: 'pre-wrap' }}>
                         "{selectedDayPostIt.content}"
                       </p>
-                      <p style={{ textAlign: 'right', fontSize: '0.75rem', color: '#a39763', marginTop: '5px' }}>- 아빠의 쪽지</p>
                     </>
                   ) : (
                     currentUserRole === 'partner' ? (
@@ -925,7 +924,7 @@ export default function Home() {
                         <textarea 
                           value={postItContent}
                           onChange={(e) => setPostItContent(e.target.value)}
-                          placeholder="엄마에게 남길 쪽지를 적어보세요..." 
+                          placeholder="쪽지로 마음을 남길수 있어요!" 
                           style={{ width: '100%', backgroundColor: 'transparent', border: 'none', outline: 'none', resize: 'none', fontSize: '0.85rem', color: '#5c5227', fontStyle: 'italic', fontFamily: 'inherit' }}
                         />
                         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
@@ -1465,7 +1464,7 @@ export default function Home() {
               <p style={{ textAlign: 'center', color: 'var(--text-secondary)', marginTop: '50px' }}>기록된 일기가 없습니다.</p>
             ) : (
               allDiariesToExport.map(diary => {
-                const hasVisibleContent = diary.content || (diary.badges && diary.badges.length > 0) || diary.image_url || (currentUserRole === 'mother' && diary.private_content && exportIncludesPrivate);
+                const hasVisibleContent = diary.content || (diary.badges && diary.badges.length > 0) || diary.image_url || (currentUserRole === 'mother' && diary.private_content && exportIncludesPrivate) || (diary.post_its && diary.post_its.length > 0);
                 if (!hasVisibleContent) return null;
                 
                 return (
@@ -1500,6 +1499,22 @@ export default function Home() {
                           <strong style={{ color: 'var(--accent-color)', fontSize: '1rem' }}>나만의 비밀 이야기</strong>
                         </div>
                         <p style={{ whiteSpace: 'pre-wrap', color: 'var(--text-primary)', margin: '0', lineHeight: '1.8' }}>{diary.private_content}</p>
+                      </div>
+                    )}
+                    
+                    {diary.post_its && diary.post_its.length > 0 && (
+                      <div style={{
+                        marginTop: '20px',
+                        backgroundColor: '#fff7d6',
+                        padding: '15px',
+                        borderRadius: '2px 12px 12px 12px',
+                        position: 'relative',
+                        borderLeft: '3px solid #ffde59'
+                      }}>
+                        <span style={{ position: 'absolute', top: '-10px', left: '10px', fontSize: '1.2rem' }}>📌</span>
+                        <p style={{ fontSize: '0.95rem', color: '#5c5227', fontStyle: 'italic', lineHeight: '1.6', whiteSpace: 'pre-wrap', margin: '10px 0 0 0' }}>
+                          "{diary.post_its[0].content}"
+                        </p>
                       </div>
                     )}
                   </div>
