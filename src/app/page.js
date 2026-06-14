@@ -134,7 +134,8 @@ export default function Home() {
   };
 
   const themes = [
-    { name: '베이지', class: '' },
+    { name: '연보라', class: '' },
+    { name: '베이지', class: 'theme-beige' },
     { name: '핑크', class: 'theme-pink' },
     { name: '주황', class: 'theme-orange' },
     { name: '노랑', class: 'theme-yellow' },
@@ -481,7 +482,8 @@ export default function Home() {
                     onClick={() => changeTheme(t.class)}
                     style={{ 
                       width: '24px', height: '24px', borderRadius: '12px', border: currentTheme === t.class ? '2px solid var(--text-primary)' : '1px solid #ddd',
-                      backgroundColor: t.class === '' ? '#f7f3e8' : 
+                      backgroundColor: t.class === '' ? '#E8DEFF' : 
+                                       t.class === 'theme-beige' ? '#f7f3e8' : 
                                        t.class === 'theme-pink' ? '#fff0f5' : 
                                        t.class === 'theme-orange' ? '#fff8eb' : 
                                        t.class === 'theme-yellow' ? '#fffde7' : 

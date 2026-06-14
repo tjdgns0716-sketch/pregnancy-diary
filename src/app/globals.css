@@ -15,6 +15,16 @@
   --shadow-md: 0 8px 15px rgba(0, 0, 0, 0.08);
 }
 
+/* 테마: 오리지널 베이지 */
+.theme-beige {
+  --bg-color: #f7f3e8; 
+  --card-bg: #ffffff;
+  --text-primary: #3d3d3d; 
+  --text-secondary: #8c8c8c;
+  --border-color: #e5dfd3;
+  --accent-color: #d48f87; 
+}
+
 /* 테마: 포근한 핑크 */
 .theme-pink {
   --bg-color: #fff0f5; 
