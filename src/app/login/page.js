@@ -363,7 +363,16 @@ export default function Login() {
 
   if (mode === "landing") {
     return (
-      <main className="main-content" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'transparent', boxShadow: 'none' }}>
+      <main className="main-content" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'transparent', boxShadow: 'none', position: 'relative' }}>
+        
+        {/* Support Button (Top Right) */}
+        <div style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 10 }}>
+          <button 
+            onClick={() => router.push('/support')}
+            style={{ padding: '6px 12px', borderRadius: '20px', border: '1px solid rgba(0,0,0,0.1)', backgroundColor: 'white', color: 'var(--text-secondary)', fontSize: '0.8rem', cursor: 'pointer', boxShadow: '0 2px 5px rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <span>🎧</span> 고객센터
+          </button>
+        </div>
         
         {/* Header / Hero */}
         <section className="animate-fade-up" style={{ padding: '80px 20px 40px', textAlign: 'center' }}>
