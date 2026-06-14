@@ -226,3 +226,27 @@ body {
     margin: 0;
   }
 }
+
+/* Landing Page Animations */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes pulseSoft {
+  0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+  50% { transform: scale(1.03); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+}
+.animate-fade-up {
+  animation: fadeUp 0.8s ease-out forwards;
+  opacity: 0;
+}
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+.animate-pulse-btn {
+  animation: pulseSoft 2s infinite;
+}
