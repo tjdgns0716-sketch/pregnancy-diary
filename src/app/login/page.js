@@ -367,27 +367,17 @@ export default function Login() {
             className="hide-scrollbar"
           >
             
-            {/* Card 1 */}
+            {/* Card 1 (New) */}
             <div style={{ flex: '0 0 85%', maxWidth: '400px', scrollSnapAlign: 'center', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '30px', padding: '40px 25px', boxShadow: '0 10px 40px rgba(0,0,0,0.03)', textAlign: 'center', userSelect: 'none' }}>
-              <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#FFF0F5', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', margin: '0 auto 25px' }}>🍓</div>
-              <h3 style={{ fontSize: '1.2rem', color: '#333', marginBottom: '15px', fontWeight: '700', wordBreak: 'keep-all' }}>은근슬쩍 전하는 속마음</h3>
+              <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#F0E6FF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', margin: '0 auto 25px' }}>📖</div>
+              <h3 style={{ fontSize: '1.2rem', color: '#333', marginBottom: '15px', fontWeight: '700', wordBreak: 'keep-all' }}>우리의 소중한 기록</h3>
               <p style={{ fontSize: '0.95rem', color: '#666', lineHeight: '1.6', wordBreak: 'keep-all' }}>
-                먹고 싶은 음식, 가고 싶은 장소 등<br/>필요한 것들을 다이어리를 통해<br/>귀엽게 전달해 보세요.
+                아가와 함께하는 시간을 기록하고<br/>아빠와 함께 공유하며<br/>작성해 보아요.
               </p>
-              <div style={{ marginTop: '25px', display: 'inline-block', padding: '8px 20px', backgroundColor: '#FFF0F5', color: '#FF8A8A', borderRadius: '20px', fontSize: '0.85rem', fontWeight: 'bold' }}>귀여운 어필</div>
+              <div style={{ marginTop: '25px', display: 'inline-block', padding: '8px 20px', backgroundColor: '#F0E6FF', color: '#9B51E0', borderRadius: '20px', fontSize: '0.85rem', fontWeight: 'bold' }}>함께 쓰는 일기</div>
             </div>
 
             {/* Card 2 */}
-            <div style={{ flex: '0 0 85%', maxWidth: '400px', scrollSnapAlign: 'center', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '30px', padding: '40px 25px', boxShadow: '0 10px 40px rgba(0,0,0,0.03)', textAlign: 'center', userSelect: 'none' }}>
-              <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#FFF8EB', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', margin: '0 auto 25px' }}>✨</div>
-              <h3 style={{ fontSize: '1.2rem', color: '#333', marginBottom: '15px', fontWeight: '700', wordBreak: 'keep-all' }}>센스 만점 예비 아빠</h3>
-              <p style={{ fontSize: '0.95rem', color: '#666', lineHeight: '1.6', wordBreak: 'keep-all' }}>
-                아내의 일기를 보고 무엇이<br/>필요한지 체크해 보세요.<br/>감동을 선물해 보세요.
-              </p>
-              <div style={{ marginTop: '25px', display: 'inline-block', padding: '8px 20px', backgroundColor: '#FFF8EB', color: '#FFA834', borderRadius: '20px', fontSize: '0.85rem', fontWeight: 'bold' }}>서로를 위한 기록</div>
-            </div>
-
-            {/* Card 3 */}
             <div style={{ flex: '0 0 85%', maxWidth: '400px', scrollSnapAlign: 'center', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '30px', padding: '40px 25px', boxShadow: '0 10px 40px rgba(0,0,0,0.03)', textAlign: 'center', userSelect: 'none' }}>
               <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#F0F5FF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', margin: '0 auto 25px' }}>💌</div>
               <h3 style={{ fontSize: '1.2rem', color: '#333', marginBottom: '15px', fontWeight: '700', wordBreak: 'keep-all' }}>얼굴 보고 하지 못한 말</h3>
@@ -397,7 +387,27 @@ export default function Login() {
               <div style={{ marginTop: '25px', display: 'inline-block', padding: '8px 20px', backgroundColor: '#F0F5FF', color: '#5A8CFF', borderRadius: '20px', fontSize: '0.85rem', fontWeight: 'bold' }}>진심 전하기</div>
             </div>
 
+            {/* Card 3 */}
+            <div style={{ flex: '0 0 85%', maxWidth: '400px', scrollSnapAlign: 'center', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '30px', padding: '40px 25px', boxShadow: '0 10px 40px rgba(0,0,0,0.03)', textAlign: 'center', userSelect: 'none' }}>
+              <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#FFF8EB', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', margin: '0 auto 25px' }}>✨</div>
+              <h3 style={{ fontSize: '1.2rem', color: '#333', marginBottom: '15px', fontWeight: '700', wordBreak: 'keep-all' }}>센스 만점 예비 아빠</h3>
+              <p style={{ fontSize: '0.95rem', color: '#666', lineHeight: '1.6', wordBreak: 'keep-all' }}>
+                아내의 일기를 보고 무엇이<br/>필요한지 체크해 보세요.<br/>감동을 선물해 보세요.
+              </p>
+              <div style={{ marginTop: '25px', display: 'inline-block', padding: '8px 20px', backgroundColor: '#FFF8EB', color: '#FFA834', borderRadius: '20px', fontSize: '0.85rem', fontWeight: 'bold' }}>서로를 위한 기록</div>
+            </div>
+
             {/* Card 4 */}
+            <div style={{ flex: '0 0 85%', maxWidth: '400px', scrollSnapAlign: 'center', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '30px', padding: '40px 25px', boxShadow: '0 10px 40px rgba(0,0,0,0.03)', textAlign: 'center', userSelect: 'none' }}>
+              <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#FFF0F5', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', margin: '0 auto 25px' }}>🍓</div>
+              <h3 style={{ fontSize: '1.2rem', color: '#333', marginBottom: '15px', fontWeight: '700', wordBreak: 'keep-all' }}>은근슬쩍 전하는 속마음</h3>
+              <p style={{ fontSize: '0.95rem', color: '#666', lineHeight: '1.6', wordBreak: 'keep-all' }}>
+                먹고 싶은 음식, 가고 싶은 장소 등<br/>필요한 것들을 다이어리를 통해<br/>귀엽게 전달해 보세요.
+              </p>
+              <div style={{ marginTop: '25px', display: 'inline-block', padding: '8px 20px', backgroundColor: '#FFF0F5', color: '#FF8A8A', borderRadius: '20px', fontSize: '0.85rem', fontWeight: 'bold' }}>귀여운 어필</div>
+            </div>
+
+            {/* Card 5 */}
             <div style={{ flex: '0 0 85%', maxWidth: '400px', scrollSnapAlign: 'center', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '30px', padding: '40px 25px', boxShadow: '0 10px 40px rgba(0,0,0,0.03)', textAlign: 'center', userSelect: 'none' }}>
               <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#F0FBF4', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', margin: '0 auto 25px' }}>👨‍👩‍👦</div>
               <h3 style={{ fontSize: '1.2rem', color: '#333', marginBottom: '15px', fontWeight: '700', wordBreak: 'keep-all' }}>진짜 부모가 되어가는 시간</h3>
@@ -411,7 +421,7 @@ export default function Login() {
 
           {/* Pagination Indicators */}
           <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '10px' }}>
-            {[0, 1, 2, 3].map((idx) => (
+            {[0, 1, 2, 3, 4].map((idx) => (
               <div key={idx} style={{ 
                 width: '8px', height: '8px', borderRadius: '50%', 
                 backgroundColor: currentSlide === idx ? '#B490FF' : '#E0E0E0',
