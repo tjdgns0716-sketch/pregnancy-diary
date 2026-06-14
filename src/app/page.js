@@ -772,7 +772,7 @@ export default function Home() {
                     style={{ width: '32px', height: '32px', borderRadius: '16px', border: 'none', backgroundColor: 'var(--accent-color)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: 'var(--shadow-sm)', fontSize: '1.2rem', paddingBottom: '2px' }}
                     title="일정 추가"
                   >
-                    +
+                    📅
                   </button>
                   <button 
                     onClick={() => setIsWriteModalOpen(true)}
