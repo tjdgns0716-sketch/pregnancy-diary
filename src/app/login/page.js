@@ -162,10 +162,9 @@ export default function Login() {
   };
 
   useEffect(() => {
-    const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+    const checkUser = async (session) => {
       if (session) {
-        // User logged in (e.g., via OAuth redirect), check profile
+        // User logged in (e.g., via OAuth redirect or auto-login), check profile
         const { data: profile } = await supabase.from("profiles").select("*").eq("id", session.user.id).single();
         if (profile && profile.couple_id) {
           router.push("/");
@@ -178,7 +177,18 @@ export default function Login() {
       }
       setLoading(false);
     };
-    checkUser();
+
+    // Check initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      checkUser(session);
+    });
+
+    // Listen for state changes (e.g., localStorage hydration, OAuth return)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      checkUser(session);
+    });
+
+    return () => subscription.unsubscribe();
   }, [router]);
 
   const handleOAuthLogin = async (provider) => {
