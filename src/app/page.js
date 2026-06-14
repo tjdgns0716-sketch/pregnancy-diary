@@ -243,6 +243,25 @@ export default function Home() {
     setMonthDiaries(diaries || []);
   };
 
+  const handleDeleteDiary = async () => {
+    if (!selectedDayDiary) return;
+    if (window.confirm("정말 이 날의 일기를 삭제하시겠습니까?")) {
+      setIsUploading(true);
+      const { error } = await supabase.from('diaries').delete().eq('id', selectedDayDiary.id);
+      if (error) { alert("삭제 실패: " + error.message); setIsUploading(false); return; }
+      
+      setIsWriteModalOpen(false);
+      const { data: diaries } = await supabase.from('diaries').select('*').eq('pregnancy_id', pregnancyId).gte('date', `${currentYear}-${String(currentMonth).padStart(2, '0')}-01`).lte('date', `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(daysInMonth).padStart(2, '0')}`);
+      setMonthDiaries(diaries || []);
+      
+      if (selectedDayPostIt) {
+        await supabase.from('post_its').delete().eq('diary_id', selectedDayDiary.id);
+        setSelectedDayPostIt(null);
+      }
+      setIsUploading(false);
+    }
+  };
+
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -272,11 +291,7 @@ export default function Home() {
 
   const handleSaveSchedule = async () => {
     if (!scheduleTitle.trim()) {
-      if (selectedDaySchedule) {
-        await supabase.from('schedules').delete().eq('id', selectedDaySchedule.id);
-      } else {
-        return;
-      }
+      return;
     } else {
       if (!scheduleDate) return;
       if (selectedDaySchedule) {
@@ -294,6 +309,17 @@ export default function Home() {
     
     const { data: schedules } = await supabase.from('schedules').select('*').eq('pregnancy_id', pregnancyId).gte('date', `${currentYear}-${String(currentMonth).padStart(2, '0')}-01`).lte('date', `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(daysInMonth).padStart(2, '0')}`);
     setMonthSchedules(schedules || []);
+  };
+
+  const handleDeleteSchedule = async () => {
+    if (!selectedDaySchedule) return;
+    if (window.confirm("정말 이 일정을 삭제하시겠습니까?")) {
+      const { error } = await supabase.from('schedules').delete().eq('id', selectedDaySchedule.id);
+      if (error) { alert("삭제 실패: " + error.message); return; }
+      setIsScheduleModalOpen(false);
+      const { data: schedules } = await supabase.from('schedules').select('*').eq('pregnancy_id', pregnancyId).gte('date', `${currentYear}-${String(currentMonth).padStart(2, '0')}-01`).lte('date', `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(daysInMonth).padStart(2, '0')}`);
+      setMonthSchedules(schedules || []);
+    }
   };
 
   const handleSavePostIt = async () => {
@@ -824,7 +850,7 @@ export default function Home() {
               )}
 
               {/* Partner's Post-it Note or Input */}
-              {(selectedDayDiary.content || selectedDayDiary.badges) && (
+              {(selectedDayDiary.content || selectedDayDiary.badges) && (currentUserRole === 'partner' || selectedDayPostIt) && (
                 <div style={{
                   marginTop: '20px',
                   backgroundColor: '#fff7d6',
@@ -873,9 +899,7 @@ export default function Home() {
                           </button>
                         </div>
                       </div>
-                    ) : (
-                      <p style={{ fontSize: '0.8rem', color: '#a39763', fontStyle: 'italic', paddingLeft: '20px' }}>아직 도착한 쪽지가 없습니다.</p>
-                    )
+                    ) : null
                   )}
                 </div>
               )}
@@ -1011,7 +1035,7 @@ export default function Home() {
                 </div>
               )}
 
-              <div style={{ display: 'flex', gap: '10px' }}>
+              <div style={{ display: 'flex', gap: '5px' }}>
                 <input 
                   type="file" 
                   accept="image/*" 
@@ -1022,15 +1046,23 @@ export default function Home() {
                 <button 
                   onClick={() => fileInputRef.current?.click()}
                   disabled={isUploading}
-                  style={{ flex: 1, padding: '15px', borderRadius: '10px', border: 'none', backgroundColor: '#e0dcd3', cursor: isUploading ? 'not-allowed' : 'pointer' }}
+                  style={{ flex: 1, padding: '15px', borderRadius: '10px', border: 'none', backgroundColor: '#e0dcd3', cursor: isUploading ? 'not-allowed' : 'pointer', fontSize: '0.9rem' }}
                 >
                   {isUploading ? '업로드 중...' : (attachedImage ? '사진 변경' : '사진 첨부')}
                 </button>
+                {selectedDayDiary && (
+                  <button 
+                    onClick={handleDeleteDiary} 
+                    disabled={isUploading}
+                    style={{ padding: '15px', borderRadius: '10px', border: 'none', backgroundColor: '#f5d6d1', color: '#c96b63', cursor: isUploading ? 'not-allowed' : 'pointer', fontWeight: 'bold', fontSize: '0.9rem' }}>
+                    삭제
+                  </button>
+                )}
                 <button 
                   onClick={handleSaveDiary} 
                   disabled={isUploading}
-                  style={{ flex: 1, padding: '15px', borderRadius: '10px', border: 'none', backgroundColor: 'var(--accent-color)', color: 'white', cursor: isUploading ? 'not-allowed' : 'pointer', opacity: isUploading ? 0.7 : 1 }}>
-                  저장하기
+                  style={{ flex: 1, padding: '15px', borderRadius: '10px', border: 'none', backgroundColor: 'var(--accent-color)', color: 'white', cursor: isUploading ? 'not-allowed' : 'pointer', opacity: isUploading ? 0.7 : 1, fontSize: '0.9rem', fontWeight: 'bold' }}>
+                  {selectedDayDiary ? "수정하기" : "저장하기"}
                 </button>
               </div>
             </div>
@@ -1060,9 +1092,16 @@ export default function Home() {
               <input type="date" value={scheduleDate || `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(selectedDate).padStart(2, '0')}`} onChange={(e) => setScheduleDate(e.target.value)} style={{ flex: 1, padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.95rem', fontFamily: 'inherit', color: 'var(--text-primary)', boxSizing: 'border-box' }} />
               <input type="time" value={scheduleTime} onChange={(e) => setScheduleTime(e.target.value)} style={{ flex: 1, padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.95rem', fontFamily: 'inherit', color: 'var(--text-primary)', boxSizing: 'border-box' }} />
             </div>
-            <button onClick={handleSaveSchedule} style={{ padding: '15px', borderRadius: '10px', border: 'none', backgroundColor: 'var(--text-primary)', color: 'white', cursor: 'pointer', width: '100%', fontWeight: 'bold' }}>
-              {selectedDaySchedule ? (scheduleTitle.trim() ? "수정하기" : "삭제하기") : "등록하기"}
-            </button>
+            <div style={{ display: 'flex', gap: '10px' }}>
+              {selectedDaySchedule && (
+                <button onClick={handleDeleteSchedule} style={{ padding: '15px', borderRadius: '10px', border: 'none', backgroundColor: '#f5d6d1', color: '#c96b63', cursor: 'pointer', fontWeight: 'bold' }}>
+                  삭제
+                </button>
+              )}
+              <button onClick={handleSaveSchedule} style={{ flex: 1, padding: '15px', borderRadius: '10px', border: 'none', backgroundColor: 'var(--text-primary)', color: 'white', cursor: 'pointer', fontWeight: 'bold' }}>
+                {selectedDaySchedule ? "수정하기" : "등록하기"}
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -1377,15 +1416,15 @@ export default function Home() {
 
       {/* Printable View for PDF Export */}
       {isExporting && (
-        <div className="printable-diary-export" style={{ position: 'absolute', top: 0, left: 0, width: '100%', minHeight: '100vh', backgroundColor: '#FAF7F2', zIndex: 99999, padding: '0', boxSizing: 'border-box', color: '#333' }}>
+        <div className="printable-diary-export" style={{ position: 'absolute', top: 0, left: 0, width: '100%', minHeight: '100vh', backgroundColor: 'var(--bg-color)', zIndex: 99999, padding: '0', boxSizing: 'border-box', color: 'var(--text-primary)' }}>
           
           {/* Cover Page */}
           <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', pageBreakAfter: 'always', padding: '40px' }}>
-            <div style={{ width: '100px', height: '100px', borderRadius: '50%', backgroundColor: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '3rem', marginBottom: '30px', boxShadow: '0 10px 30px rgba(0,0,0,0.05)' }}>
+            <div style={{ width: '100px', height: '100px', borderRadius: '50%', backgroundColor: 'var(--card-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '3rem', marginBottom: '30px', boxShadow: '0 10px 30px rgba(0,0,0,0.05)' }}>
               🤍
             </div>
-            <h1 style={{ textAlign: 'center', marginBottom: '15px', color: '#5c5227', fontSize: '2.5rem', fontWeight: 'bold' }}>우리의 열달 기록</h1>
-            <p style={{ textAlign: 'center', color: '#8a8163', fontSize: '1.2rem', marginTop: '0' }}>
+            <h1 style={{ textAlign: 'center', marginBottom: '15px', color: 'var(--text-primary)', fontSize: '2.5rem', fontWeight: 'bold' }}>우리의 열달 기록</h1>
+            <p style={{ textAlign: 'center', color: 'var(--text-secondary)', fontSize: '1.2rem', marginTop: '0' }}>
               {babyName ? `${babyName}와(과) 함께한 소중한 시간들` : '우리 아기와 함께한 소중한 시간들'}
             </p>
           </div>
@@ -1393,44 +1432,44 @@ export default function Home() {
           {/* Diary Entries */}
           <div style={{ padding: '40px' }}>
             {allDiariesToExport.length === 0 ? (
-              <p style={{ textAlign: 'center', color: '#666', marginTop: '50px' }}>기록된 일기가 없습니다.</p>
+              <p style={{ textAlign: 'center', color: 'var(--text-secondary)', marginTop: '50px' }}>기록된 일기가 없습니다.</p>
             ) : (
               allDiariesToExport.map(diary => {
                 const hasVisibleContent = diary.content || (diary.badges && diary.badges.length > 0) || diary.image_url || (currentUserRole === 'mother' && diary.private_content && exportIncludesPrivate);
                 if (!hasVisibleContent) return null;
                 
                 return (
-                  <div key={diary.id} style={{ marginBottom: '50px', padding: '40px', backgroundColor: '#fff', borderRadius: '20px', boxShadow: '0 4px 15px rgba(0,0,0,0.03)', pageBreakInside: 'avoid', border: '1px solid #f0ebe1' }}>
+                  <div key={diary.id} style={{ marginBottom: '50px', padding: '40px', backgroundColor: 'var(--card-bg)', borderRadius: '20px', boxShadow: 'var(--shadow-sm)', pageBreakInside: 'avoid', border: '1px solid var(--border-color)' }}>
                     
-                    <div style={{ borderBottom: '2px solid #FAF7F2', paddingBottom: '15px', marginBottom: '20px' }}>
-                      <h2 style={{ color: '#5c5227', margin: '0', fontSize: '1.5rem' }}>{diary.date}</h2>
+                    <div style={{ borderBottom: '2px solid var(--bg-color)', paddingBottom: '15px', marginBottom: '20px' }}>
+                      <h2 style={{ color: 'var(--text-primary)', margin: '0', fontSize: '1.5rem' }}>{diary.date}</h2>
                     </div>
                     
                     {diary.badges && diary.badges.length > 0 && (
                       <div style={{ display: 'flex', gap: '8px', marginBottom: '20px', flexWrap: 'wrap' }}>
-                        {diary.badges.map(b => <span key={b} style={{ backgroundColor: '#FAF7F2', color: '#5c5227', padding: '8px 15px', borderRadius: '20px', fontSize: '0.85rem', border: '1px solid #efe8d8' }}>{b}</span>)}
+                        {diary.badges.map(b => <span key={b} style={{ backgroundColor: 'var(--bg-color)', color: 'var(--text-primary)', padding: '8px 15px', borderRadius: '20px', fontSize: '0.85rem', border: '1px solid var(--border-color)' }}>{b}</span>)}
                       </div>
                     )}
                     
                     {diary.content && (
-                      <p style={{ whiteSpace: 'pre-wrap', lineHeight: '1.8', color: '#444', fontSize: '1.05rem', margin: diary.image_url ? '0 0 20px 0' : '0' }}>
+                      <p style={{ whiteSpace: 'pre-wrap', lineHeight: '1.8', color: 'var(--text-primary)', fontSize: '1.05rem', margin: diary.image_url ? '0 0 20px 0' : '0' }}>
                         {diary.content}
                       </p>
                     )}
                     
                     {diary.image_url && (
-                      <div style={{ marginBottom: diary.content ? '20px' : '0', borderRadius: '15px', overflow: 'hidden', backgroundColor: '#f9f9f9', display: 'flex', justifyContent: 'center' }}>
+                      <div style={{ marginBottom: diary.content ? '20px' : '0', borderRadius: '15px', overflow: 'hidden', backgroundColor: 'var(--bg-color)', display: 'flex', justifyContent: 'center' }}>
                         <img src={diary.image_url} style={{ maxWidth: '100%', maxHeight: '500px', objectFit: 'contain' }} />
                       </div>
                     )}
                     
                     {currentUserRole === 'mother' && diary.private_content && exportIncludesPrivate && (
-                      <div style={{ marginTop: '20px', padding: '25px', backgroundColor: '#fffdfa', borderRadius: '15px', border: '1px dashed #e6c5c2' }}>
+                      <div style={{ marginTop: '20px', padding: '25px', backgroundColor: 'var(--bg-color)', borderRadius: '15px', border: '1px dashed var(--accent-color)' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '10px' }}>
                           <span style={{ fontSize: '1.2rem' }}>🔒</span>
-                          <strong style={{ color: '#d48f87', fontSize: '1rem' }}>나만의 비밀 이야기</strong>
+                          <strong style={{ color: 'var(--accent-color)', fontSize: '1rem' }}>나만의 비밀 이야기</strong>
                         </div>
-                        <p style={{ whiteSpace: 'pre-wrap', color: '#666', margin: '0', lineHeight: '1.8' }}>{diary.private_content}</p>
+                        <p style={{ whiteSpace: 'pre-wrap', color: 'var(--text-primary)', margin: '0', lineHeight: '1.8' }}>{diary.private_content}</p>
                       </div>
                     )}
                   </div>
