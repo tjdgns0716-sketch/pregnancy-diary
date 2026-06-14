@@ -13,6 +13,10 @@ export default function Login() {
   const [inviteCode, setInviteCode] = useState("");
   const [babyName, setBabyName] = useState("");
   const [dueDate, setDueDate] = useState("");
+  const [userName, setUserName] = useState("");
+  const [birthdate, setBirthdate] = useState("");
+  const [phoneLast4, setPhoneLast4] = useState("");
+  const [foundEmails, setFoundEmails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
   
@@ -200,7 +204,17 @@ export default function Login() {
     setLoading(true);
     try {
       if (mode === "signup") {
-        const { data, error } = await supabase.auth.signUp({ email, password });
+        const { data, error } = await supabase.auth.signUp({ 
+          email, 
+          password,
+          options: {
+            data: {
+              name: userName,
+              birthdate: birthdate,
+              phone_last4: phoneLast4
+            }
+          }
+        });
         if (error) throw error;
         
         if (!data.session) {
@@ -234,6 +248,41 @@ export default function Login() {
         msg = "이미 가입된 이메일입니다.";
       }
       alert(msg);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleFindId = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.rpc('find_user_emails', { 
+        p_name: userName, 
+        p_birthdate: birthdate, 
+        p_phone_last4: phoneLast4 
+      });
+      if (error) throw error;
+      setFoundEmails(data || []);
+    } catch (error) {
+      alert("아이디 조회 중 오류가 발생했습니다: " + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin + '/update-password',
+      });
+      if (error) throw error;
+      alert("비밀번호 재설정 링크가 이메일로 발송되었습니다. 메일함을 확인해주세요.");
+      setMode("login");
+    } catch (error) {
+      alert("이메일 발송에 실패했습니다: " + error.message);
     } finally {
       setLoading(false);
     }
@@ -541,10 +590,14 @@ export default function Login() {
     <main className="main-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', padding: '20px' }}>
       <div style={{ textAlign: 'center', marginBottom: '40px' }}>
         <h1 style={{ fontSize: '2rem', color: 'var(--text-primary)', marginBottom: '10px' }}>
-          {mode === "signup" ? "이메일 회원가입 🤍" : "우리의 열달 🤍"}
+          {mode === "signup" ? "이메일 회원가입 🤍" : 
+           mode === "find-id" ? "아이디 찾기 🔍" :
+           mode === "reset-password" ? "비밀번호 찾기 🔑" : "우리의 열달 🤍"}
         </h1>
         <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-          {mode === "signup" ? "새로운 계정을 만들어 일기를 시작하세요." : "아빠와 엄마가 함께 기록하는 임신 일지"}
+          {mode === "signup" ? "새로운 계정을 만들어 일기를 시작하세요." : 
+           mode === "find-id" ? "가입 시 입력하신 정보를 입력해주세요." :
+           mode === "reset-password" ? "가입하신 이메일 주소를 입력해주세요." : "아빠와 엄마가 함께 기록하는 임신 일지"}
         </p>
       </div>
 
@@ -573,24 +626,106 @@ export default function Login() {
       )}
 
       <div style={{ width: '100%', maxWidth: '300px' }}>
-        <form onSubmit={handleAuth} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <input 
-            type="email" 
-            placeholder="이메일" 
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.9rem', fontFamily: 'inherit' }}
-          />
-          <input 
-            type="password" 
-            placeholder="비밀번호" 
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.9rem', fontFamily: 'inherit' }}
-          />
+        <form onSubmit={mode === 'find-id' ? handleFindId : mode === 'reset-password' ? handleResetPassword : handleAuth} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          {(mode === "login" || mode === "signup" || mode === "reset-password") && (
+            <input 
+              type="email" 
+              placeholder="이메일" 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.9rem', fontFamily: 'inherit' }}
+            />
+          )}
+          {(mode === "login" || mode === "signup") && (
+            <input 
+              type="password" 
+              placeholder="비밀번호" 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.9rem', fontFamily: 'inherit' }}
+            />
+          )}
           
+          {mode === "find-id" && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <input 
+                type="text" 
+                placeholder="이름" 
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
+                required
+                style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.9rem', fontFamily: 'inherit' }}
+              />
+              <input 
+                type="text" 
+                placeholder="생년월일 8자리 (예: 19900101)" 
+                value={birthdate}
+                onChange={(e) => setBirthdate(e.target.value)}
+                required
+                maxLength={8}
+                style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.9rem', fontFamily: 'inherit' }}
+              />
+              <input 
+                type="text" 
+                placeholder="휴대폰 뒷 4자리 (예: 1234)" 
+                value={phoneLast4}
+                onChange={(e) => setPhoneLast4(e.target.value)}
+                required
+                maxLength={4}
+                style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.9rem', fontFamily: 'inherit' }}
+              />
+              {foundEmails && foundEmails.length > 0 && (
+                <div style={{ marginTop: '10px', padding: '15px', backgroundColor: '#f5f5f5', borderRadius: '8px', textAlign: 'center' }}>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '10px' }}>가입된 계정 정보입니다.</p>
+                  {foundEmails.map((em, idx) => (
+                    <p key={idx} style={{ fontSize: '1.1rem', color: 'var(--text-primary)', fontWeight: 'bold', margin: '5px 0' }}>{em}</p>
+                  ))}
+                  <button type="button" onClick={() => setMode("login")} style={{ marginTop: '10px', padding: '8px 15px', borderRadius: '20px', border: '1px solid var(--border-color)', backgroundColor: 'white', color: 'var(--text-primary)', fontSize: '0.85rem', cursor: 'pointer' }}>로그인하러 가기</button>
+                </div>
+              )}
+              {foundEmails && foundEmails.length === 0 && (
+                <div style={{ marginTop: '10px', padding: '15px', backgroundColor: '#fff0f0', borderRadius: '8px', textAlign: 'center' }}>
+                  <p style={{ fontSize: '0.85rem', color: '#d32f2f', margin: 0 }}>일치하는 계정 정보가 없습니다.</p>
+                </div>
+              )}
+            </div>
+          )}
+          {mode === "signup" && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '5px' }}>
+              <input 
+                type="text" 
+                placeholder="이름" 
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
+                required
+                style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.9rem', fontFamily: 'inherit' }}
+              />
+              <input 
+                type="text" 
+                placeholder="생년월일 8자리 (예: 19900101)" 
+                value={birthdate}
+                onChange={(e) => setBirthdate(e.target.value)}
+                required
+                maxLength={8}
+                style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.9rem', fontFamily: 'inherit' }}
+              />
+              <input 
+                type="text" 
+                placeholder="휴대폰 뒷 4자리 (예: 1234)" 
+                value={phoneLast4}
+                onChange={(e) => setPhoneLast4(e.target.value)}
+                required
+                maxLength={4}
+                style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.9rem', fontFamily: 'inherit' }}
+              />
+              <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.4', marginTop: '5px', marginBottom: '5px' }}>
+                입력하신 정보는 추후 아이디(이메일) 분실 시 계정 복구를 위한 본인 확인 용도로만 활용됩니다. 별도의 실명 인증 절차를 거치지 않으나, 원활한 아이디 찾기를 위해 정확한 정보를 입력해 주시기를 권장합니다.
+              </p>
+            </div>
+          )}
+
           {mode === "signup" && (
             <div style={{ marginTop: '10px', marginBottom: '10px', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -651,18 +786,34 @@ export default function Login() {
             type="submit" 
             disabled={loading || (mode === "signup" && (!agreeTerms || !agreePrivacy || !agreeSensitive))}
             style={{ padding: '12px', borderRadius: '8px', border: 'none', backgroundColor: (mode === "signup" && (!agreeTerms || !agreePrivacy || !agreeSensitive)) ? 'var(--border-color)' : 'var(--text-primary)', color: 'white', fontSize: '0.9rem', fontWeight: 'bold', cursor: (mode === "signup" && (!agreeTerms || !agreePrivacy || !agreeSensitive)) ? 'not-allowed' : 'pointer', marginTop: mode === "signup" ? '0' : '10px' }}>
-            {loading ? "처리중..." : (mode === "login" ? "이메일 로그인" : "가입하기")}
+            {loading ? "처리중..." : (mode === "login" ? "이메일 로그인" : mode === "signup" ? "가입하기" : mode === "find-id" ? "아이디 조회" : "재설정 메일 보내기")}
           </button>
         </form>
 
-        <div style={{ marginTop: '15px', textAlign: 'center' }}>
+        {mode === "login" && (
+          <div style={{ marginTop: '15px', textAlign: 'center' }}>
+            <span 
+              onClick={() => { setMode("find-id"); setFoundEmails(null); }} 
+              style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', cursor: 'pointer', textDecoration: 'underline' }}>
+              아이디 찾기
+            </span>
+            <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', margin: '0 10px' }}>|</span>
+            <span 
+              onClick={() => setMode("reset-password")} 
+              style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', cursor: 'pointer', textDecoration: 'underline' }}>
+              비밀번호 찾기
+            </span>
+          </div>
+        )}
+
+        <div style={{ marginTop: '20px', textAlign: 'center' }}>
           {mode === "login" ? (
             <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
               계정이 없으신가요? <span onClick={() => { setMode("signup"); setAgreeTerms(false); setAgreePrivacy(false); setAgreeSensitive(false); }} style={{ color: 'var(--accent-color)', fontWeight: 'bold', cursor: 'pointer' }}>회원가입</span>
             </p>
           ) : (
             <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-              이미 계정이 있으신가요? <span onClick={() => setMode("login")} style={{ color: 'var(--text-primary)', fontWeight: 'bold', cursor: 'pointer' }}>로그인</span>
+              이미 계정이 있으신가요? <span onClick={() => setMode("login")} style={{ color: 'var(--text-primary)', fontWeight: 'bold', cursor: 'pointer' }}>로그인으로 돌아가기</span>
             </p>
           )}
         </div>
