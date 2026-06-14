@@ -810,7 +810,14 @@ export default function Home() {
                   </div>
                 )}
 
-                {selectedDayDiary && (
+                {(() => {
+                  if (!selectedDayDiary) return null;
+                  const hasPublic = selectedDayDiary.content || selectedDayDiary.image_url || (selectedDayDiary.badges && selectedDayDiary.badges.length > 0);
+                  const hasPrivate = selectedDayDiary.private_content && currentUserRole === 'mother';
+                  const hasPostItUI = hasPublic && (currentUserRole === 'partner' || selectedDayPostIt);
+                  if (!hasPublic && !hasPrivate && !hasPostItUI) return null;
+                  
+                  return (
                   <div style={{
                     backgroundColor: 'var(--card-bg)',
                     padding: '20px',
@@ -941,7 +948,8 @@ export default function Home() {
                 </div>
               )}
             </div>
-          )}
+                  );
+                })()}
         </>
       ) : (
         <p style={{ color: 'var(--text-secondary)', textAlign: 'center', padding: '30px 0' }}>이 날은 기록된 내용이 없습니다.</p>
