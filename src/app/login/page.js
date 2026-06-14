@@ -665,7 +665,7 @@ export default function Login() {
               onClick={() => handleOAuthLogin('google')}
               disabled={loading}
               style={{ padding: '15px', borderRadius: '8px', border: '1px solid #ddd', backgroundColor: 'white', color: '#333', fontSize: '1rem', fontWeight: 'bold', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
-              <span style={{ fontSize: '1.2rem' }}>G</span> 구글 계정으로 시작하기
+              <span style={{ fontSize: '1.2rem' }}>G</span> 구글 계정으로 로그인
             </button>
 
             
