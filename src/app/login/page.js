@@ -300,73 +300,78 @@ export default function Login() {
 
   if (mode === "landing") {
     return (
-      <main className="main-content" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'linear-gradient(135deg, #FCF9F2 0%, #F5EAE1 100%)' }}>
+      <main className="main-content" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: '#FAFAFA' }}>
+        
         {/* Hero Section */}
-        <div className="animate-fade-up" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '60px 20px', textAlign: 'center' }}>
-          <div className="animate-float" style={{ fontSize: '3.5rem', marginBottom: '15px' }}>🤍</div>
-          <h1 style={{ fontSize: '2.8rem', color: 'var(--text-primary)', marginBottom: '15px', letterSpacing: '-0.03em' }}>우리의 열달</h1>
-          <p style={{ fontSize: '1.15rem', color: 'var(--text-secondary)', lineHeight: '1.6', marginBottom: '40px', wordBreak: 'keep-all', opacity: 0.8 }}>
+        <section className="animate-fade-up" style={{ minHeight: '85vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 20px', textAlign: 'center', background: 'linear-gradient(180deg, #FFFFFF 0%, #FDFBF7 100%)' }}>
+          <div style={{ fontSize: '3.5rem', marginBottom: '20px' }}>🤍</div>
+          <h1 style={{ fontSize: '2.8rem', color: '#333', marginBottom: '20px', letterSpacing: '-0.04em', fontWeight: '800' }}>우리의 열달</h1>
+          <p style={{ fontSize: '1.2rem', color: '#666', lineHeight: '1.6', marginBottom: '50px', wordBreak: 'keep-all', fontWeight: '400' }}>
             아내와 남편이 함께 기록하는<br/>가장 특별한 280일의 임신 다이어리
           </p>
           <button 
             className="animate-pulse-btn"
             onClick={() => setMode("login")}
             style={{ 
-              padding: '18px 45px', fontSize: '1.2rem', borderRadius: '40px', 
-              background: 'linear-gradient(45deg, #FFB4B4, #FF9E9E)', color: 'white', border: 'none', 
-              cursor: 'pointer', fontWeight: 'bold', textShadow: '0 1px 2px rgba(0,0,0,0.1)'
+              padding: '18px 40px', fontSize: '1.1rem', borderRadius: '40px', 
+              backgroundColor: '#333', color: 'white', border: 'none', 
+              cursor: 'pointer', fontWeight: 'bold', boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
+              letterSpacing: '-0.02em'
             }}>
             다이어리 시작하기
           </button>
-        </div>
+        </section>
 
-        {/* Features Section */}
-        <div style={{ backgroundColor: 'transparent', padding: '0 20px 60px' }}>
-          
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', 
-            gap: '15px' 
-          }}>
-            
-            {/* Card 1 */}
-            <div className="animate-fade-up" style={{ animationDelay: '0.2s', backgroundColor: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(10px)', padding: '25px 20px', borderRadius: '24px', boxShadow: '0 8px 30px rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', border: '1px solid rgba(255,255,255,0.5)' }}>
-              <div className="animate-float" style={{ animationDelay: '0.5s', fontSize: '2.8rem', marginBottom: '15px' }}>🍓</div>
-              <h3 style={{ fontSize: '1.05rem', color: 'var(--text-primary)', marginBottom: '10px', wordBreak: 'keep-all', fontWeight: 'bold' }}>은근슬쩍 전하는 속마음</h3>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.5', wordBreak: 'keep-all' }}>
-                문득 먹고 싶은 간식이나 서운했던 감정들을 일기장에 살며시 남겨보세요.
-              </p>
-            </div>
+        {/* Story Section 1 */}
+        <section className="animate-fade-up" style={{ padding: '100px 30px', backgroundColor: '#FFF5F5', textAlign: 'center' }}>
+          <div style={{ fontSize: '3rem', marginBottom: '25px' }}>🍓</div>
+          <h2 style={{ fontSize: '1.8rem', color: '#222', marginBottom: '15px', letterSpacing: '-0.03em', fontWeight: '700', wordBreak: 'keep-all' }}>은근슬쩍 전하는 속마음</h2>
+          <p style={{ fontSize: '1.1rem', color: '#555', lineHeight: '1.7', wordBreak: 'keep-all' }}>
+            문득 먹고 싶은 간식이나 서운했던 감정들을<br/>일기장에 살며시 남겨보세요.
+          </p>
+        </section>
 
-            {/* Card 2 */}
-            <div className="animate-fade-up" style={{ animationDelay: '0.3s', backgroundColor: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(10px)', padding: '25px 20px', borderRadius: '24px', boxShadow: '0 8px 30px rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', border: '1px solid rgba(255,255,255,0.5)' }}>
-              <div className="animate-float" style={{ animationDelay: '0.2s', fontSize: '2.8rem', marginBottom: '15px' }}>✨</div>
-              <h3 style={{ fontSize: '1.05rem', color: 'var(--text-primary)', marginBottom: '10px', wordBreak: 'keep-all', fontWeight: 'bold' }}>센스 만점 예비 아빠</h3>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.5', wordBreak: 'keep-all' }}>
-                퇴근길 손에 들린 딸기 한 팩. 아내의 일기를 보고 말없이 감동을 선물해 보세요.
-              </p>
-            </div>
+        {/* Story Section 2 */}
+        <section className="animate-fade-up" style={{ padding: '100px 30px', backgroundColor: '#F4F7FB', textAlign: 'center' }}>
+          <div style={{ fontSize: '3rem', marginBottom: '25px' }}>✨</div>
+          <h2 style={{ fontSize: '1.8rem', color: '#222', marginBottom: '15px', letterSpacing: '-0.03em', fontWeight: '700', wordBreak: 'keep-all' }}>센스 만점 예비 아빠</h2>
+          <p style={{ fontSize: '1.1rem', color: '#555', lineHeight: '1.7', wordBreak: 'keep-all' }}>
+            퇴근길 손에 들린 딸기 한 팩.<br/>아내의 일기를 보고 말없이 감동을 선물해 보세요.
+          </p>
+        </section>
 
-            {/* Card 3 */}
-            <div className="animate-fade-up" style={{ animationDelay: '0.4s', backgroundColor: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(10px)', padding: '25px 20px', borderRadius: '24px', boxShadow: '0 8px 30px rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', border: '1px solid rgba(255,255,255,0.5)' }}>
-              <div className="animate-float" style={{ animationDelay: '0.8s', fontSize: '2.8rem', marginBottom: '15px' }}>💌</div>
-              <h3 style={{ fontSize: '1.05rem', color: 'var(--text-primary)', marginBottom: '10px', wordBreak: 'keep-all', fontWeight: 'bold' }}>얼굴 보고 하지 못한 말</h3>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.5', wordBreak: 'keep-all' }}>
-                "오늘 하루도 너무 고마워." 쑥스러워 삼켰던 진심을 다이어리를 통해 전해보세요.
-              </p>
-            </div>
+        {/* Story Section 3 */}
+        <section className="animate-fade-up" style={{ padding: '100px 30px', backgroundColor: '#FDF8E2', textAlign: 'center' }}>
+          <div style={{ fontSize: '3rem', marginBottom: '25px' }}>💌</div>
+          <h2 style={{ fontSize: '1.8rem', color: '#222', marginBottom: '15px', letterSpacing: '-0.03em', fontWeight: '700', wordBreak: 'keep-all' }}>얼굴 보고 하지 못한 말</h2>
+          <p style={{ fontSize: '1.1rem', color: '#555', lineHeight: '1.7', wordBreak: 'keep-all' }}>
+            "오늘 하루도 너무 고마워."<br/>쑥스러워 삼켰던 진심을 다이어리로 전해보세요.
+          </p>
+        </section>
 
-            {/* Card 4 */}
-            <div className="animate-fade-up" style={{ animationDelay: '0.5s', backgroundColor: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(10px)', padding: '25px 20px', borderRadius: '24px', boxShadow: '0 8px 30px rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', border: '1px solid rgba(255,255,255,0.5)' }}>
-              <div className="animate-float" style={{ animationDelay: '0.4s', fontSize: '2.8rem', marginBottom: '15px' }}>👨‍👩‍👦</div>
-              <h3 style={{ fontSize: '1.05rem', color: 'var(--text-primary)', marginBottom: '10px', wordBreak: 'keep-all', fontWeight: 'bold' }}>진짜 부모가 되어가는 시간</h3>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.5', wordBreak: 'keep-all' }}>
-                서로를 더 깊이 이해하고 위로하며, 온전한 가족이 되어가는 280일의 여정입니다.
-              </p>
-            </div>
+        {/* Story Section 4 */}
+        <section className="animate-fade-up" style={{ padding: '100px 30px', backgroundColor: '#F4FAEB', textAlign: 'center' }}>
+          <div style={{ fontSize: '3rem', marginBottom: '25px' }}>👨‍👩‍👦</div>
+          <h2 style={{ fontSize: '1.8rem', color: '#222', marginBottom: '15px', letterSpacing: '-0.03em', fontWeight: '700', wordBreak: 'keep-all' }}>진짜 부모가 되어가는 시간</h2>
+          <p style={{ fontSize: '1.1rem', color: '#555', lineHeight: '1.7', wordBreak: 'keep-all' }}>
+            서로를 더 깊이 이해하고 위로하며,<br/>온전한 가족이 되어가는 280일의 여정입니다.
+          </p>
+        </section>
 
-          </div>
-        </div>
+        {/* Bottom CTA Section */}
+        <section style={{ padding: '80px 20px', backgroundColor: '#FFFFFF', textAlign: 'center' }}>
+          <h2 style={{ fontSize: '1.5rem', color: '#222', marginBottom: '30px', fontWeight: '700' }}>지금 바로 우리만의 일기를 시작해보세요</h2>
+          <button 
+            onClick={() => setMode("login")}
+            style={{ 
+              padding: '18px 50px', fontSize: '1.1rem', borderRadius: '40px', 
+              backgroundColor: '#333', color: 'white', border: 'none', 
+              cursor: 'pointer', fontWeight: 'bold', boxShadow: '0 5px 15px rgba(0,0,0,0.1)'
+            }}>
+            시작하기
+          </button>
+        </section>
+
       </main>
     );
   }
