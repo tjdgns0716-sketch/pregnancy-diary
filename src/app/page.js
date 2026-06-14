@@ -739,10 +739,19 @@ export default function Home() {
                   <button 
                     onClick={() => setIsWriteModalOpen(true)}
                     style={{ width: '32px', height: '32px', borderRadius: '16px', border: 'none', backgroundColor: 'var(--text-primary)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: 'var(--shadow-sm)', fontSize: '1rem' }}
-                    title="일기 쓰기"
+                    title={selectedDayDiary ? "일기 수정" : "일기 쓰기"}
                   >
                     ✏️
                   </button>
+                  {selectedDayDiary && (
+                    <button 
+                      onClick={handleDeleteDiary}
+                      style={{ width: '32px', height: '32px', borderRadius: '16px', border: 'none', backgroundColor: '#f5d6d1', color: '#c96b63', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: 'var(--shadow-sm)', fontSize: '1rem' }}
+                      title="일기 삭제"
+                    >
+                      🗑️
+                    </button>
+                  )}
                 </div>
               )}
             </div>
@@ -1052,14 +1061,6 @@ export default function Home() {
                 >
                   {isUploading ? '업로드 중...' : (attachedImage ? '사진 변경' : '사진 첨부')}
                 </button>
-                {selectedDayDiary && (
-                  <button 
-                    onClick={handleDeleteDiary} 
-                    disabled={isUploading}
-                    style={{ padding: '15px', borderRadius: '10px', border: 'none', backgroundColor: '#f5d6d1', color: '#c96b63', cursor: isUploading ? 'not-allowed' : 'pointer', fontWeight: 'bold', fontSize: '0.9rem' }}>
-                    삭제
-                  </button>
-                )}
                 <button 
                   onClick={handleSaveDiary} 
                   disabled={isUploading}
