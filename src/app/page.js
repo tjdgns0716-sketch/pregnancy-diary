@@ -78,14 +78,6 @@ export default function Home() {
   const [postItContent, setPostItContent] = useState("");
 
   useEffect(() => {
-    // Load theme from localStorage
-    const savedTheme = localStorage.getItem('diary_theme');
-    if (savedTheme) {
-      setCurrentTheme(savedTheme);
-      document.body.className = savedTheme;
-    }
-
-
     const fetchUserAndProfile = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
@@ -98,6 +90,16 @@ export default function Home() {
         setCurrentUserRole(profile.role);
         setCurrentUser(user);
         setCoupleId(profile.couple_id);
+        
+        // Load theme from localStorage for this specific user
+        const savedTheme = localStorage.getItem(`diary_theme_${user.id}`);
+        if (savedTheme) {
+          setCurrentTheme(savedTheme);
+          document.body.className = savedTheme;
+        } else {
+          setCurrentTheme('');
+          document.body.className = '';
+        }
         
         // Check Tutorial
         const tutorialSeen = localStorage.getItem(`diary_tutorial_seen_${profile.role}_${user.id}`);
@@ -129,7 +131,9 @@ export default function Home() {
 
   const changeTheme = (themeClass) => {
     setCurrentTheme(themeClass);
-    localStorage.setItem('diary_theme', themeClass);
+    if (currentUser) {
+      localStorage.setItem(`diary_theme_${currentUser.id}`, themeClass);
+    }
     document.body.className = themeClass;
   };
 
