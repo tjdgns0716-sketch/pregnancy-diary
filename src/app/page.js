@@ -111,9 +111,8 @@ export default function Home() {
           document.body.className = '';
         }
         
-        // Check Tutorial
-        const tutorialSeen = localStorage.getItem(`diary_tutorial_seen_${profile.role}_${user.id}`);
-        if (!tutorialSeen) {
+        // Check Tutorial from user_metadata
+        if (!user.user_metadata?.tutorial_seen) {
           setShowTutorial(true);
         }
         
@@ -1422,12 +1421,13 @@ export default function Home() {
                 </button>
               )}
               <button 
-                onClick={() => {
+                onClick={async () => {
                   const totalSteps = currentUserRole === 'mother' ? 7 : 4;
                   if (tutorialStep < totalSteps - 1) {
                     setTutorialStep(tutorialStep + 1);
                   } else {
-                    localStorage.setItem(`diary_tutorial_seen_${currentUserRole}_${currentUser.id}`, 'true');
+                    // Save tutorial state securely to Supabase user_metadata
+                    await supabase.auth.updateUser({ data: { tutorial_seen: true } });
                     setShowTutorial(false);
                   }
                 }}
