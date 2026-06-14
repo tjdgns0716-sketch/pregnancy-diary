@@ -8,7 +8,7 @@ export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [mode, setMode] = useState("login"); // login, signup, setup_role
+  const [mode, setMode] = useState("landing"); // landing, login, signup, setup_role
   const [role, setRole] = useState(null); // 'mother' or 'partner'
   const [inviteCode, setInviteCode] = useState("");
   const [babyName, setBabyName] = useState("");
@@ -297,6 +297,75 @@ export default function Login() {
       setLoading(false);
     }
   };
+
+  if (mode === "landing") {
+    return (
+      <main className="main-content" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: 'var(--bg-color)' }}>
+        {/* Hero Section */}
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 20px', textAlign: 'center' }}>
+          <div style={{ fontSize: '3rem', marginBottom: '10px' }}>🤍</div>
+          <h1 style={{ fontSize: '2.5rem', color: 'var(--text-primary)', marginBottom: '15px' }}>우리의 열달</h1>
+          <p style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', lineHeight: '1.6', marginBottom: '30px', wordBreak: 'keep-all' }}>
+            아내와 남편이 함께 기록하는<br/>가장 특별한 280일의 임신 다이어리
+          </p>
+          <button 
+            onClick={() => setMode("login")}
+            style={{ 
+              padding: '16px 40px', fontSize: '1.1rem', borderRadius: '30px', 
+              backgroundColor: 'var(--accent-color)', color: 'white', border: 'none', 
+              cursor: 'pointer', fontWeight: 'bold', boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+            }}>
+            다이어리 시작하기
+          </button>
+        </div>
+
+        {/* Features Section */}
+        <div style={{ backgroundColor: 'white', borderRadius: '30px 30px 0 0', padding: '40px 20px', boxShadow: '0 -10px 30px rgba(0,0,0,0.03)' }}>
+          
+          <div style={{ marginBottom: '40px', display: 'flex', gap: '15px', alignItems: 'flex-start' }}>
+            <div style={{ fontSize: '2.5rem' }}>✍️</div>
+            <div>
+              <h3 style={{ fontSize: '1.2rem', color: 'var(--text-primary)', marginBottom: '5px' }}>매일의 감정 기록</h3>
+              <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
+                입덧, 태동, 그리고 예비 엄마의 기분 변화를 귀여운 뱃지와 사진으로 간편하게 기록하세요.
+              </p>
+            </div>
+          </div>
+
+          <div style={{ marginBottom: '40px', display: 'flex', gap: '15px', alignItems: 'flex-start' }}>
+            <div style={{ fontSize: '2.5rem' }}>💌</div>
+            <div>
+              <h3 style={{ fontSize: '1.2rem', color: 'var(--text-primary)', marginBottom: '5px' }}>아빠의 따뜻한 포스트잇</h3>
+              <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
+                엄마가 남긴 일기에 예비 아빠가 응원의 포스트잇을 붙일 수 있어요. 함께하는 열달을 만들어보세요.
+              </p>
+            </div>
+          </div>
+
+          <div style={{ marginBottom: '40px', display: 'flex', gap: '15px', alignItems: 'flex-start' }}>
+            <div style={{ fontSize: '2.5rem' }}>🤫</div>
+            <div>
+              <h3 style={{ fontSize: '1.2rem', color: 'var(--text-primary)', marginBottom: '5px' }}>나만의 비밀 일기</h3>
+              <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
+                남편에게 말하기 힘든 고민이 있나요? '나만의 일기' 기능을 사용하면 완벽하게 비밀이 보장됩니다.
+              </p>
+            </div>
+          </div>
+
+          <div style={{ marginBottom: '20px', display: 'flex', gap: '15px', alignItems: 'flex-start' }}>
+            <div style={{ fontSize: '2.5rem' }}>📚</div>
+            <div>
+              <h3 style={{ fontSize: '1.2rem', color: 'var(--text-primary)', marginBottom: '5px' }}>출산 후 PDF 영구 소장</h3>
+              <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
+                아기가 태어나면, 지금까지 쓴 모든 일기와 사진을 한 권의 책처럼 PDF 파일로 영구 소장할 수 있습니다.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </main>
+    );
+  }
 
   if (mode === "setup_role") {
     return (
