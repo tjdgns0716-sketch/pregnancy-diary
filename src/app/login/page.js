@@ -318,23 +318,14 @@ export default function Login() {
         
         {/* Header / Hero */}
         <section className="animate-fade-up" style={{ 
-          height: '480px', 
+          height: '500px', 
           position: 'relative', 
-          backgroundColor: '#FDECE4', /* Matches the peach wall color of the image */
+          backgroundImage: 'url(/images/hero.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'top center',
+          backgroundRepeat: 'no-repeat',
           overflow: 'hidden'
         }}>
-          
-          {/* Hero Image shifted to the right */}
-          <img src="/images/hero.png" alt="" style={{
-            position: 'absolute',
-            right: '-80px',
-            bottom: '0',
-            height: '110%',
-            zIndex: 1,
-            pointerEvents: 'none',
-            objectFit: 'contain',
-            objectPosition: 'right bottom'
-          }} />
           
           {/* Hamburger Menu (Mockup visual) */}
           <div style={{ position: 'absolute', top: '20px', right: '20px', cursor: 'pointer', zIndex: 20 }}>
@@ -467,35 +458,35 @@ export default function Login() {
         </section>
         </div>
 
-        {/* Feature Badges (Horizontal Scroll) */}
-        <section className="animate-fade-up" style={{ animationDelay: '0.4s', padding: '30px 20px', marginTop: '10px' }}>
-          <div style={{ display: 'flex', gap: '15px', overflowX: 'auto', paddingBottom: '10px', msOverflowStyle: 'none', scrollbarWidth: 'none' }} className="hide-scrollbar">
+        {/* Feature Badges (Horizontal Row) */}
+        <section className="animate-fade-up" style={{ animationDelay: '0.4s', padding: '10px 20px 30px', marginTop: '10px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', padding: '20px 0', backgroundColor: 'transparent' }}>
             
             {/* Feature 1 */}
-            <div style={{ minWidth: '150px', backgroundColor: 'rgba(255,255,255,0.6)', padding: '15px', borderRadius: '20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: '#EBE0FF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}>🔒</div>
-              <div>
-                <div style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#333' }}>안전한 보안</div>
-                <div style={{ fontSize: '0.7rem', color: '#777', marginTop: '2px', wordBreak: 'keep-all' }}>소중한 기록을<br/>안전하게 보호해요.</div>
-              </div>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '0 5px' }}>
+              <div style={{ width: '45px', height: '45px', borderRadius: '50%', backgroundColor: '#EBE0FF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', marginBottom: '10px' }}>🔒</div>
+              <div style={{ fontSize: '0.9rem', fontWeight: 'bold', color: '#333', marginBottom: '5px' }}>안전한 보안</div>
+              <div style={{ fontSize: '0.75rem', color: '#777', wordBreak: 'keep-all', lineHeight: '1.4' }}>소중한 기록을<br/>안전하게 보호해요.</div>
             </div>
+
+            {/* Divider */}
+            <div style={{ width: '1px', height: '60px', backgroundColor: '#EADACA', marginTop: '20px' }} />
 
             {/* Feature 2 */}
-            <div style={{ minWidth: '150px', backgroundColor: 'rgba(255,255,255,0.6)', padding: '15px', borderRadius: '20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: '#FFE6E6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}>❤️</div>
-              <div>
-                <div style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#333' }}>부부가 함께</div>
-                <div style={{ fontSize: '0.7rem', color: '#777', marginTop: '2px', wordBreak: 'keep-all' }}>서로의 마음을<br/>함께 기록해요.</div>
-              </div>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '0 5px' }}>
+              <div style={{ width: '45px', height: '45px', borderRadius: '50%', backgroundColor: '#FFE6E6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', marginBottom: '10px' }}>❤️</div>
+              <div style={{ fontSize: '0.9rem', fontWeight: 'bold', color: '#333', marginBottom: '5px' }}>부부가 함께</div>
+              <div style={{ fontSize: '0.75rem', color: '#777', wordBreak: 'keep-all', lineHeight: '1.4' }}>서로의 마음을 나누고<br/>함께 기록해요.</div>
             </div>
 
+            {/* Divider */}
+            <div style={{ width: '1px', height: '60px', backgroundColor: '#EADACA', marginTop: '20px' }} />
+
             {/* Feature 3 */}
-            <div style={{ minWidth: '150px', backgroundColor: 'rgba(255,255,255,0.6)', padding: '15px', borderRadius: '20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: '#FFF4D9', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}>✨</div>
-              <div>
-                <div style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#333' }}>소중한 추억</div>
-                <div style={{ fontSize: '0.7rem', color: '#777', marginTop: '2px', wordBreak: 'keep-all' }}>280일의 순간을<br/>평생 간직하세요.</div>
-              </div>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '0 5px' }}>
+              <div style={{ width: '45px', height: '45px', borderRadius: '50%', backgroundColor: '#FFF4D9', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', marginBottom: '10px' }}>✨</div>
+              <div style={{ fontSize: '0.9rem', fontWeight: 'bold', color: '#333', marginBottom: '5px' }}>소중한 추억</div>
+              <div style={{ fontSize: '0.75rem', color: '#777', wordBreak: 'keep-all', lineHeight: '1.4' }}>280일의 순간을<br/>평생 간직하세요.</div>
             </div>
 
           </div>
