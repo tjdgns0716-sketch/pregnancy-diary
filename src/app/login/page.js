@@ -13,6 +13,13 @@ export default function Login() {
   const [inviteCode, setInviteCode] = useState("");
   const [babyName, setBabyName] = useState("");
   const [dueDate, setDueDate] = useState("");
+  const [keepLoggedIn, setKeepLoggedIn] = useState(true);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem('keepLoggedIn', keepLoggedIn ? 'true' : 'false');
+    }
+  }, [keepLoggedIn]);
   const [userName, setUserName] = useState("");
   const [birthdate, setBirthdate] = useState("");
   const [phoneLast4, setPhoneLast4] = useState("");
@@ -642,6 +649,18 @@ export default function Login() {
       {mode === "login" && (
         <>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', width: '100%', maxWidth: '300px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '5px', justifyContent: 'center' }}>
+              <input 
+                type="checkbox" 
+                id="keepLoggedIn" 
+                checked={keepLoggedIn} 
+                onChange={(e) => setKeepLoggedIn(e.target.checked)} 
+                style={{ cursor: 'pointer', accentColor: 'var(--accent-color)' }}
+              />
+              <label htmlFor="keepLoggedIn" style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', cursor: 'pointer' }}>
+                자동 로그인 유지
+              </label>
+            </div>
             <button 
               onClick={() => handleOAuthLogin('google')}
               disabled={loading}
