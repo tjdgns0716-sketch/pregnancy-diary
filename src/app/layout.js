@@ -27,7 +27,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ko">
       <body className={gowunDodum.className}>
-        <div className="app-container" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--bg-color)' }}>
+        <div className="app-container" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--bg-color)' }}>
           <div style={{ flex: 1 }}>
             {children}
           </div>

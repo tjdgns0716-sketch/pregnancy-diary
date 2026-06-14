@@ -308,11 +308,7 @@ export default function Login() {
 
   if (mode === "landing") {
     return (
-      <>
-        {/* Full screen background for desktop & mobile */}
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: -1, background: 'radial-gradient(circle at 50% 20%, #E8DEFF 0%, #F5F0FF 40%, #FFFDFD 100%)' }} />
-        
-        <main className="main-content" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'transparent', boxShadow: 'none' }}>
+      <main className="main-content" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'transparent', boxShadow: 'none' }}>
         
         {/* Header / Hero */}
         <section className="animate-fade-up" style={{ padding: '80px 20px 40px', textAlign: 'center' }}>
@@ -434,13 +430,11 @@ export default function Login() {
           </p>
         </section>
 
-        {/* CSS overrides for Landing Mode */}
+        {/* Hide scrollbar styles locally */}
         <style dangerouslySetInnerHTML={{__html: `
-          body, .app-container { background: transparent !important; }
           .hide-scrollbar::-webkit-scrollbar { display: none; }
         `}} />
       </main>
-      </>
     );
   }
 
