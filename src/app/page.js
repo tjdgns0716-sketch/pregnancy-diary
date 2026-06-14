@@ -889,7 +889,7 @@ export default function Home() {
               )}
 
               {/* Partner's Post-it Note or Input */}
-              {(selectedDayDiary.content || selectedDayDiary.badges) && (currentUserRole === 'partner' || selectedDayPostIt) && (
+              {hasPostItUI && (
                 <div style={{
                   marginTop: '20px',
                   backgroundColor: '#fff7d6',
