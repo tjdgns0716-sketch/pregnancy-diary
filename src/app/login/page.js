@@ -434,8 +434,9 @@ export default function Login() {
           </p>
         </section>
 
-        {/* Hide scrollbar styles locally */}
+        {/* CSS overrides for Landing Mode */}
         <style dangerouslySetInnerHTML={{__html: `
+          body, .app-container { background: transparent !important; }
           .hide-scrollbar::-webkit-scrollbar { display: none; }
         `}} />
       </main>
