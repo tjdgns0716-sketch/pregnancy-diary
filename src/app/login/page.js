@@ -323,11 +323,11 @@ export default function Login() {
         <div style={{ backgroundColor: 'white', borderRadius: '30px 30px 0 0', padding: '40px 20px', boxShadow: '0 -10px 30px rgba(0,0,0,0.03)' }}>
           
           <div style={{ marginBottom: '40px', display: 'flex', gap: '15px', alignItems: 'flex-start' }}>
-            <div style={{ fontSize: '2.5rem' }}>✍️</div>
+            <div style={{ fontSize: '2.5rem' }}>🌱</div>
             <div>
-              <h3 style={{ fontSize: '1.2rem', color: 'var(--text-primary)', marginBottom: '5px' }}>매일의 감정 기록</h3>
-              <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
-                입덧, 태동, 그리고 예비 엄마의 기분 변화를 귀여운 뱃지와 사진으로 간편하게 기록하세요.
+              <h3 style={{ fontSize: '1.2rem', color: 'var(--text-primary)', marginBottom: '8px', wordBreak: 'keep-all' }}>변화하는 나의 몸과 마음을<br/>다독이는 시간</h3>
+              <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: '1.6', wordBreak: 'keep-all' }}>
+                몸은 힘들어도 마음만은 따뜻하게. 열달 동안 겪는 낯선 변화들과 하루하루 변하는 엄마의 감정을 온전히 기록하며 스스로를 토닥여주세요.
               </p>
             </div>
           </div>
@@ -335,29 +335,29 @@ export default function Login() {
           <div style={{ marginBottom: '40px', display: 'flex', gap: '15px', alignItems: 'flex-start' }}>
             <div style={{ fontSize: '2.5rem' }}>💌</div>
             <div>
-              <h3 style={{ fontSize: '1.2rem', color: 'var(--text-primary)', marginBottom: '5px' }}>아빠의 따뜻한 포스트잇</h3>
-              <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
-                엄마가 남긴 일기에 예비 아빠가 응원의 포스트잇을 붙일 수 있어요. 함께하는 열달을 만들어보세요.
+              <h3 style={{ fontSize: '1.2rem', color: 'var(--text-primary)', marginBottom: '8px', wordBreak: 'keep-all' }}>떨어져 있어도,<br/>늘 함께 걷는 우리</h3>
+              <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: '1.6', wordBreak: 'keep-all' }}>
+                아빠가 남긴 작은 포스트잇 하나가 엄마에겐 큰 위로가 됩니다. 서툴지만 진심이 담긴 아빠의 한마디로 부부가 함께 임신의 여정을 걸어가요.
               </p>
             </div>
           </div>
 
           <div style={{ marginBottom: '40px', display: 'flex', gap: '15px', alignItems: 'flex-start' }}>
-            <div style={{ fontSize: '2.5rem' }}>🤫</div>
+            <div style={{ fontSize: '2.5rem' }}>💭</div>
             <div>
-              <h3 style={{ fontSize: '1.2rem', color: 'var(--text-primary)', marginBottom: '5px' }}>나만의 비밀 일기</h3>
-              <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
-                남편에게 말하기 힘든 고민이 있나요? '나만의 일기' 기능을 사용하면 완벽하게 비밀이 보장됩니다.
+              <h3 style={{ fontSize: '1.2rem', color: 'var(--text-primary)', marginBottom: '8px', wordBreak: 'keep-all' }}>가장 솔직해질 수 있는<br/>나만의 공간</h3>
+              <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: '1.6', wordBreak: 'keep-all' }}>
+                때로는 남편에게도, 가족에게도 말하기 힘든 감정이 찾아오죠. 누구의 눈치도 보지 않고 나의 진짜 속마음을 털어놓을 수 있는 안전한 공간이 되어드릴게요.
               </p>
             </div>
           </div>
 
           <div style={{ marginBottom: '20px', display: 'flex', gap: '15px', alignItems: 'flex-start' }}>
-            <div style={{ fontSize: '2.5rem' }}>📚</div>
+            <div style={{ fontSize: '2.5rem' }}>🎁</div>
             <div>
-              <h3 style={{ fontSize: '1.2rem', color: 'var(--text-primary)', marginBottom: '5px' }}>출산 후 PDF 영구 소장</h3>
-              <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
-                아기가 태어나면, 지금까지 쓴 모든 일기와 사진을 한 권의 책처럼 PDF 파일로 영구 소장할 수 있습니다.
+              <h3 style={{ fontSize: '1.2rem', color: 'var(--text-primary)', marginBottom: '8px', wordBreak: 'keep-all' }}>아이가 태어나는 날,<br/>한 권의 책이 되다</h3>
+              <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: '1.6', wordBreak: 'keep-all' }}>
+                280일간의 설렘, 눈물, 그리고 기쁨의 순간들. 이 모든 기억을 모아 우리 아이를 위한 세상에 단 하나뿐인 태교 일기장으로 영원히 간직하세요.
               </p>
             </div>
           </div>
