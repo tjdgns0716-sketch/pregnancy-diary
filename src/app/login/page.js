@@ -330,37 +330,37 @@ export default function Login() {
             
             {/* Card 1 */}
             <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '20px', boxShadow: '0 4px 15px rgba(0,0,0,0.03)', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: '10px' }}>🌱</div>
-              <h3 style={{ fontSize: '1rem', color: 'var(--text-primary)', marginBottom: '8px', wordBreak: 'keep-all' }}>부부가 함께 걷는 열달</h3>
+              <div style={{ fontSize: '2.5rem', marginBottom: '10px' }}>🍓</div>
+              <h3 style={{ fontSize: '1rem', color: 'var(--text-primary)', marginBottom: '8px', wordBreak: 'keep-all' }}>은근슬쩍 전하는 속마음</h3>
               <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.4', wordBreak: 'keep-all' }}>
-                혼자가 아니에요. 감정을 나누며 부모가 되어갑니다.
+                문득 먹고 싶은 간식이나 서운했던 감정들을 일기장에 살며시 남겨보세요.
               </p>
             </div>
 
             {/* Card 2 */}
             <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '20px', boxShadow: '0 4px 15px rgba(0,0,0,0.03)', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: '10px' }}>💌</div>
-              <h3 style={{ fontSize: '1rem', color: 'var(--text-primary)', marginBottom: '8px', wordBreak: 'keep-all' }}>마음을 전하는 포스트잇</h3>
+              <div style={{ fontSize: '2.5rem', marginBottom: '10px' }}>✨</div>
+              <h3 style={{ fontSize: '1rem', color: 'var(--text-primary)', marginBottom: '8px', wordBreak: 'keep-all' }}>센스 만점 예비 아빠</h3>
               <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.4', wordBreak: 'keep-all' }}>
-                서툴지만 진심이 담긴 한마디로 위로를 전하세요.
+                퇴근길 손에 들린 딸기 한 팩. 아내의 일기를 보고 말없이 감동을 선물해 보세요.
               </p>
             </div>
 
             {/* Card 3 */}
             <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '20px', boxShadow: '0 4px 15px rgba(0,0,0,0.03)', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: '10px' }}>🤫</div>
-              <h3 style={{ fontSize: '1rem', color: 'var(--text-primary)', marginBottom: '8px', wordBreak: 'keep-all' }}>가장 솔직한 나의 공간</h3>
+              <div style={{ fontSize: '2.5rem', marginBottom: '10px' }}>💌</div>
+              <h3 style={{ fontSize: '1rem', color: 'var(--text-primary)', marginBottom: '8px', wordBreak: 'keep-all' }}>얼굴 보고 하지 못한 말</h3>
               <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.4', wordBreak: 'keep-all' }}>
-                말하기 힘든 속마음을 편안하게 내려놓으세요.
+                "오늘 하루도 너무 고마워." 쑥스러워 삼켰던 진심을 다이어리를 통해 전해보세요.
               </p>
             </div>
 
             {/* Card 4 */}
             <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '20px', boxShadow: '0 4px 15px rgba(0,0,0,0.03)', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: '10px' }}>🎁</div>
-              <h3 style={{ fontSize: '1rem', color: 'var(--text-primary)', marginBottom: '8px', wordBreak: 'keep-all' }}>세상에 하나뿐인 선물</h3>
+              <div style={{ fontSize: '2.5rem', marginBottom: '10px' }}>👨‍👩‍👦</div>
+              <h3 style={{ fontSize: '1rem', color: 'var(--text-primary)', marginBottom: '8px', wordBreak: 'keep-all' }}>진짜 부모가 되어가는 시간</h3>
               <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.4', wordBreak: 'keep-all' }}>
-                우리의 소중한 기억을 모아 책으로 간직하세요.
+                서로를 더 깊이 이해하고 위로하며, 온전한 가족이 되어가는 280일의 여정입니다.
               </p>
             </div>
 
