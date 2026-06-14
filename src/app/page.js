@@ -896,7 +896,7 @@ export default function Home() {
         }}>
           <div style={{
             width: '100%', maxWidth: '480px', height: '80vh',
-            backgroundColor: 'var(--bg-color)', borderTopLeftRadius: '20px', borderTopRightRadius: '20px',
+            backgroundColor: 'var(--card-bg)', borderTopLeftRadius: '20px', borderTopRightRadius: '20px',
             padding: '20px', display: 'flex', flexDirection: 'column',
             boxShadow: '0 -4px 20px rgba(0,0,0,0.1)'
           }}>
@@ -921,7 +921,7 @@ export default function Home() {
 
             {/* Badge Selector Popup */}
             {showBadgeSelector && (
-              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '15px', padding: '10px', backgroundColor: 'var(--bg-color)', borderRadius: '10px', border: '1px solid var(--border-color)', maxHeight: '160px', overflowY: 'auto' }}>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '15px', padding: '10px', backgroundColor: 'var(--card-bg)', borderRadius: '10px', border: '1px solid var(--border-color)', maxHeight: '160px', overflowY: 'auto' }}>
                 {[
                   // 신체/컨디션
                   '😊 컨디션 최고!', '😢 감정 기복이 심해요', '😠 예민해요', '🥱 무기력해요', '😪 눕고만 싶어요', '😵 어지러워요/빈혈',
@@ -1033,7 +1033,7 @@ export default function Home() {
           display: 'flex', justifyContent: 'center', alignItems: 'flex-end'
         }}>
           <div style={{
-            width: '100%', maxWidth: '480px', backgroundColor: 'var(--bg-color)', 
+            width: '100%', maxWidth: '480px', backgroundColor: 'var(--card-bg)', 
             borderTopLeftRadius: '20px', borderTopRightRadius: '20px',
             padding: '20px', display: 'flex', flexDirection: 'column',
             boxShadow: '0 -4px 20px rgba(0,0,0,0.1)'
@@ -1214,7 +1214,7 @@ export default function Home() {
           display: 'flex', justifyContent: 'center', alignItems: 'center'
         }}>
           <div style={{
-            width: '90%', maxWidth: '340px', backgroundColor: 'var(--bg-color)', 
+            width: '90%', maxWidth: '340px', backgroundColor: 'var(--card-bg)', 
             borderRadius: '20px', padding: '25px', display: 'flex', flexDirection: 'column',
             boxShadow: 'var(--shadow-md)'
           }}>
@@ -1244,7 +1244,7 @@ export default function Home() {
           display: 'flex', justifyContent: 'center', alignItems: 'center'
         }}>
           <div style={{
-            width: '90%', maxWidth: '340px', backgroundColor: 'var(--bg-color)', 
+            width: '90%', maxWidth: '340px', backgroundColor: 'var(--card-bg)', 
             borderRadius: '20px', padding: '25px', display: 'flex', flexDirection: 'column',
             boxShadow: 'var(--shadow-md)'
           }}>
@@ -1277,7 +1277,7 @@ export default function Home() {
           display: 'flex', justifyContent: 'center', alignItems: 'center'
         }}>
           <div style={{
-            width: '90%', maxWidth: '340px', backgroundColor: 'var(--bg-color)', 
+            width: '90%', maxWidth: '340px', backgroundColor: 'var(--card-bg)', 
             borderRadius: '20px', padding: '25px', display: 'flex', flexDirection: 'column',
             boxShadow: 'var(--shadow-md)', maxHeight: '80vh', overflowY: 'auto'
           }}>
@@ -1338,7 +1338,7 @@ export default function Home() {
           display: 'flex', justifyContent: 'center', alignItems: 'center'
         }}>
           <div style={{
-            width: '90%', maxWidth: '340px', backgroundColor: 'var(--bg-color)', 
+            width: '90%', maxWidth: '340px', backgroundColor: 'var(--card-bg)', 
             borderRadius: '20px', padding: '25px', display: 'flex', flexDirection: 'column',
             boxShadow: 'var(--shadow-md)'
           }}>
