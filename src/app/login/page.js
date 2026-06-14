@@ -680,7 +680,7 @@ export default function Login() {
                 <div style={{ marginTop: '10px', padding: '15px', backgroundColor: '#f5f5f5', borderRadius: '8px', textAlign: 'center' }}>
                   <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '10px' }}>가입된 계정 정보입니다.</p>
                   {foundEmails.map((em, idx) => (
-                    <p key={idx} style={{ fontSize: '1.1rem', color: 'var(--text-primary)', fontWeight: 'bold', margin: '5px 0' }}>{em}</p>
+                    <p key={idx} style={{ fontSize: '1.1rem', color: 'var(--text-primary)', fontWeight: 'bold', margin: '5px 0' }}>{em.masked_email}</p>
                   ))}
                   <button type="button" onClick={() => setMode("login")} style={{ marginTop: '10px', padding: '8px 15px', borderRadius: '20px', border: '1px solid var(--border-color)', backgroundColor: 'white', color: 'var(--text-primary)', fontSize: '0.85rem', cursor: 'pointer' }}>로그인하러 가기</button>
                 </div>
