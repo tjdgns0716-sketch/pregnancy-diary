@@ -263,6 +263,14 @@ export default function Home() {
     } else {
       const { error } = await supabase.from('diaries').insert(diaryData);
       if (error) { alert("저장 실패: " + error.message); return; }
+      
+      // 배우자에게 푸시 알림 전송 (엄마가 썼을 경우만)
+      if (currentUserRole === 'mother') {
+        const { data: partner } = await supabase.from('profiles').select('id').eq('couple_id', coupleId).eq('role', 'father').maybeSingle();
+        if (partner) {
+          sendPushNotification(partner.id, "새로운 일기 🍼", "아내가 새로운 다이어리를 작성했어요!");
+        }
+      }
     }
     
     setIsWriteModalOpen(false);
@@ -341,11 +349,24 @@ export default function Home() {
     } else {
       if (!scheduleDate) return;
       if (selectedDaySchedule) {
-        const { error } = await supabase.from('schedules').update({ date: scheduleDate, time: scheduleTime || null, title: scheduleTitle }).eq('id', selectedDaySchedule.id);
+        const { error } = await supabase.from('schedules').update({ date: scheduleDate, time: scheduleTime || null, title: scheduleTitle, alarm_minutes: scheduleAlarmMinutes }).eq('id', selectedDaySchedule.id);
         if (error) { alert("일정 수정 실패: " + error.message); return; }
       } else {
-        const { error } = await supabase.from('schedules').insert({ couple_id: coupleId, pregnancy_id: pregnancyId, date: scheduleDate, time: scheduleTime || null, title: scheduleTitle });
+        const { error } = await supabase.from('schedules').insert({ couple_id: coupleId, pregnancy_id: pregnancyId, date: scheduleDate, time: scheduleTime || null, title: scheduleTitle, alarm_minutes: scheduleAlarmMinutes });
         if (error) { alert("일정 저장 실패: " + error.message); return; }
+      }
+      
+      // 앱 내 로컬 푸시 예약 (앱 환경일 때만)
+      if (window.ReactNativeWebView && scheduleTime && scheduleAlarmMinutes > 0) {
+        const triggerDate = new Date(`${scheduleDate}T${scheduleTime}:00`);
+        triggerDate.setMinutes(triggerDate.getMinutes() - scheduleAlarmMinutes);
+        
+        window.ReactNativeWebView.postMessage(JSON.stringify({
+          type: 'SCHEDULE_ALARM',
+          title: '일정 알림 ⏰',
+          body: scheduleTitle,
+          triggerTime: triggerDate.toISOString()
+        }));
       }
     }
     
@@ -399,6 +420,14 @@ export default function Home() {
     } else {
       const { error } = await supabase.from('post_its').insert({ diary_id: currentDiaryId, author_id: currentUser.id, content: postItContent });
       if (error) { alert("쪽지 저장 실패: " + error.message); return; }
+      
+      // 아빠가 썼을 경우 엄마에게 푸시 알림 전송
+      if (currentUserRole === 'father') {
+        const { data: partner } = await supabase.from('profiles').select('id').eq('couple_id', coupleId).eq('role', 'mother').maybeSingle();
+        if (partner) {
+          sendPushNotification(partner.id, "새로운 쪽지 💌", "남편이 다이어리에 쪽지를 남겼어요!");
+        }
+      }
     }
     
     setPostItContent("");
