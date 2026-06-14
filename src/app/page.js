@@ -1001,7 +1001,7 @@ export default function Home() {
             </div>
             
             {/* Modal Actions */}
-            <div style={{ display: 'flex', gap: '10px', marginBottom: '15px', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: '10px', marginBottom: '15px', flexWrap: 'wrap', flexShrink: 0 }}>
                <button 
                  onClick={() => setShowBadgeSelector(!showBadgeSelector)}
                  style={{ fontSize: '0.85rem', padding: '6px 12px', borderRadius: '15px', border: '1px solid var(--border-color)', backgroundColor: 'white', cursor: 'pointer' }}>
@@ -1016,7 +1016,7 @@ export default function Home() {
 
             {/* Badge Selector Popup */}
             {showBadgeSelector && (
-              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '15px', padding: '10px', backgroundColor: 'var(--card-bg)', borderRadius: '10px', border: '1px solid var(--border-color)', maxHeight: '160px', overflowY: 'auto' }}>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '15px', padding: '10px', backgroundColor: 'var(--card-bg)', borderRadius: '10px', border: '1px solid var(--border-color)', maxHeight: '160px', overflowY: 'auto', flexShrink: 0 }}>
                 {[
                   // 신체/컨디션
                   '😊 컨디션 최고!', '😢 감정 기복이 심해요', '😠 예민해요', '🥱 무기력해요', '😪 눕고만 싶어요', '😵 어지러워요/빈혈',
@@ -1047,7 +1047,7 @@ export default function Home() {
 
             {/* Selected Badges Area */}
             {selectedBadges.length > 0 && (
-              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '15px' }}>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '15px', flexShrink: 0 }}>
                 {selectedBadges.map(badge => (
                   <span key={badge} style={{ fontSize: '0.8rem', backgroundColor: 'var(--accent-color)', color: 'white', padding: '4px 10px', borderRadius: '15px', display: 'flex', alignItems: 'center', gap: '5px' }}>
                     {badge}
@@ -1061,7 +1061,7 @@ export default function Home() {
               value={diaryContent}
               onChange={(e) => setDiaryContent(e.target.value)}
               style={{ 
-                flex: 1, backgroundColor: 'transparent', border: 'none', outline: 'none', resize: 'none', 
+                flex: '1 0 auto', backgroundColor: 'transparent', border: 'none', outline: 'none', resize: 'none', 
                 fontSize: '1.05rem', color: 'var(--text-primary)', fontFamily: 'inherit', minHeight: '160px',
                 lineHeight: '32px', padding: '0 5px',
                 backgroundImage: 'repeating-linear-gradient(transparent, transparent 31px, var(--border-color) 31px, var(--border-color) 32px)',
@@ -1070,7 +1070,7 @@ export default function Home() {
             />
             
             {showPrivateContentInput && (
-              <div style={{ marginTop: '10px', paddingTop: '15px', borderTop: '1px dashed var(--border-color)', display: 'flex', flexDirection: 'column', flex: 1 }}>
+              <div style={{ marginTop: '10px', paddingTop: '15px', borderTop: '1px dashed var(--border-color)', display: 'flex', flexDirection: 'column', flex: '1 0 auto' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '10px' }}>
                   <span style={{ fontSize: '0.85rem' }}>🔒</span>
                   <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 'bold' }}>나만의 비밀 이야기</span>
@@ -1080,7 +1080,7 @@ export default function Home() {
                   onChange={(e) => setPrivateContent(e.target.value)}
                   placeholder="아빠에겐 보이지 않는 비밀 이야기를 적어보세요"
                   style={{ 
-                    flex: 1, backgroundColor: 'transparent', border: 'none', outline: 'none', resize: 'none', 
+                    flex: '1 0 auto', backgroundColor: 'transparent', border: 'none', outline: 'none', resize: 'none', 
                     fontSize: '1.05rem', color: 'var(--text-primary)', fontFamily: 'inherit', minHeight: '128px',
                     lineHeight: '32px', padding: '0 5px',
                     backgroundImage: 'repeating-linear-gradient(transparent, transparent 31px, var(--border-color) 31px, var(--border-color) 32px)',
@@ -1090,7 +1090,7 @@ export default function Home() {
               </div>
             )}
 
-            <div style={{ display: 'flex', gap: '10px', marginTop: '20px', flexDirection: 'column' }}>
+            <div style={{ display: 'flex', gap: '10px', marginTop: '20px', flexDirection: 'column', flexShrink: 0 }}>
               {/* Image Preview Area */}
               {attachedImage && (
                 <div style={{ position: 'relative', width: '100%', borderRadius: '8px', overflow: 'hidden', marginBottom: '10px', backgroundColor: 'var(--bg-color)', display: 'flex', justifyContent: 'center' }}>
