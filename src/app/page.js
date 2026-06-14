@@ -337,20 +337,42 @@ export default function Home() {
   };
 
   const handleSavePostIt = async () => {
-    if (!postItContent.trim() || !selectedDayDiary) return;
+    if (!postItContent.trim()) return;
+    
+    let currentDiaryId = selectedDayDiary?.id;
+
+    if (!currentDiaryId) {
+      const targetDate = `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(selectedDate).padStart(2, '0')}`;
+      const { data, error } = await supabase.from('diaries').insert({
+        couple_id: coupleId,
+        pregnancy_id: pregnancyId,
+        author_id: currentUser.id,
+        date: targetDate,
+        content: null,
+        private_content: null,
+        image_url: null,
+        badges: []
+      }).select().single();
+      
+      if (error) { alert("쪽지 저장 실패(일기 생성 오류): " + error.message); return; }
+      currentDiaryId = data.id;
+      
+      const { data: diaries } = await supabase.from('diaries').select('*').eq('pregnancy_id', pregnancyId).gte('date', `${currentYear}-${String(currentMonth).padStart(2, '0')}-01`).lte('date', `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(daysInMonth).padStart(2, '0')}`);
+      setMonthDiaries(diaries || []);
+    }
     
     if (selectedDayPostIt) {
       const { error } = await supabase.from('post_its').update({ content: postItContent }).eq('id', selectedDayPostIt.id);
       if (error) { alert("쪽지 수정 실패: " + error.message); return; }
     } else {
-      const { error } = await supabase.from('post_its').insert({ diary_id: selectedDayDiary.id, author_id: currentUser.id, content: postItContent });
+      const { error } = await supabase.from('post_its').insert({ diary_id: currentDiaryId, author_id: currentUser.id, content: postItContent });
       if (error) { alert("쪽지 저장 실패: " + error.message); return; }
     }
     
     setPostItContent("");
     setIsEditingPostIt(false);
     
-    const { data } = await supabase.from('post_its').select('*').eq('diary_id', selectedDayDiary.id).order('created_at', { ascending: false }).limit(1).maybeSingle();
+    const { data } = await supabase.from('post_its').select('*').eq('diary_id', currentDiaryId).order('created_at', { ascending: false }).limit(1).maybeSingle();
     setSelectedDayPostIt(data || null);
   };
 
@@ -811,10 +833,10 @@ export default function Home() {
                 )}
 
                 {(() => {
-                  if (!selectedDayDiary) return null;
-                  const hasPublic = selectedDayDiary.content || selectedDayDiary.image_url || (selectedDayDiary.badges && selectedDayDiary.badges.length > 0);
-                  const hasPrivate = selectedDayDiary.private_content && currentUserRole === 'mother';
-                  const hasPostItUI = hasPublic && (currentUserRole === 'partner' || selectedDayPostIt);
+                  const hasPublic = selectedDayDiary && (selectedDayDiary.content || selectedDayDiary.image_url || (selectedDayDiary.badges && selectedDayDiary.badges.length > 0));
+                  const hasPrivate = selectedDayDiary && selectedDayDiary.private_content && currentUserRole === 'mother';
+                  const hasPostItUI = currentUserRole === 'partner' || selectedDayPostIt;
+                  
                   if (!hasPublic && !hasPrivate && !hasPostItUI) return null;
                   
                   return (
