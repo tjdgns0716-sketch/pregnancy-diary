@@ -227,7 +227,13 @@ export default function Login() {
         }
       }
     } catch (error) {
-      alert(error.message);
+      let msg = error.message;
+      if (msg === "Invalid login credentials") {
+        msg = "가입되지 않은 이메일이거나 비밀번호가 틀렸습니다.";
+      } else if (msg === "User already registered") {
+        msg = "이미 가입된 이메일입니다.";
+      }
+      alert(msg);
     } finally {
       setLoading(false);
     }
