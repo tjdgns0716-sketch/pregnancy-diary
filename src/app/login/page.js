@@ -22,8 +22,8 @@ export default function Login() {
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
 
-  const agreeTerms = false; // dummy replace block sync
-  const agreePrivacy = false;
+  const [agreeTerms, setAgreeTerms] = useState(false);
+  const [agreePrivacy, setAgreePrivacy] = useState(false);
   const [agreeSensitive, setAgreeSensitive] = useState(false);
   
   // Modal states for Terms and Privacy
