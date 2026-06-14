@@ -672,24 +672,22 @@ export default function Home() {
           </h1>
           <button onClick={() => setCurrentMonth(m => m === 12 ? 1 : m + 1)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem', color: 'var(--text-secondary)' }}>&gt;</button>
         </div>
-        {currentUserRole === 'mother' ? (
-          <p style={{ color: 'var(--accent-color)', marginTop: '5px', fontSize: '0.9rem' }}>
-            {dueDate ? (() => {
-              const due = new Date(dueDate);
-              const today = new Date();
-              const diffDays = Math.ceil((due - today) / (1000 * 60 * 60 * 24));
-              const daysPregnant = 280 - diffDays;
-              if (daysPregnant < 0) return "임신 준비 중";
-              if (daysPregnant > 280) return "출산 완료 🎉";
-              const weeks = Math.floor(daysPregnant / 7);
-              return `임신 ${weeks}주차`;
-            })() : "예정일을 입력해주세요"}
-          </p>
-        ) : (
-          <p style={{ color: '#5c5227', marginTop: '5px', fontSize: '0.9rem' }}>
-            우리의 천사를 기다리는 중 🤍
-          </p>
-        )}
+        <p style={{ color: currentUserRole === 'mother' ? 'var(--accent-color)' : '#5c5227', marginTop: '5px', fontSize: '0.9rem' }}>
+          {dueDate ? (() => {
+            const due = new Date(dueDate);
+            due.setHours(0,0,0,0);
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            const diffDays = Math.ceil((due - today) / (1000 * 60 * 60 * 24));
+            
+            const name = babyName || '우리 아기';
+            
+            if (diffDays > 280) return "임신 준비 중";
+            if (diffDays < 0) return "출산 완료 🎉";
+            if (diffDays === 0) return `${name} 만나는 날! 🎉`;
+            return `${name}(이) 만나기까지 D-${diffDays}`;
+          })() : "예정일을 입력해주세요"}
+        </p>
       </div>
       
       {/* Calendar Grid */}
