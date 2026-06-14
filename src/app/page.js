@@ -207,11 +207,11 @@ export default function Home() {
 
   // Dots Logic
   const hasPrivateDiary = monthDiaries.filter(d => d.private_content).map(d => parseInt(d.date.split('-')[2]));
-  const hasPublicDiary = monthDiaries.filter(d => d.content).map(d => parseInt(d.date.split('-')[2]));
+  const hasPublicDiary = monthDiaries.filter(d => d.content || d.image_url || (d.badges && d.badges.length > 0)).map(d => parseInt(d.date.split('-')[2]));
   const hasSchedule = monthSchedules.map(s => parseInt(s.date.split('-')[2]));
 
   const handleSaveDiary = async () => {
-    if (!diaryContent.trim() && !privateContent.trim() && selectedBadges.length === 0) return;
+    if (!diaryContent.trim() && !privateContent.trim() && selectedBadges.length === 0 && !attachedImage) return;
     const targetDate = `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(selectedDate).padStart(2, '0')}`;
     
     const diaryData = { 
