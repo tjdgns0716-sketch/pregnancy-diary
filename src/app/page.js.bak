@@ -1,0 +1,506 @@
+"use client";
+
+import Image from "next/image";
+import { useState, useEffect } from "react";
+import { supabase } from "../lib/supabase";
+import { useRouter } from "next/navigation";
+
+export default function Home() {
+  const router = useRouter();
+  
+  const today = new Date();
+  const [currentYear, setCurrentYear] = useState(today.getFullYear());
+  const [currentMonth, setCurrentMonth] = useState(today.getMonth() + 1);
+  const [selectedDate, setSelectedDate] = useState(today.getDate());
+  
+  const [isWriteModalOpen, setIsWriteModalOpen] = useState(false);
+  const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
+  
+  // Write Modal States
+  const [selectedBadges, setSelectedBadges] = useState([]);
+  const [showBadgeSelector, setShowBadgeSelector] = useState(false);
+  const [isPrivate, setIsPrivate] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [currentTheme, setCurrentTheme] = useState('');
+
+  // Real DB States
+  const [loading, setLoading] = useState(true);
+  const [currentUserRole, setCurrentUserRole] = useState(null); // 'mother' or 'partner'
+  const [inviteCode, setInviteCode] = useState(null);
+
+  useEffect(() => {
+    // Load theme from localStorage
+    const savedTheme = localStorage.getItem('diary_theme');
+    if (savedTheme) {
+      setCurrentTheme(savedTheme);
+      document.body.className = savedTheme;
+    }
+
+    const fetchUserAndProfile = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        router.push("/login");
+        return;
+      }
+      
+      const { data: profile } = await supabase.from("profiles").select("role, couple_id").eq("id", user.id).single();
+      if (profile) {
+        setCurrentUserRole(profile.role);
+        
+        if (profile.role === 'mother') {
+          const { data: couple } = await supabase.from("couples").select("invite_code").eq("id", profile.couple_id).single();
+          if (couple) setInviteCode(couple.invite_code);
+        }
+      } else {
+        router.push("/login");
+      }
+      setLoading(false);
+    };
+    
+    fetchUserAndProfile();
+  }, [router]);
+
+  const changeTheme = (themeClass) => {
+    setCurrentTheme(themeClass);
+    localStorage.setItem('diary_theme', themeClass);
+    document.body.className = themeClass;
+  };
+
+  const themes = [
+    { name: '베이지', class: '' },
+    { name: '핑크', class: 'theme-pink' },
+    { name: '주황', class: 'theme-orange' },
+    { name: '노랑', class: 'theme-yellow' },
+    { name: '파랑', class: 'theme-blue' },
+    { name: '빨강', class: 'theme-red' },
+    { name: '화이트', class: 'theme-white' },
+    { name: '다크', class: 'theme-black' }
+  ];
+
+  // Dynamic Calendar Logic
+  const days = ['일', '월', '화', '수', '목', '금', '토'];
+  const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
+  const firstDayOfMonth = new Date(currentYear, currentMonth - 1, 1).getDay(); // 0(Sun) ~ 6(Sat)
+  
+  const emptyDays = Array.from({ length: firstDayOfMonth }, (_, i) => i);
+  const dates = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+
+  // Mock data for dates (will be replaced by DB later)
+  // For demo, place mock data around the current selectedDate
+  const hasPrivateDiary = [selectedDate - 1];
+  const hasPublicDiary = [selectedDate];
+  const hasSchedule = [selectedDate + 4];
+
+  if (loading) return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', color: 'var(--text-secondary)' }}>앱을 준비 중입니다...</div>;
+
+  return (
+    <main className="main-content" style={{ position: 'relative' }}>
+      
+      {/* Top Navigation Bar */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', paddingTop: '10px' }}>
+        {/* Settings Menu */}
+        <div style={{ position: 'relative' }}>
+          <button 
+            onClick={() => setIsSettingsOpen(!isSettingsOpen)}
+            style={{ background: 'none', border: 'none', fontSize: '1.4rem', cursor: 'pointer', color: 'var(--text-secondary)', padding: '5px' }}
+            title="설정"
+          >
+            ⚙️
+          </button>
+          
+          {/* Settings Dropdown */}
+          {isSettingsOpen && (
+            <div style={{ position: 'absolute', top: '100%', left: '0', backgroundColor: 'white', borderRadius: '10px', boxShadow: '0 4px 15px rgba(0,0,0,0.1)', border: '1px solid var(--border-color)', minWidth: '160px', zIndex: 100, padding: '5px', display: 'flex', flexDirection: 'column' }}>
+              <div style={{ padding: '10px', fontSize: '0.9rem', color: 'var(--text-primary)', borderBottom: '1px solid #eee', fontWeight: 'bold' }}>
+                설정 메뉴
+              </div>
+              
+              {/* Theme Selector */}
+              <div style={{ padding: '10px 10px 5px 10px', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>🎨 테마 색상</div>
+              <div style={{ padding: '0 10px 10px 10px', display: 'flex', flexWrap: 'wrap', gap: '6px', borderBottom: '1px solid #eee' }}>
+                {themes.map(t => (
+                  <button 
+                    key={t.name}
+                    onClick={() => changeTheme(t.class)}
+                    style={{ 
+                      width: '24px', height: '24px', borderRadius: '12px', border: currentTheme === t.class ? '2px solid var(--text-primary)' : '1px solid #ddd',
+                      backgroundColor: t.class === '' ? '#f7f3e8' : 
+                                       t.class === 'theme-pink' ? '#fff0f5' : 
+                                       t.class === 'theme-orange' ? '#fff8eb' : 
+                                       t.class === 'theme-yellow' ? '#fffde7' : 
+                                       t.class === 'theme-blue' ? '#f0f4f8' : 
+                                       t.class === 'theme-red' ? '#fcf0ee' : 
+                                       t.class === 'theme-white' ? '#ffffff' : '#2c2c2c',
+                      cursor: 'pointer'
+                    }}
+                    title={t.name}
+                  />
+                ))}
+              </div>
+
+              <button 
+                onClick={async () => {
+                  if(window.confirm('정말 로그아웃 하시겠습니까?')) {
+                    await supabase.auth.signOut(); 
+                    router.push('/login'); 
+                  }
+                }}
+                style={{ background: 'none', border: 'none', padding: '10px', textAlign: 'left', fontSize: '0.85rem', color: '#d48f87', cursor: 'pointer', fontWeight: 'bold', marginTop: '5px' }} 
+              >
+                나가기 (로그아웃)
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Invite Code Badge (Mother Only) */}
+        {currentUserRole === 'mother' && inviteCode && (
+          <div style={{ backgroundColor: 'white', padding: '5px 12px', borderRadius: '20px', fontSize: '0.8rem', color: 'var(--text-secondary)', border: '1px solid var(--border-color)', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+            초대코드: <strong style={{ color: 'var(--text-primary)' }}>{inviteCode}</strong>
+          </div>
+        )}
+        {currentUserRole === 'partner' && (
+          <div style={{ backgroundColor: 'white', padding: '5px 12px', borderRadius: '20px', fontSize: '0.8rem', color: '#5c5227', border: '1px solid var(--border-color)', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+            아빠 계정
+          </div>
+        )}
+      </div>
+
+      {/* Header */}
+      <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '15px' }}>
+          <button onClick={() => setCurrentMonth(m => m === 1 ? 12 : m - 1)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem', color: 'var(--text-secondary)' }}>&lt;</button>
+          <h1 style={{ fontSize: '1.8rem', color: 'var(--text-primary)', fontWeight: 'normal', margin: 0 }}>
+            {currentYear}년 {currentMonth}월
+          </h1>
+          <button onClick={() => setCurrentMonth(m => m === 12 ? 1 : m + 1)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem', color: 'var(--text-secondary)' }}>&gt;</button>
+        </div>
+        {currentUserRole === 'mother' ? (
+          <p style={{ color: 'var(--accent-color)', marginTop: '5px', fontSize: '0.9rem' }}>
+            임신 15주차 👶
+          </p>
+        ) : (
+          <p style={{ color: '#5c5227', marginTop: '5px', fontSize: '0.9rem' }}>
+            우리의 천사를 기다리는 중 🤍
+          </p>
+        )}
+      </div>
+      
+      {/* Calendar Grid */}
+      <div style={{
+        backgroundColor: 'var(--card-bg)',
+        padding: '15px',
+        borderRadius: '12px',
+        boxShadow: 'var(--shadow-sm)',
+        border: '1px solid var(--border-color)',
+        marginBottom: '20px'
+      }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', textAlign: 'center', marginBottom: '10px' }}>
+          {days.map(day => (
+            <span key={day} style={{ fontSize: '0.8rem', color: day === '일' ? '#d48f87' : 'var(--text-secondary)' }}>{day}</span>
+          ))}
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '5px' }}>
+          {emptyDays.map(empty => <div key={`empty-${empty}`} />)}
+          {dates.map(date => {
+            const isSelected = date === selectedDate;
+            const hasPrivD = hasPrivateDiary.includes(date);
+            const hasPubD = hasPublicDiary.includes(date);
+            const hasS = hasSchedule.includes(date);
+            
+            // Partner cannot see private diary indicator
+            const showDiaryDot = (currentUserRole === 'mother' && (hasPrivD || hasPubD)) || (currentUserRole === 'partner' && hasPubD);
+            const showScheduleDot = hasS;
+
+            return (
+              <div 
+                key={date} 
+                onClick={() => setSelectedDate(date)}
+                style={{
+                  aspectRatio: '1',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: isSelected ? (currentUserRole === 'mother' ? 'var(--accent-color)' : '#a39763') : 'transparent',
+                  color: isSelected ? 'white' : 'var(--text-primary)',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  position: 'relative'
+                }}
+              >
+                <span style={{ fontSize: '0.9rem' }}>{date}</span>
+                <div style={{ position: 'absolute', bottom: '4px', display: 'flex', gap: '2px' }}>
+                  {showDiaryDot && <div style={{ width: '4px', height: '4px', backgroundColor: isSelected ? 'white' : 'var(--text-secondary)', borderRadius: '50%' }} />}
+                  {showScheduleDot && <div style={{ width: '4px', height: '4px', backgroundColor: isSelected ? 'white' : (currentUserRole === 'mother' ? 'var(--accent-color)' : '#a39763'), borderRadius: '50%' }} />}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Selected Date Details */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+        <h2 style={{ fontSize: '1.1rem', color: 'var(--text-primary)' }}>6월 {selectedDate}일의 기록</h2>
+        {currentUserRole === 'mother' && (
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <button 
+              onClick={() => setIsScheduleModalOpen(true)}
+              style={{ width: '32px', height: '32px', borderRadius: '16px', border: 'none', backgroundColor: 'var(--accent-color)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: 'var(--shadow-sm)', fontSize: '1.2rem', paddingBottom: '2px' }}
+              title="일정 추가"
+            >
+              +
+            </button>
+            <button 
+              onClick={() => setIsWriteModalOpen(true)}
+              style={{ width: '32px', height: '32px', borderRadius: '16px', border: 'none', backgroundColor: 'var(--text-primary)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: 'var(--shadow-sm)', fontSize: '1rem' }}
+              title="일기 쓰기"
+            >
+              ✏️
+            </button>
+          </div>
+        )}
+      </div>
+      
+      {selectedDate === 14 ? (
+        <div style={{
+          backgroundColor: 'var(--card-bg)',
+          padding: '20px',
+          borderRadius: '12px',
+          boxShadow: 'var(--shadow-sm)',
+          border: '1px solid var(--border-color)',
+          marginBottom: '20px'
+        }}>
+          {/* Photo Area */}
+          <div style={{ 
+            width: '100%', 
+            height: '240px', 
+            position: 'relative', 
+            borderRadius: '8px', 
+            overflow: 'hidden',
+            marginBottom: '15px',
+          }}>
+            <Image src="/ultrasound.png" alt="초음파 사진" fill style={{ objectFit: 'cover' }} />
+          </div>
+          <p style={{ lineHeight: '1.6', fontSize: '0.95rem' }}>
+            오늘은 아기가 처음으로 뱃속에서 꼬물거리는 걸 느꼈다. 신기하고 감동적인 순간. 남편도 배에 손을 대보고 깜짝 놀랐다!
+          </p>
+
+          {/* Mood Badges */}
+          <div style={{ marginTop: '15px', display: 'flex', gap: '8px' }}>
+            <span style={{ fontSize: '0.8rem', backgroundColor: '#f0f0f0', padding: '4px 10px', borderRadius: '15px', color: 'var(--text-secondary)' }}>
+              🍓 딸기 먹고 싶어
+            </span>
+            <span style={{ fontSize: '0.8rem', backgroundColor: '#f0f0f0', padding: '4px 10px', borderRadius: '15px', color: 'var(--text-secondary)' }}>
+              😊 기분 좋음
+            </span>
+          </div>
+
+          {/* Partner's Post-it Note or Input */}
+          <div style={{
+            marginTop: '20px',
+            backgroundColor: '#fff7d6',
+            padding: '15px',
+            borderRadius: '2px 12px 12px 12px',
+            boxShadow: '2px 2px 5px rgba(0,0,0,0.05)',
+            position: 'relative',
+            borderLeft: '3px solid #ffde59'
+          }}>
+            <span style={{ position: 'absolute', top: '-10px', left: '10px', fontSize: '1.2rem' }}>📌</span>
+            {currentUserRole === 'mother' ? (
+              <>
+                <p style={{ fontSize: '0.85rem', color: '#5c5227', fontStyle: 'italic', lineHeight: '1.5' }}>
+                  "퇴근길에 제일 맛있는 딸기 사갈게! 오늘 하루도 너무 고생 많았어 토닥토닥 ❤️"
+                </p>
+                <p style={{ textAlign: 'right', fontSize: '0.75rem', color: '#a39763', marginTop: '5px' }}>- 남편의 비밀 쪽지</p>
+              </>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <textarea 
+                  placeholder="아내에게 남길 쪽지를 적어보세요..." 
+                  style={{ width: '100%', backgroundColor: 'transparent', border: 'none', outline: 'none', resize: 'none', fontSize: '0.85rem', color: '#5c5227', fontStyle: 'italic', fontFamily: 'inherit' }}
+                />
+                <button style={{ alignSelf: 'flex-end', fontSize: '0.75rem', backgroundColor: '#a39763', color: 'white', border: 'none', padding: '4px 10px', borderRadius: '8px', cursor: 'pointer' }}>남기기</button>
+              </div>
+            )}
+          </div>
+        </div>
+      ) : selectedDate === 13 ? (
+        currentUserRole === 'mother' ? (
+          <div style={{
+            backgroundColor: 'var(--card-bg)',
+            padding: '20px',
+            borderRadius: '12px',
+            boxShadow: 'var(--shadow-sm)',
+            border: '1px dashed #d1c9c4',
+            marginBottom: '20px'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>2026.06.13</span>
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                🔒 나만 보기
+              </span>
+            </div>
+            <p style={{ lineHeight: '1.6', fontSize: '0.95rem', color: 'var(--text-primary)' }}>
+              조금 우울한 날. 체중도 늘고 몸도 무거워져서 속상하다. 그래도 내일은 맛있는 거 먹고 힘내야지. 파이팅!
+            </p>
+          </div>
+        ) : (
+          <p style={{ color: 'var(--text-secondary)', textAlign: 'center', padding: '30px 0' }}>이 날은 공유된 기록이 없습니다.</p>
+        )
+      ) : selectedDate === 18 ? (
+        <div style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.4)',
+          padding: '15px',
+          borderRadius: '12px',
+          borderLeft: currentUserRole === 'mother' ? '4px solid var(--accent-color)' : '4px solid #a39763',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          marginBottom: '20px'
+        }}>
+          <span style={{ fontSize: '1.2rem' }}>🏥</span>
+          <div>
+            <p style={{ fontSize: '0.95rem', color: 'var(--text-primary)' }}>산부인과 정기 검진 예약</p>
+            <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>오전 10:30 (예정)</p>
+          </div>
+        </div>
+      ) : (
+        <p style={{ color: 'var(--text-secondary)', textAlign: 'center', padding: '30px 0' }}>이 날은 기록된 내용이 없습니다.</p>
+      )}
+
+      {/* Write Modal Overlay (Mother ONLY) */}
+      {isWriteModalOpen && currentUserRole === 'mother' && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1000,
+          display: 'flex', justifyContent: 'center', alignItems: 'flex-end'
+        }}>
+          <div style={{
+            width: '100%', maxWidth: '480px', height: '80vh',
+            backgroundColor: 'var(--bg-color)', borderTopLeftRadius: '20px', borderTopRightRadius: '20px',
+            padding: '20px', display: 'flex', flexDirection: 'column',
+            boxShadow: '0 -4px 20px rgba(0,0,0,0.1)'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>일기 쓰기</span>
+              <span onClick={() => setIsWriteModalOpen(false)} style={{ fontSize: '1.5rem', cursor: 'pointer' }}>×</span>
+            </div>
+            
+            {/* Modal Actions */}
+            <div style={{ display: 'flex', gap: '10px', marginBottom: '15px', flexWrap: 'wrap' }}>
+               <button 
+                 onClick={() => setShowBadgeSelector(!showBadgeSelector)}
+                 style={{ fontSize: '0.85rem', padding: '6px 12px', borderRadius: '15px', border: '1px solid var(--border-color)', backgroundColor: 'white', cursor: 'pointer' }}>
+                 + 기분 뱃지 추가
+               </button>
+               <button 
+                 onClick={() => setIsPrivate(!isPrivate)}
+                 style={{ fontSize: '0.85rem', padding: '6px 12px', borderRadius: '15px', border: isPrivate ? '1px solid var(--accent-color)' : '1px solid var(--border-color)', backgroundColor: isPrivate ? '#fff5f4' : 'white', cursor: 'pointer', color: isPrivate ? 'var(--accent-color)' : 'inherit' }}>
+                 {isPrivate ? '🔒 나만 보기 (ON)' : '🔓 나만 보기 (OFF)'}
+               </button>
+            </div>
+
+            {/* Badge Selector Popup */}
+            {showBadgeSelector && (
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '15px', padding: '10px', backgroundColor: 'var(--bg-color)', borderRadius: '10px', border: '1px solid var(--border-color)', maxHeight: '160px', overflowY: 'auto' }}>
+                {[
+                  // 신체/컨디션
+                  '😊 컨디션 최고!', '😢 감정 기복이 심해요', '😠 예민해요', '🥱 무기력해요', '😪 눕고만 싶어요', '😵 어지러워요/빈혈',
+                  // 증상
+                  '🤢 입덧으로 고생 중', '🤮 토덧/먹덧', '🤢 양치덧/냄새덧', '😴 잠이 쏟아져요', '👀 불면증이에요', 
+                  '🦶 다리가 붓고 무거워요', '🤕 허리/골반이 아파요', '🚽 화장실 자주 가요', '🤰 배가 뭉쳐요', '💥 튼살이 보여요',
+                  // 음식/식욕
+                  '🍓 상큼한 게 땡겨요', '🍎 과일이 땡겨요', '🌶️ 매운 게 땡겨요', '🍰 달달한 게 땡겨요', '🍖 고기가 땡겨요', '🍕 기름진/밀가루 땡겨요', '🍚 밥맛이 없어요',
+                  // 아기/병원/이벤트
+                  '👶 태동이 느껴져요', '👣 역사적인 첫 태동!', '🩺 병원 다녀온 날', '💉 초음파/검사 한 날',
+                  // 일상/태교
+                  '💊 영양제 챙겨 먹음', '🏃‍♀️ 가볍게 산책했어요', '🧘‍♀️ 임산부 요가/스트레칭', '🛍️ 아기 용품 샀어요', '🍼 태교 동화/음악', '👨‍👩‍👦 아빠랑 태담 나눈 날'
+                ].map(badge => (
+                  <span 
+                    key={badge} 
+                    onClick={() => {
+                      if (!selectedBadges.includes(badge)) {
+                        setSelectedBadges([...selectedBadges, badge]);
+                      }
+                      setShowBadgeSelector(false);
+                    }}
+                    style={{ fontSize: '0.8rem', backgroundColor: 'white', padding: '6px 12px', borderRadius: '15px', cursor: 'pointer', border: '1px solid var(--border-color)', whiteSpace: 'nowrap' }}>
+                    {badge}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {/* Selected Badges Area */}
+            {selectedBadges.length > 0 && (
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '15px' }}>
+                {selectedBadges.map(badge => (
+                  <span key={badge} style={{ fontSize: '0.8rem', backgroundColor: 'var(--accent-color)', color: 'white', padding: '4px 10px', borderRadius: '15px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                    {badge}
+                    <span style={{ cursor: 'pointer', fontSize: '0.9rem' }} onClick={() => setSelectedBadges(selectedBadges.filter(b => b !== badge))}>×</span>
+                  </span>
+                ))}
+              </div>
+            )}
+
+            <textarea 
+              placeholder="오늘 하루는 어땠나요?"
+              style={{ flex: 1, backgroundColor: 'transparent', border: 'none', outline: 'none', resize: 'none', fontSize: '1rem', color: 'var(--text-primary)', fontFamily: 'inherit' }}
+            />
+            <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
+              <button style={{ flex: 1, padding: '15px', borderRadius: '10px', border: 'none', backgroundColor: '#e0dcd3', cursor: 'pointer' }}>사진 첨부</button>
+              <button 
+                onClick={() => {
+                  alert('저장되었습니다! (아직 DB 연결 전입니다)');
+                  setIsWriteModalOpen(false);
+                  setSelectedBadges([]);
+                  setIsPrivate(false);
+                }} 
+                style={{ flex: 1, padding: '15px', borderRadius: '10px', border: 'none', backgroundColor: 'var(--accent-color)', color: 'white', cursor: 'pointer' }}>
+                저장하기
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Schedule Modal Overlay (Mother ONLY) */}
+      {isScheduleModalOpen && currentUserRole === 'mother' && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1000,
+          display: 'flex', justifyContent: 'center', alignItems: 'flex-end'
+        }}>
+          <div style={{
+            width: '100%', maxWidth: '480px', backgroundColor: 'var(--bg-color)', 
+            borderTopLeftRadius: '20px', borderTopRightRadius: '20px',
+            padding: '20px', display: 'flex', flexDirection: 'column',
+            boxShadow: '0 -4px 20px rgba(0,0,0,0.1)'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>일정 추가</span>
+              <span onClick={() => setIsScheduleModalOpen(false)} style={{ fontSize: '1.5rem', cursor: 'pointer' }}>×</span>
+            </div>
+            <input type="text" placeholder="어떤 일정인가요? (예: 산부인과 검진)" style={{ padding: '15px', borderRadius: '8px', border: '1px solid var(--border-color)', marginBottom: '10px', fontSize: '1rem', fontFamily: 'inherit', width: '100%', boxSizing: 'border-box' }} />
+            <div style={{ display: 'flex', gap: '10px', marginBottom: '20px', width: '100%' }}>
+              <input type="date" defaultValue={`${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(selectedDate).padStart(2, '0')}`} style={{ flex: 1, padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.95rem', fontFamily: 'inherit', color: 'var(--text-primary)', boxSizing: 'border-box' }} />
+              <input type="time" style={{ flex: 1, padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.95rem', fontFamily: 'inherit', color: 'var(--text-primary)', boxSizing: 'border-box' }} />
+            </div>
+            <button onClick={() => setIsScheduleModalOpen(false)} style={{ padding: '15px', borderRadius: '10px', border: 'none', backgroundColor: 'var(--text-primary)', color: 'white', cursor: 'pointer', width: '100%' }}>등록하기</button>
+          </div>
+        </div>
+      )}
+
+      {/* Media query for FAB on mobile */}
+      <style dangerouslySetInnerHTML={{__html: `
+        @media (max-width: 480px) {
+          div[style*="calc(50% - 210px)"] {
+            right: 20px !important;
+          }
+        }
+      `}} />
+    </main>
+  );
+}

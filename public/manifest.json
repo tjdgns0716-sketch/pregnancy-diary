@@ -1,0 +1,21 @@
+{
+  "name": "우리의 열달",
+  "short_name": "우리의열달",
+  "description": "아빠와 엄마가 함께 아기를 기다리며 추억을 기록하는 공간",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FCF9F2",
+  "theme_color": "#FCF9F2",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

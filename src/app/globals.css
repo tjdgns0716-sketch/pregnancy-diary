@@ -1,49 +1,228 @@
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg-color: #f7f3e8; /* 종이 느낌의 베이지 배경 (기본) */
+  --card-bg: #ffffff;
+  --text-primary: #3d3d3d; /* 너무 진하지 않은 부드러운 검정 */
+  --text-secondary: #8c8c8c;
+  --border-color: #e5dfd3;
+  --accent-color: #d48f87; /* 따뜻한 느낌의 인디핑크 계열 포인트 */
+  --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 8px 15px rgba(0, 0, 0, 0.08);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* 테마: 포근한 핑크 */
+.theme-pink {
+  --bg-color: #fff0f5; 
+  --card-bg: #ffffff;
+  --text-primary: #4a3b3f;
+  --border-color: #fce4ec;
+  --accent-color: #e08b9b; 
+}
+
+/* 테마: 포근한 주황 */
+.theme-orange {
+  --bg-color: #fff8eb;
+  --card-bg: #ffffff;
+  --text-primary: #4a4138;
+  --border-color: #ffecb3;
+  --accent-color: #e8a365;
+}
+
+/* 테마: 포근한 노랑 */
+.theme-yellow {
+  --bg-color: #fffde7;
+  --card-bg: #ffffff;
+  --text-primary: #4a473a;
+  --border-color: #fff59d;
+  --accent-color: #e3c158;
+}
+
+/* 테마: 포근한 파랑 */
+.theme-blue {
+  --bg-color: #f0f4f8;
+  --card-bg: #ffffff;
+  --text-primary: #394452;
+  --border-color: #dbe4ec;
+  --accent-color: #83a5c2;
+}
+
+/* 테마: 포근한 빨강 (차분한 브릭/로즈 톤) */
+.theme-red {
+  --bg-color: #fcf0ee;
+  --card-bg: #ffffff;
+  --text-primary: #4a3633;
+  --border-color: #f5d6d1;
+  --accent-color: #c96b63;
+}
+
+/* 테마: 깔끔한 흰색 */
+.theme-white {
+  --bg-color: #ffffff;
+  --card-bg: #fcfcfc;
+  --text-primary: #333333;
+  --border-color: #f0f0f0;
+  --accent-color: #a3a3a3;
+}
+
+/* 테마: 포근한 검정 (다크모드) */
+.theme-black {
+  --bg-color: #2c2c2c;
+  --card-bg: #383838;
+  --text-primary: #f0f0f0;
+  --text-secondary: #aaaaaa;
+  --border-color: #444444;
+  --accent-color: #e8b4a2;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  font-family: 'Gowun Dodum', sans-serif;
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+.main-content {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: var(--bg-color);
+  box-shadow: 0 0 20px rgba(0,0,0,0.03);
+  padding: 20px;
+  position: relative;
+  transition: background-color 0.4s ease;
+}
+
+/* 종이 질감 오버레이 효과 */
+.main-content::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0.8;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.calendar-day-header {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  padding-bottom: 10px;
+}
+
+.calendar-date {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+  background-color: transparent;
+}
+
+.calendar-date:hover {
+  background-color: rgba(0,0,0,0.03);
+  transform: translateY(-2px);
+}
+
+.theme-black .calendar-date:hover {
+  background-color: rgba(255,255,255,0.05);
+}
+
+.calendar-date.selected {
+  background-color: var(--accent-color);
+  color: white;
+  box-shadow: var(--shadow-md);
+  transform: scale(1.05);
+}
+
+.calendar-date.selected .date-marker {
+  background-color: white;
+}
+
+/* 하단 플로팅 버튼 영역 */
+.fab-container {
+  position: fixed;
+  bottom: 30px;
+  right: calc(50% - 240px + 30px); /* 480px 중앙 정렬 기준 우측 */
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  z-index: 50;
+}
+
+@media (max-width: 480px) {
+  .fab-container {
+    right: 20px;
   }
 }
 
-html {
-  height: 100%;
-}
-
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
-body {
-  min-height: 100%;
+.fab {
+  width: 56px;
+  height: 56px;
+  border-radius: 28px;
+  border: none;
+  background-color: var(--text-primary);
+  color: var(--bg-color);
+  font-size: 1.5rem;
   display: flex;
-  flex-direction: column;
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+.fab:hover {
+  transform: scale(1.1);
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+.fab.secondary {
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  background-color: var(--accent-color);
+  color: white;
+  margin-left: 4px; /* 중앙 정렬용 */
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+/* Print Styles for PDF Export */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .printable-diary-export, .printable-diary-export * {
+    visibility: visible;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .printable-diary-export {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #FAF7F2 !important;
+  }
+  @page {
+    margin: 0;
   }
 }
