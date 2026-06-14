@@ -993,7 +993,7 @@ export default function Home() {
             width: '100%', maxWidth: '480px', height: '80vh',
             backgroundColor: 'var(--card-bg)', borderTopLeftRadius: '20px', borderTopRightRadius: '20px',
             padding: '20px', display: 'flex', flexDirection: 'column',
-            boxShadow: '0 -4px 20px rgba(0,0,0,0.1)'
+            boxShadow: '0 -4px 20px rgba(0,0,0,0.1)', overflowY: 'auto'
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
               <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>일기 쓰기</span>
@@ -1140,6 +1140,7 @@ export default function Home() {
         }}>
           <div style={{
             width: '100%', maxWidth: '480px', backgroundColor: 'var(--card-bg)', 
+            maxHeight: '90vh', overflowY: 'auto',
             borderTopLeftRadius: '20px', borderTopRightRadius: '20px',
             padding: '20px', display: 'flex', flexDirection: 'column',
             boxShadow: '0 -4px 20px rgba(0,0,0,0.1)'
