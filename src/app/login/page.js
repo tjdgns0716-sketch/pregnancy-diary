@@ -372,9 +372,9 @@ export default function Login() {
               <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#FFF0F5', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', margin: '0 auto 25px' }}>🍓</div>
               <h3 style={{ fontSize: '1.2rem', color: '#333', marginBottom: '15px', fontWeight: '700', wordBreak: 'keep-all' }}>은근슬쩍 전하는 속마음</h3>
               <p style={{ fontSize: '0.95rem', color: '#666', lineHeight: '1.6', wordBreak: 'keep-all' }}>
-                온도 습도 산후 관리부터 사소한 갈등,<br/>임신 중 설마하고 넘겨보세요.<br/>서운했던 감정들을 일기장에<br/>살며시 남겨보세요.
+                먹고 싶은 음식, 가고 싶은 장소 등<br/>필요한 것들을 다이어리를 통해<br/>귀엽게 전달해 보세요.
               </p>
-              <div style={{ marginTop: '25px', display: 'inline-block', padding: '8px 20px', backgroundColor: '#FFF0F5', color: '#FF8A8A', borderRadius: '20px', fontSize: '0.85rem', fontWeight: 'bold' }}>마음 나누기</div>
+              <div style={{ marginTop: '25px', display: 'inline-block', padding: '8px 20px', backgroundColor: '#FFF0F5', color: '#FF8A8A', borderRadius: '20px', fontSize: '0.85rem', fontWeight: 'bold' }}>귀여운 어필</div>
             </div>
 
             {/* Card 2 */}
@@ -382,7 +382,7 @@ export default function Login() {
               <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#FFF8EB', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', margin: '0 auto 25px' }}>✨</div>
               <h3 style={{ fontSize: '1.2rem', color: '#333', marginBottom: '15px', fontWeight: '700', wordBreak: 'keep-all' }}>센스 만점 예비 아빠</h3>
               <p style={{ fontSize: '0.95rem', color: '#666', lineHeight: '1.6', wordBreak: 'keep-all' }}>
-                퇴근길 손에 든 단 선물, 받기 힘든<br/>아내의 일기를 보고 무엇이<br/>필요한지 체크해 보세요.<br/>감동을 선물해 보세요.
+                아내의 일기를 보고 무엇이<br/>필요한지 체크해 보세요.<br/>감동을 선물해 보세요.
               </p>
               <div style={{ marginTop: '25px', display: 'inline-block', padding: '8px 20px', backgroundColor: '#FFF8EB', color: '#FFA834', borderRadius: '20px', fontSize: '0.85rem', fontWeight: 'bold' }}>서로를 위한 기록</div>
             </div>
