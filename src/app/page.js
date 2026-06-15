@@ -872,11 +872,25 @@ export default function Home() {
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '20px' }}>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '15px' }}>
-          <button onClick={() => setCurrentMonth(m => m === 1 ? 12 : m - 1)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem', color: 'var(--text-secondary)' }}>&lt;</button>
+          <button onClick={() => {
+            if (currentMonth === 1) {
+              setCurrentMonth(12);
+              setCurrentYear(y => y - 1);
+            } else {
+              setCurrentMonth(m => m - 1);
+            }
+          }} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem', color: 'var(--text-secondary)' }}>&lt;</button>
           <h1 style={{ fontSize: '1.8rem', color: 'var(--text-primary)', fontWeight: 'normal', margin: 0 }}>
             {currentYear}년 {currentMonth}월
           </h1>
-          <button onClick={() => setCurrentMonth(m => m === 12 ? 1 : m + 1)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem', color: 'var(--text-secondary)' }}>&gt;</button>
+          <button onClick={() => {
+            if (currentMonth === 12) {
+              setCurrentMonth(1);
+              setCurrentYear(y => y + 1);
+            } else {
+              setCurrentMonth(m => m + 1);
+            }
+          }} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem', color: 'var(--text-secondary)' }}>&gt;</button>
         </div>
         <p style={{ color: currentUserRole === 'mother' ? 'var(--accent-color)' : '#5c5227', marginTop: '5px', fontSize: '0.9rem' }}>
           {dueDate ? (() => {
