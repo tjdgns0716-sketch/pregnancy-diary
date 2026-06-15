@@ -5,6 +5,7 @@ import Image from "next/image";
 import { supabase } from "../lib/supabase";
 import { useRouter } from "next/navigation";
 import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 const formatTime = (timeStr) => {
   if (!timeStr) return "";
   const [hours, minutes] = timeStr.split(':');
@@ -655,31 +656,44 @@ export default function Home() {
                    setAllDiariesToExport([]);
                  }, 500);
               } else {
-                 // Trigger native print dialog for Mobile Safari/Chrome/Custom WebViews
-                 // Hide original content
-                 exportContainer.style.display = 'none';
+                 // For Mobile Safari and other generic mobile browsers, we completely abandon the 
+                 // native print dialog because it is fatally broken when handling large images and CSS page-breaks.
+                 // Instead, we use jsPDF to perfectly compile a binary PDF file strictly from our images and trigger a direct file download.
+                 const pdf = new jsPDF('p', 'mm', 'a4');
+                 const pdfWidth = pdf.internal.pageSize.getWidth();
+                 const pdfHeight = pdf.internal.pageSize.getHeight();
                  
-                 // Create temporary print container
-                 const printWrapper = document.createElement('div');
-                 printWrapper.id = 'mobile-print-wrapper';
-                 printWrapper.style.width = '100%';
-                 printWrapper.style.background = '#fff';
-                 printWrapper.innerHTML = imagesHtml;
-                 document.body.appendChild(printWrapper);
-              
-                 const cleanupPrint = () => {
-                   if (document.getElementById('mobile-print-wrapper')) {
-                       document.body.removeChild(document.getElementById('mobile-print-wrapper'));
+                 for (let i = 0; i < base64Images.length; i++) {
+                   if (i > 0) pdf.addPage();
+                   
+                   // Math logic to fit image perfectly into A4 without distortion
+                   const imgProps = pdf.getImageProperties(base64Images[i]);
+                   const imgRatio = imgProps.width / imgProps.height;
+                   const pdfRatio = pdfWidth / pdfHeight;
+                   
+                   let renderWidth, renderHeight;
+                   if (imgRatio > pdfRatio) {
+                      // Image is wider than A4, constrain by width
+                      renderWidth = pdfWidth;
+                      renderHeight = pdfWidth / imgRatio;
+                   } else {
+                      // Image is taller than A4, constrain by height
+                      renderHeight = pdfHeight;
+                      renderWidth = pdfHeight * imgRatio;
                    }
-                   exportContainer.style.display = 'block';
-                   setIsExporting(false);
-                   setAllDiariesToExport([]);
-                   window.removeEventListener('afterprint', cleanupPrint);
-                 };
-                 window.addEventListener('afterprint', cleanupPrint);
+                   
+                   // Center image
+                   const x = (pdfWidth - renderWidth) / 2;
+                   const y = (pdfHeight - renderHeight) / 2;
+                   
+                   pdf.addImage(base64Images[i], 'JPEG', x, y, renderWidth, renderHeight);
+                 }
                  
-                 // Allow DOM to update before printing
-                 setTimeout(() => window.print(), 100);
+                 // Trigger direct binary download
+                 pdf.save('diary.pdf');
+                 
+                 setIsExporting(false);
+                 setAllDiariesToExport([]);
               }
             } catch (e) {
               console.error("html2canvas error:", e);
