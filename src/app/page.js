@@ -569,6 +569,36 @@ export default function Home() {
         // Firefox Desktop historically ignores 'zoom' and requires the transform fallback.
         const isFirefox = navigator.userAgent.toLowerCase().includes('firefox');
         
+        // Helper to physically shrink elements for mobile PDF engines that ignore CSS scaling and overflow
+        const applyNativeScale = (element, scaleFactor) => {
+          const stylesToScale = ['fontSize', 'paddingTop', 'paddingBottom', 'marginTop', 'marginBottom', 'lineHeight', 'maxHeight'];
+          const walk = (node) => {
+            if (node.nodeType === 1) { // Element
+              const compStyle = window.getComputedStyle(node);
+              stylesToScale.forEach(prop => {
+                const val = compStyle[prop];
+                if (val && val.endsWith('px')) {
+                  const num = parseFloat(val);
+                  if (num > 0) {
+                    node.style[prop] = `${num * scaleFactor}px`;
+                  }
+                }
+              });
+              
+              // Physically shrink images
+              if (node.tagName.toLowerCase() === 'img') {
+                const currentWidth = node.offsetWidth || parseFloat(compStyle.width);
+                const currentHeight = node.offsetHeight || parseFloat(compStyle.height);
+                if (currentWidth > 0) node.style.width = `${currentWidth * scaleFactor}px`;
+                if (currentHeight > 0) node.style.height = `${currentHeight * scaleFactor}px`;
+              }
+              
+              Array.from(node.children).forEach(walk);
+            }
+          };
+          walk(element);
+        };
+        
         cards.forEach(card => {
           const wrapper = card.querySelector('.pdf-card-content-wrapper');
           if (wrapper) {
@@ -584,9 +614,12 @@ export default function Home() {
             if (actualHeight > maxContentHeight) {
               const scale = maxContentHeight / actualHeight;
               
-              if (isMobile || isFirefox) {
-                // Mobile and Firefox: 'zoom' is either ignored or buggy for PDF generation. 
-                // We must use transform: scale() and explicitly clip the height to prevent overlap.
+              if (isMobile) {
+                // Mobile PDF engines (WKWebView) ignore CSS scaling and overflow clipping.
+                // We MUST physically shrink the DOM so it natively fits without layout tricks.
+                applyNativeScale(wrapper, scale);
+              } else if (isFirefox) {
+                // Firefox Desktop: 'zoom' is buggy, but transform + overflow hidden works well.
                 wrapper.style.transform = `scale(${scale})`;
                 wrapper.style.transformOrigin = 'top center';
                 wrapper.style.width = '100%';
