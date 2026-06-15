@@ -1970,11 +1970,16 @@ export default function Home() {
                 {allDiariesToExport.length > 0 ? `${allDiariesToExport[0].date.replace(/-/g, '.')} - ${allDiariesToExport[allDiariesToExport.length - 1].date.replace(/-/g, '.')}` : '기록이 없습니다'}
               </div>
               
-              <div style={{ position: 'absolute', bottom: '80px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <div style={{ position: 'absolute', bottom: '80px', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
                 <span style={{ fontSize: '2rem', color: '#E7D8FF', marginBottom: '15px' }}>🌿</span>
                 <p style={{ textAlign: 'center', color: '#8F8798', fontSize: '1rem', lineHeight: '1.6', margin: 0 }}>
                   작은 기록이 모여,<br/>나중엔 가장 선명한 기억이 되도록
                 </p>
+              </div>
+              
+              {/* Cover Page Number */}
+              <div style={{ position: 'absolute', bottom: '30px', left: 0, width: '100%', textAlign: 'center', fontSize: '1rem', color: '#B098D5', fontWeight: 'bold', letterSpacing: '2px' }}>
+                - 1 -
               </div>
             </div>
           </div>
@@ -1986,7 +1991,14 @@ export default function Home() {
               
               {/* Daily Diaries for this month */}
               <div style={{ padding: '0 40px' }}>
-                {monthData.diaries.map(diary => {
+                {monthData.diaries.map((diary, dIndex) => {
+                  const getPageNumber = (mIdx, dIdx) => {
+                    let prevCount = 0;
+                    for (let i = 0; i < mIdx; i++) {
+                      prevCount += pdfData.months[i].diaries.length;
+                    }
+                    return prevCount + dIdx + 2; // Cover is 1
+                  };
                   const isLandscape = diary.image_ratio && diary.image_ratio >= 1.25;
                   const isPortrait = diary.image_ratio && diary.image_ratio <= 0.8;
                   let pregBadge = null;
@@ -2007,7 +2019,7 @@ export default function Home() {
                   const displayContent = diary.content ? diary.content.replace(/\n{3,}/g, '\n\n') : '';
 
                   return (
-                    <div key={diary.id} className="pdf-diary-card" style={{ marginBottom: '20px', padding: '40px 40px 0 40px', display: 'block', pageBreakInside: 'avoid' }}>
+                    <div key={diary.id} className="pdf-diary-card" style={{ padding: '40px 40px 0 40px', display: 'block', pageBreakAfter: 'always', minHeight: '100vh', position: 'relative', boxSizing: 'border-box' }}>
                       <div className="pdf-card-content-wrapper">
                       {/* Header (On Ivory Background) */}
                       <div style={{ marginBottom: '15px' }}>
@@ -2085,6 +2097,11 @@ export default function Home() {
                         </div>
                       )}
                       
+                      </div>
+                      
+                      {/* Page Number */}
+                      <div style={{ position: 'absolute', bottom: '30px', left: 0, width: '100%', textAlign: 'center', fontSize: '1rem', color: '#B098D5', fontWeight: 'bold', letterSpacing: '2px' }}>
+                        - {getPageNumber(mIndex, dIndex)} -
                       </div>
                     </div>
                   );
