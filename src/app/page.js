@@ -584,11 +584,7 @@ export default function Home() {
             if (actualHeight > maxContentHeight) {
               const scale = maxContentHeight / actualHeight;
               
-              if (isMobile) {
-                // ALL MOBILE BROWSERS / APPS: Do absolutely nothing to the DOM!
-                // We want the DOM to remain full-size and pristine because html2canvas will take 
-                // a high-res snapshot of it, and the resulting image will natively scale down in the PDF.
-              } else if (isFirefox) {
+              if (isFirefox) {
                 // Firefox Desktop: 'zoom' is buggy, but transform + overflow hidden works well.
                 wrapper.style.transform = `scale(${scale})`;
                 wrapper.style.transformOrigin = 'top center';
@@ -597,7 +593,7 @@ export default function Home() {
                 card.style.height = `${maxContentHeight + 80}px`; 
                 card.style.overflow = 'hidden'; 
               } else {
-                // Desktop Chrome/Edge/Safari: transform: scale() causes pagination split bugs.
+                // Chrome/Edge/Safari (Desktop & Mobile): transform: scale() causes pagination split bugs.
                 // 'zoom' correctly shrinks the layout bounds natively so it fits perfectly.
                 wrapper.style.zoom = scale;
                 wrapper.style.margin = '0 auto';
@@ -607,113 +603,19 @@ export default function Home() {
         });
 
         // Now that the DOM is perfectly scaled, check environment and export
-        if (isMobile) {
-          // MOBILE PDF EXPORT (All Mobile Apps & Browsers):
-          // Because mobile Print engines ignore CSS scaling and overflow clipping, 
-          // we use html2canvas to take perfect snapshot images of the cover and each card.
-          // We then temporarily replace the DOM with these images and call print().
-          (async () => {
-            try {
-              const coverPage = exportContainer.children[0];
-              const cardElements = document.querySelectorAll('.pdf-diary-card');
-              const elementsToSnapshot = [coverPage, ...Array.from(cardElements)];
-              const base64Images = [];
-              
-              // Add a slight delay before capturing to ensure all fonts/layouts are stable
-              await new Promise(r => setTimeout(r, 100));
-              
-              for (let i = 0; i < elementsToSnapshot.length; i++) {
-                if (!elementsToSnapshot[i]) continue;
-                const canvas = await html2canvas(elementsToSnapshot[i], {
-                  scale: 2, // High resolution for crisp PDF text
-                  useCORS: true, 
-                  logging: false,
-                  backgroundColor: '#ffffff',
-                  windowWidth: document.documentElement.clientWidth || window.innerWidth
-                });
-                base64Images.push(canvas.toDataURL('image/jpeg', 0.9));
-              }
-              
-              let imagesHtml = '';
-              base64Images.forEach((src, index) => {
-                // FORCES the image to shrink proportionally so its height NEVER exceeds one printed A4 page.
-                // This completely prevents horizontal slicing and overlapping.
-                const pageBreak = index === base64Images.length - 1 ? 'auto' : 'always';
-                imagesHtml += `
-                  <div style="page-break-after: ${pageBreak}; page-break-inside: avoid; display: flex; justify-content: center; align-items: center; width: 100%; height: 260mm; overflow: hidden; box-sizing: border-box; padding: 10px;">
-                    <img src="${src}" style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; display: block; margin: 0 auto;" />
-                  </div>
-                `;
-              });
-              
-              if (window.ReactNativeWebView) {
-                 // Send to React Native if available
-                 const htmlContent = `<html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>body{margin:0;padding:0;background:#fff;}@media print { @page { size: A4 portrait; margin: 0; } }</style></head><body>${imagesHtml}</body></html>`;
-                 window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'DOWNLOAD_PDF_HTML', htmlContent }));
-                 
-                 setTimeout(() => {
-                   setIsExporting(false);
-                   setAllDiariesToExport([]);
-                 }, 500);
-              } else {
-                 // Trigger native print dialog for Mobile Safari/Chrome/Custom WebViews
-                 // Use a dedicated print stylesheet to guarantee only the wrapper is printed
-                 const style = document.createElement('style');
-                 style.id = 'mobile-print-style';
-                 style.innerHTML = `
-                   @media print {
-                     body > *:not(#mobile-print-wrapper) {
-                       display: none !important;
-                     }
-                   }
-                 `;
-                 document.head.appendChild(style);
-                 
-                 // Create temporary print container
-                 const printWrapper = document.createElement('div');
-                 printWrapper.id = 'mobile-print-wrapper';
-                 printWrapper.style.width = '100%';
-                 printWrapper.style.background = '#fff';
-                 printWrapper.innerHTML = imagesHtml;
-                 document.body.appendChild(printWrapper);
-              
-                 // On iOS, window.print() is non-blocking and afterprint fires inconsistently.
-                 const cleanupPrint = () => {
-                   if (document.getElementById('mobile-print-wrapper')) {
-                       document.body.removeChild(document.getElementById('mobile-print-wrapper'));
-                   }
-                   if (document.getElementById('mobile-print-style')) {
-                       document.head.removeChild(document.getElementById('mobile-print-style'));
-                   }
-                   setIsExporting(false);
-                   setAllDiariesToExport([]);
-                   window.removeEventListener('afterprint', cleanupPrint);
-                 };
-                 
-                 window.addEventListener('afterprint', cleanupPrint);
-                 // Fallback cleanup
-                 setTimeout(cleanupPrint, 10000);
-                 
-                 // Allow DOM to update before printing
-                 setTimeout(() => window.print(), 100);
-              }
-            } catch (e) {
-              console.error("html2canvas error:", e);
-              alert("PDF 생성 중 이미지 변환에 실패했습니다.");
-              setIsExporting(false);
-              setAllDiariesToExport([]);
-            }
-          })();
-        } else {
-          // Desktop Chrome/Edge/Safari: Use native print dialog with zoom CSS
-          const cleanupPrint = () => {
-            setIsExporting(false);
-            setAllDiariesToExport([]);
-            window.removeEventListener('afterprint', cleanupPrint);
-          };
-          window.addEventListener('afterprint', cleanupPrint);
-          window.print();
-        }
+        // ALL PLATFORMS (Desktop & Mobile): Use native print dialog with zoom CSS
+        // This is exactly the Web PC logic, applied universally.
+        const cleanupPrint = () => {
+          setIsExporting(false);
+          setAllDiariesToExport([]);
+          window.removeEventListener('afterprint', cleanupPrint);
+        };
+        window.addEventListener('afterprint', cleanupPrint);
+        
+        // Allow a short delay for React to finish applying the CSS zoom styles before invoking print
+        setTimeout(() => {
+           window.print();
+        }, 300);
       };
 
       if (images.length === 0) {
