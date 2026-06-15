@@ -2079,8 +2079,6 @@ export default function Home() {
             background-color: #FAF7F3 !important;
           }
           .pdf-diary-card {
-            page-break-inside: avoid !important;
-            break-inside: avoid !important;
             width: 100% !important;
             box-sizing: border-box !important;
           }
