@@ -1695,13 +1695,16 @@ export default function Home() {
             size: A4 portrait;
             margin: 0; /* removes default browser header/footer (date, url, etc) */
           }
-          body {
+          html, body {
+            width: 210mm !important;
+            min-width: 210mm !important;
+            margin: 0 auto !important;
+            padding: 0 !important;
             background-color: white !important;
-            min-width: 800px !important; /* 모바일에서도 데스크탑 비율을 유지하도록 강제 */
           }
           .printable-diary-export {
-            width: 800px !important;
-            max-width: none !important;
+            width: 210mm !important;
+            max-width: 210mm !important;
             margin: 0 auto !important;
             padding: 15mm !important; /* replaces @page margin */
             box-sizing: border-box !important;
