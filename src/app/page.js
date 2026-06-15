@@ -1917,9 +1917,10 @@ export default function Home() {
                 {monthData.diaries.map(diary => {
                   const isLandscape = diary.image_ratio && diary.image_ratio >= 1.25;
                   const isPortrait = diary.image_ratio && diary.image_ratio <= 0.8;
+                  const displayContent = diary.content ? diary.content.replace(/\n{3,}/g, '\n\n') : '';
                   
                   return (
-                    <div key={diary.id} className="pdf-diary-card" style={{ marginBottom: '60px', padding: '50px', backgroundColor: '#FFFFFF', borderRadius: '24px', border: '1px solid #EADFF7', display: 'block' }}>
+                    <div key={diary.id} className="pdf-diary-card" style={{ marginBottom: '60px', padding: '50px', backgroundColor: '#FFFFFF', borderRadius: '24px', border: '1px solid #EADFF7', display: 'block', WebkitBoxDecorationBreak: 'clone', boxDecorationBreak: 'clone' }}>
                       
                       {/* Header */}
                       <div style={{ borderBottom: '1px dashed #EADFF7', paddingBottom: '20px', marginBottom: '30px' }}>
@@ -1937,7 +1938,7 @@ export default function Home() {
                         <div style={{ display: 'table', width: '100%', tableLayout: 'fixed', marginBottom: '30px' }}>
                           <div style={{ display: 'table-cell', verticalAlign: 'top', width: '55%', paddingRight: '40px' }}>
                             <h3 style={{ color: '#9d7ad2', fontSize: '1.3rem', marginBottom: '20px', fontWeight: 'bold' }}>엄마의 기록</h3>
-                            <p style={{ whiteSpace: 'pre-wrap', lineHeight: '2', color: '#333039', fontSize: '1.1rem', margin: 0 }}>{diary.content}</p>
+                            <p style={{ whiteSpace: 'pre-wrap', lineHeight: '2', color: '#333039', fontSize: '1.1rem', margin: 0 }}>{displayContent}</p>
                           </div>
                           <div className="pdf-inner-block" style={{ display: 'table-cell', verticalAlign: 'top', width: '45%' }}>
                             <img src={diary.image_url} style={{ width: '100%', display: 'block', objectFit: 'cover', borderRadius: '16px' }} />
@@ -1949,11 +1950,11 @@ export default function Home() {
                           {diary.content && (
                             <div style={{ marginBottom: '30px' }}>
                               <h3 style={{ color: '#9d7ad2', fontSize: '1.3rem', marginBottom: '20px', fontWeight: 'bold' }}>엄마의 기록</h3>
-                              <p style={{ whiteSpace: 'pre-wrap', lineHeight: '2', color: '#333039', fontSize: '1.1rem', margin: 0 }}>{diary.content}</p>
+                              <p style={{ whiteSpace: 'pre-wrap', lineHeight: '2', color: '#333039', fontSize: '1.1rem', margin: 0 }}>{displayContent}</p>
                             </div>
                           )}
                           <div className="pdf-inner-block" style={{ width: '100%', borderRadius: '16px', overflow: 'hidden', backgroundColor: '#FAF7F3' }}>
-                            <img src={diary.image_url} style={{ width: '100%', maxHeight: '500px', display: 'block', objectFit: 'contain', borderRadius: '16px' }} />
+                            <img src={diary.image_url} style={{ width: '100%', maxHeight: '300px', display: 'block', objectFit: 'contain', borderRadius: '16px' }} />
                           </div>
                         </div>
                       ) : (
@@ -1962,12 +1963,12 @@ export default function Home() {
                           {diary.content && (
                             <div style={{ marginBottom: '30px' }}>
                               <h3 style={{ color: '#9d7ad2', fontSize: '1.3rem', marginBottom: '20px', fontWeight: 'bold' }}>엄마의 기록</h3>
-                              <p style={{ whiteSpace: 'pre-wrap', lineHeight: '2', color: '#333039', fontSize: '1.1rem', margin: 0 }}>{diary.content}</p>
+                              <p style={{ whiteSpace: 'pre-wrap', lineHeight: '2', color: '#333039', fontSize: '1.1rem', margin: 0 }}>{displayContent}</p>
                             </div>
                           )}
                           {diary.image_url && (
                             <div className="pdf-inner-block" style={{ width: '100%', textAlign: 'center' }}>
-                              <img src={diary.image_url} style={{ maxWidth: '80%', maxHeight: '500px', display: 'inline-block', objectFit: 'contain', borderRadius: '16px' }} />
+                              <img src={diary.image_url} style={{ maxWidth: '80%', maxHeight: '300px', display: 'inline-block', objectFit: 'contain', borderRadius: '16px' }} />
                             </div>
                           )}
                         </div>
