@@ -82,37 +82,8 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState('diary'); // 'diary', 'album', 'checklist'
   const [albumImages, setAlbumImages] = useState([]);
   const [checklists, setChecklists] = useState([]);
-  const [newChecklistCategory, setNewChecklistCategory] = useState("아기용품");
+  const [newChecklistCategory, setNewChecklistCategory] = useState("아기 용품");
   const [newChecklistContent, setNewChecklistContent] = useState("");
-
-  const getPregnancyWeekInfo = () => {
-    if (!dueDate) return null;
-    const due = new Date(dueDate);
-    const today = new Date();
-    const conceptionDate = new Date(due.getTime() - 280 * 24 * 60 * 60 * 1000);
-    const diffTime = today.getTime() - conceptionDate.getTime();
-    if (diffTime < 0) return { text: "만나기 준비 중 ✨", week: 0, day: 0 };
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    const week = Math.floor(diffDays / 7);
-    const day = diffDays % 7;
-    
-    if (week >= 40) return { text: "방 뺄 시간이에요! 👶", week, day };
-    
-    const sizes = [
-      "아직은 아주아주 작아요 🐣", "아직은 아주아주 작아요 🐣", "아직은 아주아주 작아요 🐣", "아직은 아주아주 작아요 🐣", // 0~3
-      "양귀비 씨앗만 해요 🌱", "참깨만 해요 🌾", "렌틸콩만 해요 🥜", "블루베리만 해요 🫐", // 4~7
-      "라즈베리만 해요 🍓", "체리만 해요 🍒", "딸기만 해요 🍓", "무화과만 해요 🍐", // 8~11
-      "자두만 해요 🍑", "레몬만 해요 🍋", "작은 주먹만 해요 ✊", "사과만 해요 🍎", // 12~15
-      "아보카도만 해요 🥑", "배만 해요 🍐", "고구마만 해요 🍠", "작은 다이어리만 해요 📓", // 16~19
-      "바나나 길이 정도예요 🍌", "당근만 해요 🥕", "작은 인형만 해요 🧸", "자몽만 해요 🍊", // 20~23
-      "옥수수만 해요 🌽", "작은 축구공만 해요 ⚽", "파인애플만 해요 🍍", "브로콜리 다발만 해요 🥦", // 24~27
-      "가지 길이 정도예요 🍆", "작은 백팩만 해요 🎒", "양배추만 해요 🥬", "코코넛만 해요 🥥", // 28~31
-      "자그마한 강아지만 해요 🐶", "파인애플만 해요 🍍", "작은 멜론만 해요 🍈", "통통한 고양이만 해요 🐱", // 32~35
-      "작은 수박만 해요 🍉", "갓 태어난 꼬마 요정만 해요 🧚", "미니 호박만 해요 🎃", "이제 세상에 나올 준비가 다 되었어요! 👶" // 36~39
-    ];
-    
-    return { text: sizes[week] || "건강하게 쑥쑥 크고 있어요! 👶", week, day };
-  };
 
   useEffect(() => {
     const fetchUserAndProfile = async () => {
@@ -822,7 +793,7 @@ export default function Home() {
           🖼️ 앨범
         </div>
         <div onClick={() => setActiveTab('checklist')} style={{ flex: 1, textAlign: 'center', padding: '10px 0', borderRadius: '12px', cursor: 'pointer', backgroundColor: activeTab === 'checklist' ? 'var(--accent-color)' : 'transparent', color: activeTab === 'checklist' ? 'white' : 'var(--text-secondary)', fontWeight: activeTab === 'checklist' ? 'bold' : 'normal', transition: 'all 0.2s', fontSize: '0.9rem' }}>
-          ✅ 준비물
+          ✅ 체크리스트
         </div>
       </div>
 
@@ -843,28 +814,18 @@ export default function Home() {
             due.setHours(0,0,0,0);
             const today = new Date();
             today.setHours(0,0,0,0);
-            const diffDays = Math.ceil((due - today) / (1000 * 60 * 60 * 24));
+            const diffTime = due - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
             
-            const name = babyName || '우리 아기';
-            
-            if (diffDays > 280) return "임신 준비 중";
-            if (diffDays < 0) return "출산 완료 🎉";
-            if (diffDays === 0) return `${name} 만나는 날! 🎉`;
-            return `${name}(이) 만나기까지 D-${diffDays}`;
-          })() : "예정일을 입력해주세요"}
+            if (diffDays === 0) return '🎉 드디어 우리 아기를 만나는 날이에요!';
+            if (diffDays > 0) {
+              const week = Math.floor((280 - diffDays) / 7);
+              const day = (280 - diffDays) % 7;
+              return week > 0 ? `현재 ${week}주 ${day}일째 (D-${diffDays})` : `임신 준비 중 (D-${diffDays})`;
+            }
+            return `우리 아기와 만난 지 D+${Math.abs(diffDays)}일`;
+          })() : '예정일을 등록해주세요'}
         </p>
-
-        {/* Baby Growth Info */}
-        <div style={{ color: 'var(--text-primary)', marginTop: '15px', backgroundColor: 'var(--card-bg)', padding: '12px 20px', borderRadius: '15px', display: 'inline-block', boxShadow: 'var(--shadow-sm)', border: '1px solid var(--border-color)' }}>
-          {getPregnancyWeekInfo() ? (
-            <>
-              <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                {getPregnancyWeekInfo().week > 0 ? `${getPregnancyWeekInfo().week}주 ${getPregnancyWeekInfo().day}일차` : '임신 준비중'}
-              </div>
-              <div style={{ fontSize: '1.1rem', fontWeight: 'bold', marginTop: '5px' }}>{getPregnancyWeekInfo().text}</div>
-            </>
-          ) : '출산 예정일을 입력해주세요'}
-        </div>
       </div>
       
       {/* Calendar Grid */}
@@ -1674,20 +1635,22 @@ export default function Home() {
       {/* Checklist Tab */}
       {activeTab === 'checklist' && (
         <div style={{ padding: '20px' }}>
-          <h2 style={{ color: 'var(--text-primary)', textAlign: 'center', marginBottom: '20px' }}>출산 준비물 📝</h2>
+          <h2 style={{ color: 'var(--text-primary)', textAlign: 'center', marginBottom: '20px' }}>체크리스트 📝</h2>
           
           {/* Add Form */}
           <div style={{ backgroundColor: 'var(--card-bg)', padding: '15px', borderRadius: '15px', marginBottom: '20px', boxShadow: 'var(--shadow-sm)' }}>
             <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
               <select value={newChecklistCategory} onChange={(e) => setNewChecklistCategory(e.target.value)} style={{ padding: '10px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.9rem', flex: 1, backgroundColor: 'white' }}>
                 <option value="아기 용품">아기 용품</option>
-                <option value="엄마 용품">엄마 용품</option>
-                <option value="병원/조리원">병원/조리원</option>
+                <option value="병원/검진">병원/검진</option>
+                <option value="산모 용품">산모 용품</option>
+                <option value="아빠 준비물">아빠 준비물</option>
+                <option value="예약">예약</option>
                 <option value="기타">기타</option>
               </select>
             </div>
             <div style={{ display: 'flex', gap: '10px' }}>
-              <input type="text" value={newChecklistContent} onChange={(e) => setNewChecklistContent(e.target.value)} placeholder="준비물을 입력하세요" style={{ flex: 2, padding: '10px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.9rem' }} />
+              <input type="text" value={newChecklistContent} onChange={(e) => setNewChecklistContent(e.target.value)} placeholder="항목을 입력하세요" style={{ flex: 2, padding: '10px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.9rem' }} />
               <button 
                 onClick={async () => {
                   if(!newChecklistContent.trim() || !coupleId) return;
@@ -1704,7 +1667,7 @@ export default function Home() {
 
           {/* List */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {['아기 용품', '엄마 용품', '병원/조리원', '기타'].map(cat => {
+            {['아기 용품', '병원/검진', '산모 용품', '아빠 준비물', '예약', '기타'].map(cat => {
               const items = checklists.filter(c => c.category === cat);
               if (items.length === 0) return null;
               return (
