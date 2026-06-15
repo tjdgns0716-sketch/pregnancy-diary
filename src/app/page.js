@@ -569,7 +569,7 @@ export default function Home() {
         }
       } else {
         const cards = document.querySelectorAll('.pdf-diary-card');
-        const MAX_HEIGHT = 850; // Lower threshold to ensure scaling triggers before ANY risk of clipping
+        const MAX_HEIGHT = 850; 
         
         cards.forEach(card => {
           card.style.zoom = '1';
@@ -580,12 +580,17 @@ export default function Home() {
           }
         });
 
-        setTimeout(() => {
-          window.print();
+        const cleanupPrint = () => {
           cards.forEach(card => { card.style.zoom = ''; });
           setIsExporting(false);
           setAllDiariesToExport([]);
-        }, 100);
+          window.removeEventListener('afterprint', cleanupPrint);
+        };
+        window.addEventListener('afterprint', cleanupPrint);
+
+        setTimeout(() => {
+          window.print();
+        }, 300); // allow DOM to paint zoom before printing
         return;
       }
       setIsExporting(false);
@@ -2094,7 +2099,17 @@ export default function Home() {
             margin: 0 !important;
             padding: 0 !important;
             box-sizing: border-box !important;
+            background-color: transparent !important;
+          }
+          .printable-diary-export::before {
+            content: "";
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
             background-color: #FAF7F3 !important;
+            z-index: -1 !important;
           }
           .pdf-diary-card {
             page-break-inside: avoid !important;
