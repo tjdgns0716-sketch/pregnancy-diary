@@ -6,6 +6,7 @@
 
 :root {
   --bg-color: radial-gradient(circle at 50% 20%, #E8DEFF 0%, #F5F0FF 40%, #FFFDFD 100%); /* 몽환적인 연보라 배경 */
+  --pdf-bg-color: #F8F4FF; /* 솔리드 톤의 연보라 (PDF 출력용) */
   --card-bg: #ffffff;
   --text-primary: #3d3d3d; /* 너무 진하지 않은 부드러운 검정 */
   --text-secondary: #8c8c8c;
