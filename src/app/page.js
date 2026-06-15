@@ -551,8 +551,8 @@ export default function Home() {
         if (printed) return;
         printed = true;
 
-        // Auto-scale content to fit on one page using Chrome's 'zoom' property.
-        // 'zoom' correctly modifies layout bounds before pagination, preventing splitting.
+        // Auto-scale content to fit on one page.
+        // We use different strategies for Mobile App (iOS WebKit) vs Desktop Chrome.
         const cards = document.querySelectorAll('.pdf-diary-card');
         
         cards.forEach(card => {
@@ -565,17 +565,27 @@ export default function Home() {
             card.style.overflow = 'visible';
             
             const actualHeight = wrapper.scrollHeight;
-            const maxContentHeight = 900; // Safe height for A4 with standard margins
+            const maxContentHeight = 750; // Extremely safe height for A4 (accounts for 1-inch margins)
             
             if (actualHeight > maxContentHeight) {
               const scale = maxContentHeight / actualHeight;
               
-              // Apply zoom. Chrome recalculates the entire layout bounding box,
-              // making the card physically smaller so the print engine won't split it.
-              wrapper.style.zoom = scale;
-              
-              // Ensure the zoomed wrapper is centered within the card
-              wrapper.style.margin = '0 auto';
+              if (window.ReactNativeWebView) {
+                // Mobile (iOS WebKit): Ignores 'zoom'. We must use transform: scale().
+                // To prevent the unscaled layout bounds from overlapping the next card,
+                // we force the outer card's height to match the scaled height and hide overflow.
+                wrapper.style.transform = `scale(${scale})`;
+                wrapper.style.transformOrigin = 'top center';
+                wrapper.style.width = '100%';
+                
+                card.style.height = `${maxContentHeight + 80}px`; 
+                card.style.overflow = 'hidden'; 
+              } else {
+                // Desktop Web: transform: scale() causes pagination bugs on overflowing elements.
+                // 'zoom' correctly shrinks the layout bounds natively so Chrome doesn't split it.
+                wrapper.style.zoom = scale;
+                wrapper.style.margin = '0 auto';
+              }
             }
           }
         });
