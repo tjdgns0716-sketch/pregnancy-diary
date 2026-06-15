@@ -551,13 +551,33 @@ export default function Home() {
         if (printed) return;
         printed = true;
 
-        // Auto-scale content to fit on one page robustly
+        // Auto-scale content to fit on one page natively (avoids WebKit PDF transform bugs)
         const cards = document.querySelectorAll('.pdf-diary-card');
+        
+        // Helper function to physically scale DOM elements in JS
+        const applyNativeScale = (element, scaleFactor) => {
+          const stylesToScale = ['fontSize', 'paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight', 'marginTop', 'marginBottom', 'marginLeft', 'marginRight', 'lineHeight', 'maxHeight'];
+          const walk = (node) => {
+            if (node.nodeType === 1) { // Element
+              const compStyle = window.getComputedStyle(node);
+              stylesToScale.forEach(prop => {
+                const val = compStyle[prop];
+                if (val && val.endsWith('px')) {
+                  const num = parseFloat(val);
+                  if (num > 0) {
+                    node.style[prop] = `${num * scaleFactor}px`;
+                  }
+                }
+              });
+              Array.from(node.children).forEach(walk);
+            }
+          };
+          walk(element);
+        };
+
         cards.forEach(card => {
           const wrapper = card.querySelector('.pdf-card-content-wrapper');
           if (wrapper) {
-            // Reset in case of multiple prints
-            wrapper.style.transform = 'none';
             card.style.height = 'auto';
             card.style.overflow = 'visible';
             
@@ -566,14 +586,8 @@ export default function Home() {
             
             if (actualHeight > maxContentHeight) {
               const scale = maxContentHeight / actualHeight;
-              // Use robust CSS transform
-              wrapper.style.transform = `scale(${scale})`;
-              wrapper.style.transformOrigin = 'top center';
-              wrapper.style.width = '100%';
-              
-              // CRITICAL: Physically shrink the outer card's layout bounds 
-              // to exactly match the visual scaled height + padding.
-              card.style.height = `${(actualHeight * scale) + 60}px`; 
+              // Natively scale every element inside the wrapper to physically shrink it
+              applyNativeScale(wrapper, scale);
             }
           }
         });
