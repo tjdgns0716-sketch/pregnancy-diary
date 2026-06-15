@@ -2068,7 +2068,20 @@ export default function Home() {
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
           }
+          body::before {
+            content: "";
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            background-color: #FAF7F3 !important;
+            z-index: -9999 !important;
+          }
           .app-container, .main-content {
+            display: block !important;
+            height: auto !important;
+            min-height: auto !important;
             max-width: none !important;
             width: 100% !important;
             margin: 0 !important;
@@ -2089,16 +2102,7 @@ export default function Home() {
             box-sizing: border-box !important;
             background-color: transparent !important;
           }
-          .printable-diary-export::before {
-            content: "";
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            width: 100vw !important;
-            height: 100vh !important;
-            background-color: #FAF7F3 !important;
-            z-index: -1 !important;
-          }
+
           .printable-diary-export .pdf-diary-card {
             margin-bottom: 40px !important;
             padding: 40px 40px 0 40px !important;
