@@ -639,7 +639,7 @@ export default function Home() {
                 // FORCES the image to shrink proportionally so its height NEVER exceeds one printed A4 page.
                 // This completely prevents horizontal slicing and overlapping.
                 imagesHtml += `
-                  <div style="page-break-after: always; display: flex; justify-content: center; align-items: center; width: 100%; height: 95vh; overflow: hidden; box-sizing: border-box; padding: 10px;">
+                  <div style="page-break-after: always; page-break-inside: avoid; display: flex; justify-content: center; align-items: center; width: 100%; height: 260mm; overflow: hidden; box-sizing: border-box; padding: 10px;">
                     <img src="${src}" style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; display: block; margin: 0 auto;" />
                   </div>
                 `;
