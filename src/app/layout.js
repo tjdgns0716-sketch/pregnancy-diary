@@ -14,7 +14,7 @@ export const metadata = {
   manifest: "/manifest.json",
   icons: {
     icon: "/favicon.png?v=3",
-    apple: "/icon-192x192.png",
+    apple: "/icon-192x192.png?v=2",
   },
   openGraph: {
     title: "우리의 열달",
