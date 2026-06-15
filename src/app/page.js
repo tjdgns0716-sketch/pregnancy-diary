@@ -1913,61 +1913,61 @@ export default function Home() {
               {/* Monthly Summary Page Removed */}
               
               {/* Daily Diaries for this month */}
-              <div style={{ padding: '0 30px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px', alignItems: 'start' }}>
+              <div style={{ padding: '0 40px' }}>
                 {monthData.diaries.map(diary => {
                   const isLandscape = diary.image_ratio && diary.image_ratio >= 1.25;
                   const isPortrait = diary.image_ratio && diary.image_ratio <= 0.8;
                   
                   return (
-                    <div key={diary.id} className="pdf-diary-card" style={{ padding: '30px', backgroundColor: '#FFFFFF', borderRadius: '20px', border: '1px solid #EADFF7', display: 'block' }}>
+                    <div key={diary.id} className="pdf-diary-card" style={{ marginBottom: '60px', padding: '50px', backgroundColor: '#FFFFFF', borderRadius: '24px', border: '1px solid #EADFF7', display: 'block' }}>
                       
                       {/* Header */}
-                      <div style={{ borderBottom: '1px dashed #EADFF7', paddingBottom: '15px', marginBottom: '20px' }}>
-                        <h2 style={{ color: '#333039', margin: '0 0 10px 0', fontSize: '1.4rem' }}>{diary.date.split('-')[0]}년 {parseInt(diary.date.split('-')[1])}월 {parseInt(diary.date.split('-')[2])}일</h2>
+                      <div style={{ borderBottom: '1px dashed #EADFF7', paddingBottom: '20px', marginBottom: '30px' }}>
+                        <h2 style={{ color: '#333039', margin: '0 0 15px 0', fontSize: '2rem' }}>{diary.date.split('-')[0]}년 {parseInt(diary.date.split('-')[1])}월 {parseInt(diary.date.split('-')[2])}일</h2>
                         <div style={{ display: 'block' }}>
-                          {diary.badges && diary.badges.map(b => <span key={b} style={{ display: 'inline-block', backgroundColor: '#F4EDFF', color: '#8F8798', padding: '4px 10px', borderRadius: '15px', fontSize: '0.8rem', marginRight: '6px', marginBottom: '6px' }}>{b}</span>)}
-                          {diary.image_url && <span style={{ display: 'inline-block', backgroundColor: '#FAF7F3', color: '#8F8798', padding: '4px 10px', borderRadius: '15px', fontSize: '0.8rem', marginRight: '6px', marginBottom: '6px' }}>사진 1장</span>}
-                          <span style={{ float: 'right', color: '#E7D8FF', fontSize: '1.2rem', marginTop: '-2px' }}>♥</span>
+                          {diary.badges && diary.badges.map(b => <span key={b} style={{ display: 'inline-block', backgroundColor: '#F4EDFF', color: '#8F8798', padding: '6px 15px', borderRadius: '20px', fontSize: '0.9rem', marginRight: '10px', marginBottom: '10px' }}>{b}</span>)}
+                          {diary.image_url && <span style={{ display: 'inline-block', backgroundColor: '#FAF7F3', color: '#8F8798', padding: '6px 15px', borderRadius: '20px', fontSize: '0.9rem', marginRight: '10px', marginBottom: '10px' }}>사진 1장</span>}
+                          <span style={{ float: 'right', color: '#E7D8FF', fontSize: '1.5rem', marginTop: '-5px' }}>♥</span>
                         </div>
                       </div>
 
                       {/* Content Layout */}
                       {isPortrait && diary.image_url && diary.content ? (
-                        // 세로형 2단 배치
-                        <div style={{ display: 'table', width: '100%', tableLayout: 'fixed', marginBottom: '20px' }}>
-                          <div style={{ display: 'table-cell', verticalAlign: 'top', width: '55%', paddingRight: '20px' }}>
-                            <h3 style={{ color: '#9d7ad2', fontSize: '1.1rem', marginBottom: '10px', fontWeight: 'bold' }}>엄마의 기록</h3>
-                            <p style={{ whiteSpace: 'pre-wrap', lineHeight: '1.6', color: '#333039', fontSize: '0.95rem', margin: 0 }}>{diary.content}</p>
+                        // 세로형 2단 배치 (엄마기록 좌측, 사진 우측) - display: table 사용
+                        <div style={{ display: 'table', width: '100%', tableLayout: 'fixed', marginBottom: '30px' }}>
+                          <div style={{ display: 'table-cell', verticalAlign: 'top', width: '55%', paddingRight: '40px' }}>
+                            <h3 style={{ color: '#9d7ad2', fontSize: '1.3rem', marginBottom: '20px', fontWeight: 'bold' }}>엄마의 기록</h3>
+                            <p style={{ whiteSpace: 'pre-wrap', lineHeight: '2', color: '#333039', fontSize: '1.1rem', margin: 0 }}>{diary.content}</p>
                           </div>
                           <div className="pdf-inner-block" style={{ display: 'table-cell', verticalAlign: 'top', width: '45%' }}>
-                            <img src={diary.image_url} style={{ width: '100%', display: 'block', objectFit: 'cover', borderRadius: '12px' }} />
+                            <img src={diary.image_url} style={{ width: '100%', display: 'block', objectFit: 'cover', borderRadius: '16px' }} />
                           </div>
                         </div>
                       ) : isLandscape && diary.image_url ? (
-                        // 가로형
-                        <div style={{ display: 'block', marginBottom: '20px' }}>
+                        // 가로형 (기록 -> 넓은사진)
+                        <div style={{ display: 'block', marginBottom: '30px' }}>
                           {diary.content && (
-                            <div style={{ marginBottom: '20px' }}>
-                              <h3 style={{ color: '#9d7ad2', fontSize: '1.1rem', marginBottom: '10px', fontWeight: 'bold' }}>엄마의 기록</h3>
-                              <p style={{ whiteSpace: 'pre-wrap', lineHeight: '1.6', color: '#333039', fontSize: '0.95rem', margin: 0 }}>{diary.content}</p>
+                            <div style={{ marginBottom: '30px' }}>
+                              <h3 style={{ color: '#9d7ad2', fontSize: '1.3rem', marginBottom: '20px', fontWeight: 'bold' }}>엄마의 기록</h3>
+                              <p style={{ whiteSpace: 'pre-wrap', lineHeight: '2', color: '#333039', fontSize: '1.1rem', margin: 0 }}>{diary.content}</p>
                             </div>
                           )}
-                          <div className="pdf-inner-block" style={{ width: '100%', borderRadius: '12px', overflow: 'hidden', backgroundColor: '#FAF7F3' }}>
-                            <img src={diary.image_url} style={{ width: '100%', maxHeight: '300px', display: 'block', objectFit: 'contain', borderRadius: '12px' }} />
+                          <div className="pdf-inner-block" style={{ width: '100%', borderRadius: '16px', overflow: 'hidden', backgroundColor: '#FAF7F3' }}>
+                            <img src={diary.image_url} style={{ width: '100%', maxHeight: '500px', display: 'block', objectFit: 'contain', borderRadius: '16px' }} />
                           </div>
                         </div>
                       ) : (
-                        // 일반/사진 없음
-                        <div style={{ display: 'block', marginBottom: '20px' }}>
+                        // 일반/정사각형 비율 또는 사진 없는 경우
+                        <div style={{ display: 'block', marginBottom: '30px' }}>
                           {diary.content && (
-                            <div style={{ marginBottom: '20px' }}>
-                              <h3 style={{ color: '#9d7ad2', fontSize: '1.1rem', marginBottom: '10px', fontWeight: 'bold' }}>엄마의 기록</h3>
-                              <p style={{ whiteSpace: 'pre-wrap', lineHeight: '1.6', color: '#333039', fontSize: '0.95rem', margin: 0 }}>{diary.content}</p>
+                            <div style={{ marginBottom: '30px' }}>
+                              <h3 style={{ color: '#9d7ad2', fontSize: '1.3rem', marginBottom: '20px', fontWeight: 'bold' }}>엄마의 기록</h3>
+                              <p style={{ whiteSpace: 'pre-wrap', lineHeight: '2', color: '#333039', fontSize: '1.1rem', margin: 0 }}>{diary.content}</p>
                             </div>
                           )}
                           {diary.image_url && (
                             <div className="pdf-inner-block" style={{ width: '100%', textAlign: 'center' }}>
-                              <img src={diary.image_url} style={{ maxWidth: '100%', maxHeight: '300px', display: 'inline-block', objectFit: 'contain', borderRadius: '12px' }} />
+                              <img src={diary.image_url} style={{ maxWidth: '80%', maxHeight: '500px', display: 'inline-block', objectFit: 'contain', borderRadius: '16px' }} />
                             </div>
                           )}
                         </div>
@@ -1975,23 +1975,23 @@ export default function Home() {
                       
                       {/* Private Content */}
                       {currentUserRole === 'mother' && diary.private_content && exportIncludesPrivate && (
-                        <div className="pdf-inner-block" style={{ padding: '20px', backgroundColor: '#FAF7F3', borderRadius: '12px', border: '1px dashed #E7D8FF', marginBottom: '20px' }}>
-                          <div style={{ marginBottom: '10px' }}>
-                            <span style={{ fontSize: '1.2rem', verticalAlign: 'middle', marginRight: '8px' }}>🔒</span>
-                            <strong style={{ color: '#9d7ad2', fontSize: '1rem', verticalAlign: 'middle' }}>나만의 비밀 이야기</strong>
+                        <div className="pdf-inner-block" style={{ padding: '30px', backgroundColor: '#FAF7F3', borderRadius: '16px', border: '1px dashed #E7D8FF', marginBottom: '30px' }}>
+                          <div style={{ marginBottom: '15px' }}>
+                            <span style={{ fontSize: '1.4rem', verticalAlign: 'middle', marginRight: '10px' }}>🔒</span>
+                            <strong style={{ color: '#9d7ad2', fontSize: '1.1rem', verticalAlign: 'middle' }}>나만의 비밀 이야기</strong>
                           </div>
-                          <p style={{ whiteSpace: 'pre-wrap', color: '#333039', margin: '0', lineHeight: '1.6', fontSize: '0.9rem' }}>{diary.private_content}</p>
+                          <p style={{ whiteSpace: 'pre-wrap', color: '#333039', margin: '0', lineHeight: '1.8' }}>{diary.private_content}</p>
                         </div>
                       )}
 
                       {/* Dad Memo */}
                       {diary.post_its && diary.post_its.length > 0 && (
-                        <div className="pdf-inner-block" style={{ backgroundColor: '#FFF4CF', padding: '20px', borderRadius: '12px', border: '1px solid #fbe695', position: 'relative', boxShadow: '2px 4px 10px rgba(0,0,0,0.03)' }}>
-                          <div style={{ borderBottom: '1px solid rgba(0,0,0,0.05)', paddingBottom: '10px', marginBottom: '10px' }}>
-                            <span style={{ fontSize: '1.2rem', color: '#d4aa37', verticalAlign: 'middle', marginRight: '8px' }}>♡</span>
-                            <strong style={{ color: '#5c5227', fontSize: '1rem', verticalAlign: 'middle' }}>아빠의 짧은 메모</strong>
+                        <div className="pdf-inner-block" style={{ backgroundColor: '#FFF4CF', padding: '30px', borderRadius: '16px', border: '1px solid #fbe695', position: 'relative', boxShadow: '2px 4px 15px rgba(0,0,0,0.03)' }}>
+                          <div style={{ borderBottom: '1px solid rgba(0,0,0,0.05)', paddingBottom: '15px', marginBottom: '15px' }}>
+                            <span style={{ fontSize: '1.5rem', color: '#d4aa37', verticalAlign: 'middle', marginRight: '10px' }}>♡</span>
+                            <strong style={{ color: '#5c5227', fontSize: '1.2rem', verticalAlign: 'middle' }}>아빠의 짧은 메모</strong>
                           </div>
-                          <p style={{ fontSize: '0.9rem', color: '#333039', lineHeight: '1.6', whiteSpace: 'pre-wrap', margin: 0 }}>
+                          <p style={{ fontSize: '1.1rem', color: '#333039', lineHeight: '1.8', whiteSpace: 'pre-wrap', margin: 0 }}>
                             {diary.post_its[0].content}
                           </p>
                         </div>
