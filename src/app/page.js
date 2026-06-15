@@ -652,7 +652,13 @@ export default function Home() {
           </button>
           {/* Settings Dropdown */}
           {isSettingsOpen && (
-            <div style={{ position: 'absolute', top: '100%', left: '0', backgroundColor: 'white', borderRadius: '10px', boxShadow: '0 4px 15px rgba(0,0,0,0.1)', border: '1px solid var(--border-color)', minWidth: '160px', zIndex: 100, padding: '5px', display: 'flex', flexDirection: 'column' }}>
+            <>
+              {/* Invisible overlay for click-outside to close */}
+              <div 
+                style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 99 }} 
+                onClick={() => setIsSettingsOpen(false)} 
+              />
+              <div style={{ position: 'absolute', top: '100%', left: '0', backgroundColor: 'white', borderRadius: '10px', boxShadow: '0 4px 15px rgba(0,0,0,0.1)', border: '1px solid var(--border-color)', minWidth: '160px', zIndex: 100, padding: '5px', display: 'flex', flexDirection: 'column' }}>
               <div style={{ padding: '10px', fontSize: '0.9rem', color: 'var(--text-primary)', borderBottom: '1px solid #eee', fontWeight: 'bold' }}>
                 설정 메뉴
               </div>
@@ -769,6 +775,7 @@ export default function Home() {
                 회원 탈퇴
               </button>
             </div>
+            </>
           )}
         </div>
 
