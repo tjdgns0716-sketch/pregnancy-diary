@@ -2157,7 +2157,7 @@ export default function Home() {
             min-width: 100% !important;
             margin: 0 !important;
             padding: 0 !important;
-            background: var(--pdf-bg-color, var(--bg-color)) !important;
+            background: var(--bg-color) !important;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
           }
@@ -2168,7 +2168,7 @@ export default function Home() {
             left: 0 !important;
             width: 100vw !important;
             height: 100vh !important;
-            background: var(--pdf-bg-color, var(--bg-color)) !important;
+            background: var(--bg-color) !important;
             z-index: -9999 !important;
           }
           footer {
