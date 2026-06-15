@@ -518,8 +518,17 @@ export default function Home() {
     setIsExporting(true);
     const { data: allDiaries } = await supabase.from('diaries').select('*, post_its(*)').eq('pregnancy_id', pregnancyId).order('date', { ascending: true });
     
+    // Filter out completely empty records first so the cover page date range is accurate
+    const visibleDiaries = (allDiaries || []).filter(diary => {
+      return diary.content || 
+             (diary.badges && diary.badges.length > 0) || 
+             diary.image_url || 
+             (currentUserRole === 'mother' && diary.private_content && includePrivate) || 
+             (diary.post_its && diary.post_its.length > 0);
+    });
+
     // Preload image dimensions for layout calculations
-    const processedDiaries = await Promise.all((allDiaries || []).map(async (diary) => {
+    const processedDiaries = await Promise.all(visibleDiaries.map(async (diary) => {
       if (!diary.image_url) return diary;
       return new Promise((resolve) => {
         const img = new window.Image();
