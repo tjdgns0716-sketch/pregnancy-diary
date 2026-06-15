@@ -657,8 +657,17 @@ export default function Home() {
                  }, 500);
               } else {
                  // Trigger native print dialog for Mobile Safari/Chrome/Custom WebViews
-                 // Hide original content
-                 exportContainer.style.display = 'none';
+                 // Use a dedicated print stylesheet to guarantee only the wrapper is printed
+                 const style = document.createElement('style');
+                 style.id = 'mobile-print-style';
+                 style.innerHTML = `
+                   @media print {
+                     body > *:not(#mobile-print-wrapper) {
+                       display: none !important;
+                     }
+                   }
+                 `;
+                 document.head.appendChild(style);
                  
                  // Create temporary print container
                  const printWrapper = document.createElement('div');
@@ -668,16 +677,22 @@ export default function Home() {
                  printWrapper.innerHTML = imagesHtml;
                  document.body.appendChild(printWrapper);
               
+                 // On iOS, window.print() is non-blocking and afterprint fires inconsistently.
                  const cleanupPrint = () => {
                    if (document.getElementById('mobile-print-wrapper')) {
                        document.body.removeChild(document.getElementById('mobile-print-wrapper'));
                    }
-                   exportContainer.style.display = 'block';
+                   if (document.getElementById('mobile-print-style')) {
+                       document.head.removeChild(document.getElementById('mobile-print-style'));
+                   }
                    setIsExporting(false);
                    setAllDiariesToExport([]);
                    window.removeEventListener('afterprint', cleanupPrint);
                  };
+                 
                  window.addEventListener('afterprint', cleanupPrint);
+                 // Fallback cleanup
+                 setTimeout(cleanupPrint, 10000);
                  
                  // Allow DOM to update before printing
                  setTimeout(() => window.print(), 100);
