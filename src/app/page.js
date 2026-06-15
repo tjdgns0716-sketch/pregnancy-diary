@@ -1847,13 +1847,13 @@ export default function Home() {
                     )}
                     
                     {diary.image_url && (
-                      <div style={{ marginBottom: diary.content ? '20px' : '0', borderRadius: '15px', overflow: 'hidden', backgroundColor: 'var(--bg-color)', display: 'flex', justifyContent: 'center' }}>
+                      <div className="pdf-inner-block" style={{ marginBottom: diary.content ? '20px' : '0', borderRadius: '15px', overflow: 'hidden', backgroundColor: 'var(--bg-color)', display: 'flex', justifyContent: 'center' }}>
                         <img src={diary.image_url} style={{ maxWidth: '100%', maxHeight: '500px', objectFit: 'contain' }} />
                       </div>
                     )}
                     
                     {currentUserRole === 'mother' && diary.private_content && exportIncludesPrivate && (
-                      <div style={{ marginTop: '20px', padding: '25px', backgroundColor: 'var(--bg-color)', borderRadius: '15px', border: '1px dashed var(--accent-color)' }}>
+                      <div className="pdf-inner-block" style={{ marginTop: '20px', padding: '25px', backgroundColor: 'var(--bg-color)', borderRadius: '15px', border: '1px dashed var(--accent-color)' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '10px' }}>
                           <span style={{ fontSize: '1.2rem' }}>🔒</span>
                           <strong style={{ color: 'var(--accent-color)', fontSize: '1rem' }}>나만의 비밀 이야기</strong>
@@ -1863,7 +1863,7 @@ export default function Home() {
                     )}
                     
                     {diary.post_its && diary.post_its.length > 0 && (
-                      <div style={{
+                      <div className="pdf-inner-block" style={{
                         marginTop: '20px',
                         backgroundColor: '#fff7d6',
                         padding: '15px',
@@ -1937,6 +1937,14 @@ export default function Home() {
             box-sizing: border-box !important;
             padding: 25px !important; /* Shrink padding for 2-column layout */
             margin-bottom: 30px !important;
+          }
+          .pdf-inner-block {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+            -webkit-column-break-inside: avoid !important;
+            display: inline-block !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
           }
         }
       `}} />
