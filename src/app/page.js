@@ -568,7 +568,25 @@ export default function Home() {
           }));
         }
       } else {
-        window.print();
+        const cards = document.querySelectorAll('.pdf-diary-card');
+        const MAX_HEIGHT = 1030; // Approx A4 height (1122) minus margins
+        
+        cards.forEach(card => {
+          card.style.zoom = '1';
+          const height = card.scrollHeight;
+          if (height > MAX_HEIGHT) {
+            const scale = MAX_HEIGHT / height;
+            card.style.zoom = scale.toString();
+          }
+        });
+
+        setTimeout(() => {
+          window.print();
+          cards.forEach(card => { card.style.zoom = ''; });
+          setIsExporting(false);
+          setAllDiariesToExport([]);
+        }, 100);
+        return;
       }
       setIsExporting(false);
       setAllDiariesToExport([]);
@@ -2079,6 +2097,8 @@ export default function Home() {
             background-color: #FAF7F3 !important;
           }
           .pdf-diary-card {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
             width: 100% !important;
             box-sizing: border-box !important;
           }
