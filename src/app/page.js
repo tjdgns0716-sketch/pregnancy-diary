@@ -901,7 +901,7 @@ export default function Home() {
         return (
           <>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-              <h2 style={{ fontSize: '1.1rem', color: 'var(--text-primary)' }}>{currentMonth}월 {selectedDate}일({['일', '월', '화', '수', '목', '금', '토'][new Date(currentYear, currentMonth - 1, selectedDate).getDay()]})의 기록</h2>
+              <h2 style={{ fontSize: '1.1rem', color: 'var(--text-primary)' }}>{currentMonth}월 {selectedDate}일의 기록</h2>
               {currentUserRole === 'mother' && (
                 <div style={{ display: 'flex', gap: '8px' }}>
                   <button 
