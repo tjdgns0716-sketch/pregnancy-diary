@@ -535,9 +535,51 @@ export default function Home() {
     
     // Give DOM time to render all diaries
     setTimeout(() => {
-      if (window.ReactNativeWebView) {
-        const exportContainer = document.querySelector('.printable-diary-export');
-        if (exportContainer) {
+      const exportContainer = document.querySelector('.printable-diary-export');
+      if (!exportContainer) {
+        setIsExporting(false);
+        setAllDiariesToExport([]);
+        return;
+      }
+
+      // Wait for all images inside export container to load before measuring and scaling
+      const images = Array.from(exportContainer.querySelectorAll('img'));
+      let loadedCount = 0;
+      let printed = false;
+
+      const performExport = () => {
+        if (printed) return;
+        printed = true;
+
+        // Auto-scale content to fit on one page robustly
+        const cards = document.querySelectorAll('.pdf-diary-card');
+        cards.forEach(card => {
+          const wrapper = card.querySelector('.pdf-card-content-wrapper');
+          if (wrapper) {
+            // Reset in case of multiple prints
+            wrapper.style.transform = 'none';
+            card.style.height = 'auto';
+            card.style.overflow = 'visible';
+            
+            const actualHeight = wrapper.scrollHeight;
+            const maxContentHeight = 820; // Extremely safe height
+            
+            if (actualHeight > maxContentHeight) {
+              const scale = maxContentHeight / actualHeight;
+              // Use robust CSS transform
+              wrapper.style.transform = `scale(${scale})`;
+              wrapper.style.transformOrigin = 'top center';
+              wrapper.style.width = '100%';
+              
+              // CRITICAL: Physically shrink the outer card's layout bounds 
+              // to exactly match the visual scaled height + padding.
+              card.style.height = `${(actualHeight * scale) + 60}px`; 
+            }
+          }
+        });
+
+        // Now that the DOM is perfectly scaled, check environment and export
+        if (window.ReactNativeWebView) {
           const htmlContent = `
             <html>
               <head>
@@ -561,98 +603,43 @@ export default function Home() {
             type: 'DOWNLOAD_PDF_HTML',
             htmlContent
           }));
+          setTimeout(() => {
+            setIsExporting(false);
+            setAllDiariesToExport([]);
+          }, 500);
         } else {
-          window.ReactNativeWebView.postMessage(JSON.stringify({
-            type: 'DOWNLOAD_PDF_HTML',
-            htmlContent: '<html><body><h1>Error: Could not find container</h1></body></html>'
-          }));
-        }
-      } else {
-        const cleanupPrint = () => {
-          setIsExporting(false);
-          setAllDiariesToExport([]);
-          window.removeEventListener('afterprint', cleanupPrint);
-        };
-        window.addEventListener('afterprint', cleanupPrint);
-
-        // Wait for all images inside export container to load before measuring and printing
-        const checkImagesAndPrint = () => {
-          const exportContainer = document.querySelector('.printable-diary-export');
-          if (!exportContainer) {
-            window.print();
-            return;
-          }
-          const images = Array.from(exportContainer.querySelectorAll('img'));
-          let loadedCount = 0;
-          
-          const doPrint = () => {
-            // Auto-scale content to fit on one page robustly
-            const cards = document.querySelectorAll('.pdf-diary-card');
-            cards.forEach(card => {
-              const wrapper = card.querySelector('.pdf-card-content-wrapper');
-              if (wrapper) {
-                // Reset in case of multiple prints
-                wrapper.style.transform = 'none';
-                card.style.height = 'auto';
-                card.style.overflow = 'visible';
-                
-                const actualHeight = wrapper.scrollHeight;
-                const maxContentHeight = 820; // Extremely safe height, accounts for any crazy custom print margins
-                
-                if (actualHeight > maxContentHeight) {
-                  const scale = maxContentHeight / actualHeight;
-                  // Use robust CSS transform
-                  wrapper.style.transform = `scale(${scale})`;
-                  wrapper.style.transformOrigin = 'top center';
-                  wrapper.style.width = '100%';
-                  
-                  // CRITICAL: Physically shrink the outer card's layout bounds 
-                  // to exactly match the visual scaled height + padding.
-                  card.style.height = `${(actualHeight * scale) + 60}px`; 
-                }
-              }
-            });
-            window.print();
+          const cleanupPrint = () => {
+            setIsExporting(false);
+            setAllDiariesToExport([]);
+            window.removeEventListener('afterprint', cleanupPrint);
           };
+          window.addEventListener('afterprint', cleanupPrint);
+          window.print();
+        }
+      };
 
-          if (images.length === 0) {
-            // If no images, still give DOM a tiny tick to render text
-            setTimeout(doPrint, 100);
+      if (images.length === 0) {
+        setTimeout(performExport, 100);
+      } else {
+        const fallbackTimer = setTimeout(performExport, 3000);
+        images.forEach(img => {
+          if (img.complete) {
+            loadedCount++;
+            if (loadedCount === images.length) {
+              clearTimeout(fallbackTimer);
+              setTimeout(performExport, 100);
+            }
           } else {
-            // Add a timeout fallback in case images fail to load or take too long
-            let printed = false;
-            const fallbackTimer = setTimeout(() => {
-              if (!printed) { printed = true; doPrint(); }
-            }, 3000);
-
-            images.forEach(img => {
-              if (img.complete) {
-                loadedCount++;
-                if (loadedCount === images.length && !printed) {
-                  printed = true;
-                  clearTimeout(fallbackTimer);
-                  // Give layout one final tick to settle after images complete
-                  setTimeout(doPrint, 100);
-                }
-              } else {
-                img.onload = img.onerror = () => {
-                  loadedCount++;
-                  if (loadedCount === images.length && !printed) {
-                    printed = true;
-                    clearTimeout(fallbackTimer);
-                    // Give layout one final tick to settle after images complete
-                    setTimeout(doPrint, 100);
-                  }
-                };
+            img.onload = img.onerror = () => {
+              loadedCount++;
+              if (loadedCount === images.length) {
+                clearTimeout(fallbackTimer);
+                setTimeout(performExport, 100);
               }
-            });
+            };
           }
-        };
-        checkImagesAndPrint();
-        return;
+        });
       }
-      setIsExporting(false);
-      setAllDiariesToExport([]);
     }, 1500);
   };
 
