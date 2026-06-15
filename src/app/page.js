@@ -2051,8 +2051,8 @@ export default function Home() {
                               <p style={{ whiteSpace: 'pre-wrap', lineHeight: '2.2', color: '#333039', fontSize: '1.1rem', margin: 0 }}>{displayContent}</p>
                             </div>
                           )}
-                          <div className="pdf-inner-block" style={{ width: '100%' }}>
-                            <img src={diary.image_url} style={{ width: '100%', maxHeight: '320px', display: 'block', objectFit: 'cover', borderRadius: '30px' }} />
+                          <div className="pdf-inner-block" style={{ width: '100%', backgroundColor: '#FFFFFF', borderRadius: '30px', padding: '20px', boxShadow: '0 10px 30px rgba(0,0,0,0.02)', boxSizing: 'border-box' }}>
+                            <img src={diary.image_url} style={{ width: '100%', maxHeight: '350px', display: 'block', objectFit: 'cover', borderRadius: '20px' }} />
                           </div>
                         </div>
                       ) : (
@@ -2064,8 +2064,8 @@ export default function Home() {
                             </div>
                           )}
                           {diary.image_url && (
-                            <div className="pdf-inner-block" style={{ width: '100%', textAlign: 'center' }}>
-                              <img src={diary.image_url} style={{ maxWidth: '80%', maxHeight: '320px', display: 'inline-block', objectFit: 'cover', borderRadius: '30px' }} />
+                            <div className="pdf-inner-block" style={{ width: '100%', textAlign: 'center', backgroundColor: '#FFFFFF', borderRadius: '30px', padding: '20px', boxShadow: '0 10px 30px rgba(0,0,0,0.02)', boxSizing: 'border-box' }}>
+                              <img src={diary.image_url} style={{ maxWidth: '100%', maxHeight: '380px', display: 'inline-block', objectFit: 'contain', borderRadius: '20px' }} />
                             </div>
                           )}
                         </div>
