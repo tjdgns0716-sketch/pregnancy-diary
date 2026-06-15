@@ -551,43 +551,31 @@ export default function Home() {
         if (printed) return;
         printed = true;
 
-        // Auto-scale content to fit on one page natively (avoids WebKit PDF transform bugs)
+        // Auto-scale content to fit on one page using Chrome's 'zoom' property.
+        // 'zoom' correctly modifies layout bounds before pagination, preventing splitting.
         const cards = document.querySelectorAll('.pdf-diary-card');
         
-        // Helper function to physically scale DOM elements in JS
-        const applyNativeScale = (element, scaleFactor) => {
-          const stylesToScale = ['fontSize', 'paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight', 'marginTop', 'marginBottom', 'marginLeft', 'marginRight', 'lineHeight', 'maxHeight'];
-          const walk = (node) => {
-            if (node.nodeType === 1) { // Element
-              const compStyle = window.getComputedStyle(node);
-              stylesToScale.forEach(prop => {
-                const val = compStyle[prop];
-                if (val && val.endsWith('px')) {
-                  const num = parseFloat(val);
-                  if (num > 0) {
-                    node.style[prop] = `${num * scaleFactor}px`;
-                  }
-                }
-              });
-              Array.from(node.children).forEach(walk);
-            }
-          };
-          walk(element);
-        };
-
         cards.forEach(card => {
           const wrapper = card.querySelector('.pdf-card-content-wrapper');
           if (wrapper) {
+            // Reset styles
+            wrapper.style.transform = 'none';
+            wrapper.style.zoom = 'normal';
             card.style.height = 'auto';
             card.style.overflow = 'visible';
             
             const actualHeight = wrapper.scrollHeight;
-            const maxContentHeight = 820; // Extremely safe height
+            const maxContentHeight = 900; // Safe height for A4 with standard margins
             
             if (actualHeight > maxContentHeight) {
               const scale = maxContentHeight / actualHeight;
-              // Natively scale every element inside the wrapper to physically shrink it
-              applyNativeScale(wrapper, scale);
+              
+              // Apply zoom. Chrome recalculates the entire layout bounding box,
+              // making the card physically smaller so the print engine won't split it.
+              wrapper.style.zoom = scale;
+              
+              // Ensure the zoomed wrapper is centered within the card
+              wrapper.style.margin = '0 auto';
             }
           }
         });
