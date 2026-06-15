@@ -2068,12 +2068,14 @@ export default function Home() {
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
           }
-          .main-content {
+          .app-container, .main-content {
             max-width: none !important;
             width: 100% !important;
             margin: 0 !important;
             padding: 0 !important;
             box-shadow: none !important;
+            background: transparent !important;
+            background-color: transparent !important;
           }
           .main-content::before {
             display: none !important;
