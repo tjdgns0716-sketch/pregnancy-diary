@@ -1404,8 +1404,16 @@ export default function Home() {
                     <div style={{ fontSize: '3rem', marginBottom: '10px' }}>🔗</div>
                     <h3 style={{ fontSize: '1.2rem', marginBottom: '15px', color: 'var(--text-primary)' }}>배우자와 연결 끊기</h3>
                     <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.5', marginBottom: '30px' }}>
-                      설정 메뉴에서 배우자 계정과의 연결을 해제할 수 있습니다. 해제 후에도 초대 코드를 통해 다시 연결이 가능합니다.<br/><br/>
-                      <span style={{ fontSize: '0.8rem', color: '#999' }}>* 이 안내들은 상단 물음표(❓) 버튼을 통해 언제든 다시 볼 수 있습니다.</span>
+                      설정 메뉴에서 배우자 계정과의 연결을 해제할 수 있습니다. 해제 후에도 초대 코드를 통해 다시 연결이 가능합니다.
+                    </p>
+                  </>
+                )}
+                {tutorialStep === 8 && (
+                  <>
+                    <div style={{ fontSize: '3rem', marginBottom: '10px' }}>❓</div>
+                    <h3 style={{ fontSize: '1.2rem', marginBottom: '15px', color: 'var(--text-primary)' }}>튜토리얼 다시보기</h3>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.5', marginBottom: '30px' }}>
+                      이 안내들은 상단 물음표(❓) 버튼을 통해 언제든 다시 볼 수 있습니다.
                     </p>
                   </>
                 )}
@@ -1453,8 +1461,16 @@ export default function Home() {
                     <div style={{ fontSize: '3rem', marginBottom: '10px' }}>🔗</div>
                     <h3 style={{ fontSize: '1.2rem', marginBottom: '15px', color: 'var(--text-primary)' }}>배우자와 연결 끊기</h3>
                     <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.5', marginBottom: '30px' }}>
-                      설정 메뉴에서 배우자 계정과의 연결을 해제할 수 있습니다. 해제 후에도 초대 코드를 통해 다시 연결이 가능합니다.<br/><br/>
-                      <span style={{ fontSize: '0.8rem', color: '#999' }}>* 이 안내들은 상단 물음표(❓) 버튼을 통해 언제든 다시 볼 수 있습니다.</span>
+                      설정 메뉴에서 배우자 계정과의 연결을 해제할 수 있습니다. 해제 후에도 초대 코드를 통해 다시 연결이 가능합니다.
+                    </p>
+                  </>
+                )}
+                {tutorialStep === 5 && (
+                  <>
+                    <div style={{ fontSize: '3rem', marginBottom: '10px' }}>❓</div>
+                    <h3 style={{ fontSize: '1.2rem', marginBottom: '15px', color: 'var(--text-primary)' }}>튜토리얼 다시보기</h3>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.5', marginBottom: '30px' }}>
+                      이 안내들은 상단 물음표(❓) 버튼을 통해 언제든 다시 볼 수 있습니다.
                     </p>
                   </>
                 )}
@@ -1462,7 +1478,7 @@ export default function Home() {
             )}
             
             <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
-              {[...Array(currentUserRole === 'mother' ? 8 : 5).keys()].map((step) => (
+              {[...Array(currentUserRole === 'mother' ? 9 : 6).keys()].map((step) => (
                 <div key={step} onClick={() => setTutorialStep(step)} style={{
                   width: '8px', height: '8px', borderRadius: '50%',
                   backgroundColor: tutorialStep === step ? 'var(--accent-color)' : 'var(--border-color)',
@@ -1487,7 +1503,7 @@ export default function Home() {
               )}
               <button 
                 onClick={async () => {
-                  const totalSteps = currentUserRole === 'mother' ? 8 : 5;
+                  const totalSteps = currentUserRole === 'mother' ? 9 : 6;
                   if (tutorialStep < totalSteps - 1) {
                     setTutorialStep(tutorialStep + 1);
                   } else {
@@ -1502,7 +1518,7 @@ export default function Home() {
                   fontWeight: 'bold', border: 'none', cursor: 'pointer', fontSize: '1rem'
                 }}
               >
-                {tutorialStep < (currentUserRole === 'mother' ? 7 : 4) ? "다음" : "다이어리 시작하기"}
+                {tutorialStep < (currentUserRole === 'mother' ? 8 : 5) ? "다음" : "다이어리 시작하기"}
               </button>
             </div>
           </div>
