@@ -557,6 +557,8 @@ export default function Home() {
         
         // Comprehensive mobile detection: covers React Native WebView AND all standard mobile browsers
         const isMobile = window.ReactNativeWebView || /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        // Firefox Desktop historically ignores 'zoom' and requires the transform fallback.
+        const isFirefox = navigator.userAgent.toLowerCase().includes('firefox');
         
         cards.forEach(card => {
           const wrapper = card.querySelector('.pdf-card-content-wrapper');
@@ -573,10 +575,9 @@ export default function Home() {
             if (actualHeight > maxContentHeight) {
               const scale = maxContentHeight / actualHeight;
               
-              if (isMobile) {
-                // Mobile (iOS WebKit, Android): Ignores or breaks 'zoom'. We must use transform: scale().
-                // To prevent the unscaled layout bounds from overlapping the next card,
-                // we force the outer card's height to match the scaled height and hide overflow.
+              if (isMobile || isFirefox) {
+                // Mobile and Firefox: 'zoom' is either ignored or buggy for PDF generation. 
+                // We must use transform: scale() and explicitly clip the height to prevent overlap.
                 wrapper.style.transform = `scale(${scale})`;
                 wrapper.style.transformOrigin = 'top center';
                 wrapper.style.width = '100%';
@@ -584,8 +585,8 @@ export default function Home() {
                 card.style.height = `${maxContentHeight + 80}px`; 
                 card.style.overflow = 'hidden'; 
               } else {
-                // Desktop Web: transform: scale() causes pagination bugs on overflowing elements.
-                // 'zoom' correctly shrinks the layout bounds natively so Chrome doesn't split it.
+                // Desktop Chrome/Edge/Safari: transform: scale() causes pagination split bugs.
+                // 'zoom' correctly shrinks the layout bounds natively so it fits perfectly.
                 wrapper.style.zoom = scale;
                 wrapper.style.margin = '0 auto';
               }
