@@ -53,6 +53,40 @@ export default function Home() {
   const [isExporting, setIsExporting] = useState(false);
   const [allDiariesToExport, setAllDiariesToExport] = useState([]);
 
+
+  const [isBabyInfoModalOpen, setIsBabyInfoModalOpen] = useState(false);
+  const [isNewJourneyModalOpen, setIsNewJourneyModalOpen] = useState(false);
+  const [tempBabyName, setTempBabyName] = useState("");
+  const [tempDueDate, setTempDueDate] = useState("");
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
+  const [exportIncludesPrivate, setExportIncludesPrivate] = useState(false);
+  
+  const [allPregnancies, setAllPregnancies] = useState([]);
+  const [isArchiveModalOpen, setIsArchiveModalOpen] = useState(false);
+
+  // DB Data States
+  const [monthDiaries, setMonthDiaries] = useState([]);
+  const [monthSchedules, setMonthSchedules] = useState([]);
+  const [selectedDayDiary, setSelectedDayDiary] = useState(null);
+  const [selectedDaySchedule, setSelectedDaySchedule] = useState(null);
+  const [selectedDayPostIt, setSelectedDayPostIt] = useState(null);
+
+  // Input States
+  const [diaryContent, setDiaryContent] = useState("");
+  const [scheduleTitle, setScheduleTitle] = useState("");
+  const [scheduleDate, setScheduleDate] = useState("");
+  const [scheduleTime, setScheduleTime] = useState("");
+  const [scheduleAlarmMinutes, setScheduleAlarmMinutes] = useState(0);
+  const [postItContent, setPostItContent] = useState("");
+
+  // New Tab States
+  const [activeTab, setActiveTab] = useState('diary'); // 'diary', 'album', 'checklist'
+  const [albumImages, setAlbumImages] = useState([]);
+  const [selectedAlbumImage, setSelectedAlbumImage] = useState(null);
+  const [checklists, setChecklists] = useState([]);
+  const [newChecklistCategory, setNewChecklistCategory] = useState("아기 용품");
+  const [newChecklistContent, setNewChecklistContent] = useState("");
+
   // Prepare grouped data for PDF Export
   const pdfData = useMemo(() => {
     if (!isExporting || !allDiariesToExport.length) return { months: [], shortRecords: [] };
@@ -99,39 +133,6 @@ export default function Home() {
       shortRecords
     };
   }, [allDiariesToExport, isExporting, currentUserRole, exportIncludesPrivate]);
-  
-  const [isBabyInfoModalOpen, setIsBabyInfoModalOpen] = useState(false);
-  const [isNewJourneyModalOpen, setIsNewJourneyModalOpen] = useState(false);
-  const [tempBabyName, setTempBabyName] = useState("");
-  const [tempDueDate, setTempDueDate] = useState("");
-  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
-  const [exportIncludesPrivate, setExportIncludesPrivate] = useState(false);
-  
-  const [allPregnancies, setAllPregnancies] = useState([]);
-  const [isArchiveModalOpen, setIsArchiveModalOpen] = useState(false);
-
-  // DB Data States
-  const [monthDiaries, setMonthDiaries] = useState([]);
-  const [monthSchedules, setMonthSchedules] = useState([]);
-  const [selectedDayDiary, setSelectedDayDiary] = useState(null);
-  const [selectedDaySchedule, setSelectedDaySchedule] = useState(null);
-  const [selectedDayPostIt, setSelectedDayPostIt] = useState(null);
-
-  // Input States
-  const [diaryContent, setDiaryContent] = useState("");
-  const [scheduleTitle, setScheduleTitle] = useState("");
-  const [scheduleDate, setScheduleDate] = useState("");
-  const [scheduleTime, setScheduleTime] = useState("");
-  const [scheduleAlarmMinutes, setScheduleAlarmMinutes] = useState(0);
-  const [postItContent, setPostItContent] = useState("");
-
-  // New Tab States
-  const [activeTab, setActiveTab] = useState('diary'); // 'diary', 'album', 'checklist'
-  const [albumImages, setAlbumImages] = useState([]);
-  const [selectedAlbumImage, setSelectedAlbumImage] = useState(null);
-  const [checklists, setChecklists] = useState([]);
-  const [newChecklistCategory, setNewChecklistCategory] = useState("아기 용품");
-  const [newChecklistContent, setNewChecklistContent] = useState("");
 
   useEffect(() => {
     const fetchUserAndProfile = async () => {
