@@ -555,6 +555,9 @@ export default function Home() {
         // We use different strategies for Mobile App (iOS WebKit) vs Desktop Chrome.
         const cards = document.querySelectorAll('.pdf-diary-card');
         
+        // Comprehensive mobile detection: covers React Native WebView AND all standard mobile browsers
+        const isMobile = window.ReactNativeWebView || /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
         cards.forEach(card => {
           const wrapper = card.querySelector('.pdf-card-content-wrapper');
           if (wrapper) {
@@ -570,8 +573,8 @@ export default function Home() {
             if (actualHeight > maxContentHeight) {
               const scale = maxContentHeight / actualHeight;
               
-              if (window.ReactNativeWebView) {
-                // Mobile (iOS WebKit): Ignores 'zoom'. We must use transform: scale().
+              if (isMobile) {
+                // Mobile (iOS WebKit, Android): Ignores or breaks 'zoom'. We must use transform: scale().
                 // To prevent the unscaled layout bounds from overlapping the next card,
                 // we force the outer card's height to match the scaled height and hide overflow.
                 wrapper.style.transform = `scale(${scale})`;
