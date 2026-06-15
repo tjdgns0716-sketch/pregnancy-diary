@@ -1819,7 +1819,7 @@ export default function Home() {
           </div>
           
           {/* Diary Entries */}
-          <div style={{ padding: '40px' }}>
+          <div className="pdf-entries-container" style={{ padding: '40px' }}>
             {allDiariesToExport.length === 0 ? (
               <p style={{ textAlign: 'center', color: 'var(--text-secondary)', marginTop: '50px' }}>기록된 일기가 없습니다.</p>
             ) : (
@@ -1923,12 +1923,20 @@ export default function Home() {
             box-sizing: border-box !important;
             background-color: white !important;
           }
+          .pdf-entries-container {
+            column-count: 2 !important;
+            column-gap: 30px !important;
+            padding: 0 !important; /* Let the parent handle padding */
+          }
           .diary-entry-card {
             page-break-inside: avoid !important;
             break-inside: avoid !important;
-            -webkit-column-break-inside: avoid;
+            -webkit-column-break-inside: avoid !important;
             display: inline-block !important; /* Forces block not to break in Chrome */
             width: 100% !important;
+            box-sizing: border-box !important;
+            padding: 25px !important; /* Shrink padding for 2-column layout */
+            margin-bottom: 30px !important;
           }
         }
       `}} />
