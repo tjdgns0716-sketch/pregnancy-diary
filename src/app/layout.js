@@ -9,7 +9,7 @@ const gowunDodum = Gowun_Dodum({
 
 export const metadata = {
   metadataBase: new URL('https://pregnancy-diary-q1r.pages.dev'),
-  title: "우리의 열달 🤍",
+  title: "우리의 열달",
   description: "아내와 남편이 함께 기록하는 가장 특별한 280일의 임신 다이어리",
   manifest: "/manifest.json",
   icons: {
@@ -17,7 +17,7 @@ export const metadata = {
     apple: "/icon-192x192.png",
   },
   openGraph: {
-    title: "우리의 열달 🤍",
+    title: "우리의 열달",
     description: "아내와 남편이 함께 기록하는 280일의 임신 다이어리",
     siteName: "우리의 열달",
     images: [
