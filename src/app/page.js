@@ -53,6 +53,7 @@ export default function Home() {
   const [dueDate, setDueDate] = useState(null);
   const [isExporting, setIsExporting] = useState(false);
   const [allDiariesToExport, setAllDiariesToExport] = useState([]);
+  const [pdfDownloadUrl, setPdfDownloadUrl] = useState(null);
 
 
   const [isBabyInfoModalOpen, setIsBabyInfoModalOpen] = useState(false);
@@ -688,12 +689,12 @@ export default function Home() {
                    
                    pdf.addImage(base64Images[i], 'JPEG', x, y, renderWidth, renderHeight);
                  }
-                 
-                 // Trigger direct binary download
-                 pdf.save('diary.pdf');
-                 
-                 setIsExporting(false);
-                 setAllDiariesToExport([]);
+                 // Safari aggressively blocks programmatic downloads inside async functions.
+                 // We must generate a blob URL and show a physical button for the user to click.
+                 const blob = pdf.output('blob');
+                 const url = URL.createObjectURL(blob);
+                 setPdfDownloadUrl(url);
+                 // We intentionally DO NOT set isExporting(false) here, so the user can see the download button.
               }
             } catch (e) {
               console.error("html2canvas error:", e);
@@ -2007,6 +2008,50 @@ export default function Home() {
           >
             ×
           </button>
+        </div>
+      )}
+
+      {/* Safari PDF Download Ready Modal */}
+      {pdfDownloadUrl && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.8)', zIndex: 100000,
+          display: 'flex', justifyContent: 'center', alignItems: 'center'
+        }}>
+          <div style={{
+            width: '90%', maxWidth: '340px', backgroundColor: 'var(--card-bg)', 
+            borderRadius: '20px', padding: '30px', display: 'flex', flexDirection: 'column',
+            boxShadow: 'var(--shadow-md)', alignItems: 'center'
+          }}>
+            <div style={{ fontSize: '3rem', marginBottom: '15px' }}>🎉</div>
+            <h3 style={{ fontSize: '1.4rem', fontWeight: 'bold', marginBottom: '10px', color: 'var(--text-primary)', textAlign: 'center' }}>PDF 생성 완료!</h3>
+            <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', marginBottom: '25px', textAlign: 'center', lineHeight: '1.5' }}>
+              사파리 환경에서는 자동 다운로드가 제한됩니다.<br/>아래 버튼을 눌러 PDF를 저장해주세요.
+            </p>
+            
+            <a 
+              href={pdfDownloadUrl} 
+              download="우리의_열달_기록.pdf"
+              onClick={() => {
+                setTimeout(() => {
+                  setPdfDownloadUrl(null);
+                  setIsExporting(false);
+                  setAllDiariesToExport([]);
+                }, 500);
+              }}
+              style={{ width: '100%', padding: '15px', borderRadius: '10px', border: 'none', backgroundColor: 'var(--accent-color)', color: 'white', cursor: 'pointer', fontWeight: 'bold', textAlign: 'center', textDecoration: 'none', display: 'block', boxSizing: 'border-box' }}
+            >
+              PDF 파일 다운로드
+            </a>
+            
+            <button onClick={() => {
+              setPdfDownloadUrl(null);
+              setIsExporting(false);
+              setAllDiariesToExport([]);
+            }} style={{ padding: '10px', marginTop: '10px', border: 'none', backgroundColor: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer', textDecoration: 'underline' }}>
+              닫기
+            </button>
+          </div>
         </div>
       )}
 
