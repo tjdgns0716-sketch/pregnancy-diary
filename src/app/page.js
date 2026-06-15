@@ -1347,55 +1347,64 @@ export default function Home() {
                 )}
                 {tutorialStep === 1 && (
                   <>
-                    <div style={{ fontSize: '3rem', marginBottom: '10px' }}>💌</div>
-                    <h3 style={{ fontSize: '1.2rem', marginBottom: '15px', color: 'var(--text-primary)' }}>일기로 전하는 진심</h3>
+                    <div style={{ fontSize: '3rem', marginBottom: '10px' }}>✏️</div>
+                    <h3 style={{ fontSize: '1.2rem', marginBottom: '15px', color: 'var(--text-primary)' }}>다이어리 작성</h3>
                     <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.5', marginBottom: '30px' }}>
-                      남편에게 먹고 싶은 음식을 넌지시 말해보거나, 평소 직접 하지 못했던 말들을 일기의 형식을 빌려 전해보세요.
+                      상단 '다이어리' 탭에서 우측 하단의 글쓰기 버튼을 눌러 오늘의 기분과 일기, 사진을 남겨보세요. '나만의 비밀글'도 작성할 수 있습니다.
                     </p>
                   </>
                 )}
                 {tutorialStep === 2 && (
                   <>
-                    <div style={{ fontSize: '3rem', marginBottom: '10px' }}>✏️</div>
-                    <h3 style={{ fontSize: '1.2rem', marginBottom: '15px', color: 'var(--text-primary)' }}>기록 남기기</h3>
+                    <div style={{ fontSize: '3rem', marginBottom: '10px' }}>🖼️</div>
+                    <h3 style={{ fontSize: '1.2rem', marginBottom: '15px', color: 'var(--text-primary)' }}>우리의 앨범</h3>
                     <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.5', marginBottom: '30px' }}>
-                      우측 하단의 글쓰기 버튼을 눌러 오늘의 기분을 뱃지로 선택하고, 간직하고 싶은 사진과 일기를 남겨보세요.
+                      '앨범' 탭을 누르면, 그동안 다이어리에 올렸던 모든 사진들을 한눈에 감상하고 원본 크기로 확인할 수 있어요.
                     </p>
                   </>
                 )}
                 {tutorialStep === 3 && (
                   <>
-                    <div style={{ fontSize: '3rem', marginBottom: '10px' }}>🤫</div>
-                    <h3 style={{ fontSize: '1.2rem', marginBottom: '15px', color: 'var(--text-primary)' }}>나만의 일기</h3>
+                    <div style={{ fontSize: '3rem', marginBottom: '10px' }}>✅</div>
+                    <h3 style={{ fontSize: '1.2rem', marginBottom: '15px', color: 'var(--text-primary)' }}>체크리스트</h3>
                     <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.5', marginBottom: '30px' }}>
-                      가끔 혼자만 간직하고 싶은 감정이 있나요?<br/>글 작성 시 '나만의 일기'를 선택하면 아빠에겐 보이지 않는 비밀글이 됩니다.
+                      '체크리스트' 탭에서 출산 준비물을 항목별로 관리하세요. 남편과 체크 상태가 실시간으로 공유됩니다.
                     </p>
                   </>
                 )}
                 {tutorialStep === 4 && (
                   <>
                     <div style={{ fontSize: '3rem', marginBottom: '10px' }}>🎨</div>
-                    <h3 style={{ fontSize: '1.2rem', marginBottom: '15px', color: 'var(--text-primary)' }}>내 취향대로 꾸미기</h3>
+                    <h3 style={{ fontSize: '1.2rem', marginBottom: '15px', color: 'var(--text-primary)' }}>테마 색상 변경</h3>
                     <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.5', marginBottom: '30px' }}>
-                      우측 상단의 ⚙️ 설정 아이콘을 눌러<br/>언제든 예쁜 테마 색상으로 다이어리를 꾸밀 수 있어요!
+                      우측 상단의 ⚙️ 설정 아이콘을 눌러 언제든 예쁜 테마 색상으로 다이어리의 분위기를 바꿀 수 있어요!
                     </p>
                   </>
                 )}
                 {tutorialStep === 5 && (
                   <>
-                    <div style={{ fontSize: '3rem', marginBottom: '10px' }}>🌱</div>
-                    <h3 style={{ fontSize: '1.2rem', marginBottom: '15px', color: 'var(--text-primary)' }}>새로운 다이어리 쓰기</h3>
+                    <div style={{ fontSize: '3rem', marginBottom: '10px' }}>📄</div>
+                    <h3 style={{ fontSize: '1.2rem', marginBottom: '15px', color: 'var(--text-primary)' }}>PDF 추출 (오프라인 저장)</h3>
                     <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.5', marginBottom: '30px' }}>
-                      새로운 다이어리를 작성하고 싶을 때, 설정에서 백지 상태의 새 다이어리를 시작해 보세요.<br/>이전 기록은 '다이어리 보관함'에 안전하게 남으며, 원하실 때 언제든 열람하거나 삭제할 수 있습니다.
+                      설정 메뉴에서 언제든 그동안 쓴 일기 전체를 예쁜 책 형식의 PDF 파일로 다운로드하여 영구 보관할 수 있습니다.
                     </p>
                   </>
                 )}
                 {tutorialStep === 6 && (
                   <>
-                    <div style={{ fontSize: '3rem', marginBottom: '10px' }}>🔗</div>
-                    <h3 style={{ fontSize: '1.2rem', marginBottom: '15px', color: 'var(--text-primary)' }}>배우자 연결 관리</h3>
+                    <div style={{ fontSize: '3rem', marginBottom: '10px' }}>🌱</div>
+                    <h3 style={{ fontSize: '1.2rem', marginBottom: '15px', color: 'var(--text-primary)' }}>새로운 다이어리 및 보관함</h3>
                     <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.5', marginBottom: '30px' }}>
-                      필요할 때 설정에서 언제든 파트너와의 계정 연결을 해제할 수 있어요. 연결을 끊어도 나중에 초대 코드로 다시 이어질 수 있답니다.
+                      새로운 다이어리를 작성하고 싶을 때, 설정에서 백지 상태의 새 다이어리를 시작해 보세요.<br/>이전 기록들은 '다이어리 보관함'에 안전하게 보관됩니다.
+                    </p>
+                  </>
+                )}
+                {tutorialStep === 7 && (
+                  <>
+                    <div style={{ fontSize: '3rem', marginBottom: '10px' }}>🔌</div>
+                    <h3 style={{ fontSize: '1.2rem', marginBottom: '15px', color: 'var(--text-primary)' }}>배우자와 연결 끊기</h3>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.5', marginBottom: '30px' }}>
+                      설정 메뉴에서 파트너와의 계정 연결을 해제할 수 있습니다. 배우자와 연결을 끊어야 하는 경우 해당 버튼으로 끊을 수 있습니다.
                     </p>
                   </>
                 )}
@@ -1416,7 +1425,7 @@ export default function Home() {
                     <div style={{ fontSize: '3rem', marginBottom: '10px' }}>📅</div>
                     <h3 style={{ fontSize: '1.2rem', marginBottom: '15px', color: 'var(--text-primary)' }}>기록 확인하기</h3>
                     <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.5', marginBottom: '30px' }}>
-                      엄마가 남긴 소중한 일기와 사진,<br/>그리고 캘린더의 일정들을 함께 확인할 수 있어요.
+                      아내가 남긴 다이어리와 앨범의 사진들, 캘린더의 일정들을 언제든 실시간으로 함께 확인할 수 있어요.
                     </p>
                   </>
                 )}
@@ -1425,16 +1434,25 @@ export default function Home() {
                     <div style={{ fontSize: '3rem', marginBottom: '10px' }}>💛</div>
                     <h3 style={{ fontSize: '1.2rem', marginBottom: '15px', color: 'var(--text-primary)' }}>응원의 포스트잇</h3>
                     <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.5', marginBottom: '30px' }}>
-                      엄마가 남긴 일기를 읽고, 그 아래에<br/>따뜻한 메모(포스트잇)를 남겨 마음을 전해보세요.
+                      아내가 남긴 일기를 읽고, 그 아래에 따뜻한 메모(포스트잇)를 남겨 마음을 전해보세요.
                     </p>
                   </>
                 )}
                 {tutorialStep === 3 && (
                   <>
-                    <div style={{ fontSize: '3rem', marginBottom: '10px' }}>🔗</div>
-                    <h3 style={{ fontSize: '1.2rem', marginBottom: '15px', color: 'var(--text-primary)' }}>배우자 연결 관리</h3>
+                    <div style={{ fontSize: '3rem', marginBottom: '10px' }}>✅</div>
+                    <h3 style={{ fontSize: '1.2rem', marginBottom: '15px', color: 'var(--text-primary)' }}>체크리스트 함께하기</h3>
                     <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.5', marginBottom: '30px' }}>
-                      설정 메뉴에서 언제든 아내와의 연결을 해제할 수 있어요. 해제하더라도 다시 초대 코드를 입력하면 언제든 돌아올 수 있습니다.
+                      출산 준비물이나 예약 내역 등을 아내와 함께 체크하며 꼼꼼히 준비해 보세요.
+                    </p>
+                  </>
+                )}
+                {tutorialStep === 4 && (
+                  <>
+                    <div style={{ fontSize: '3rem', marginBottom: '10px' }}>🔌</div>
+                    <h3 style={{ fontSize: '1.2rem', marginBottom: '15px', color: 'var(--text-primary)' }}>배우자와 연결 끊기</h3>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.5', marginBottom: '30px' }}>
+                      설정 메뉴에서 언제든 연결을 해제할 수 있습니다. 배우자와 연결을 끊어야 하는 경우 해당 버튼으로 끊을 수 있습니다.
                     </p>
                   </>
                 )}
@@ -1442,7 +1460,7 @@ export default function Home() {
             )}
             
             <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
-              {[...Array(currentUserRole === 'mother' ? 7 : 4).keys()].map((step) => (
+              {[...Array(currentUserRole === 'mother' ? 8 : 5).keys()].map((step) => (
                 <div key={step} onClick={() => setTutorialStep(step)} style={{
                   width: '8px', height: '8px', borderRadius: '50%',
                   backgroundColor: tutorialStep === step ? 'var(--accent-color)' : 'var(--border-color)',
@@ -1467,7 +1485,7 @@ export default function Home() {
               )}
               <button 
                 onClick={async () => {
-                  const totalSteps = currentUserRole === 'mother' ? 7 : 4;
+                  const totalSteps = currentUserRole === 'mother' ? 8 : 5;
                   if (tutorialStep < totalSteps - 1) {
                     setTutorialStep(tutorialStep + 1);
                   } else {
@@ -1482,7 +1500,7 @@ export default function Home() {
                   fontWeight: 'bold', border: 'none', cursor: 'pointer', fontSize: '1rem'
                 }}
               >
-                {tutorialStep < (currentUserRole === 'mother' ? 6 : 3) ? "다음" : "다이어리 시작하기"}
+                {tutorialStep < (currentUserRole === 'mother' ? 7 : 4) ? "다음" : "다이어리 시작하기"}
               </button>
             </div>
           </div>
