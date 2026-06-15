@@ -1605,7 +1605,7 @@ export default function Home() {
         <div className="printable-diary-export" style={{ position: 'absolute', top: 0, left: 0, width: '100%', minHeight: '100vh', backgroundColor: 'var(--bg-color)', zIndex: 99999, padding: '0', boxSizing: 'border-box', color: 'var(--text-primary)' }}>
           
           {/* Cover Page */}
-          <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', pageBreakAfter: 'always', padding: '40px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', pageBreakAfter: 'always', paddingTop: '350px', paddingBottom: '100px' }}>
             <div style={{ width: '100px', height: '100px', borderRadius: '50%', backgroundColor: 'var(--card-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '3rem', marginBottom: '30px', boxShadow: '0 10px 30px rgba(0,0,0,0.05)' }}>
               🤍
             </div>
