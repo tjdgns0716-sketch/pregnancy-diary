@@ -78,6 +78,42 @@ export default function Home() {
   const [scheduleAlarmMinutes, setScheduleAlarmMinutes] = useState(0);
   const [postItContent, setPostItContent] = useState("");
 
+  // New Tab States
+  const [activeTab, setActiveTab] = useState('diary'); // 'diary', 'album', 'checklist'
+  const [albumImages, setAlbumImages] = useState([]);
+  const [checklists, setChecklists] = useState([]);
+  const [newChecklistCategory, setNewChecklistCategory] = useState("아기용품");
+  const [newChecklistContent, setNewChecklistContent] = useState("");
+
+  const getPregnancyWeekInfo = () => {
+    if (!dueDate) return null;
+    const due = new Date(dueDate);
+    const today = new Date();
+    const conceptionDate = new Date(due.getTime() - 280 * 24 * 60 * 60 * 1000);
+    const diffTime = today.getTime() - conceptionDate.getTime();
+    if (diffTime < 0) return { text: "만나기 준비 중 ✨", week: 0, day: 0 };
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    const week = Math.floor(diffDays / 7);
+    const day = diffDays % 7;
+    
+    if (week >= 40) return { text: "방 뺄 시간이에요! 👶", week, day };
+    
+    const sizes = [
+      "아직은 아주아주 작아요 🐣", "아직은 아주아주 작아요 🐣", "아직은 아주아주 작아요 🐣", "아직은 아주아주 작아요 🐣", // 0~3
+      "양귀비 씨앗만 해요 🌱", "참깨만 해요 🌾", "렌틸콩만 해요 🥜", "블루베리만 해요 🫐", // 4~7
+      "라즈베리만 해요 🍓", "체리만 해요 🍒", "딸기만 해요 🍓", "무화과만 해요 🍐", // 8~11
+      "자두만 해요 🍑", "레몬만 해요 🍋", "작은 주먹만 해요 ✊", "사과만 해요 🍎", // 12~15
+      "아보카도만 해요 🥑", "배만 해요 🍐", "고구마만 해요 🍠", "작은 다이어리만 해요 📓", // 16~19
+      "바나나 길이 정도예요 🍌", "당근만 해요 🥕", "작은 인형만 해요 🧸", "자몽만 해요 🍊", // 20~23
+      "옥수수만 해요 🌽", "작은 축구공만 해요 ⚽", "파인애플만 해요 🍍", "브로콜리 다발만 해요 🥦", // 24~27
+      "가지 길이 정도예요 🍆", "작은 백팩만 해요 🎒", "양배추만 해요 🥬", "코코넛만 해요 🥥", // 28~31
+      "자그마한 강아지만 해요 🐶", "파인애플만 해요 🍍", "작은 멜론만 해요 🍈", "통통한 고양이만 해요 🐱", // 32~35
+      "작은 수박만 해요 🍉", "갓 태어난 꼬마 요정만 해요 🧚", "미니 호박만 해요 🎃", "이제 세상에 나올 준비가 다 되었어요! 👶" // 36~39
+    ];
+    
+    return { text: sizes[week] || "건강하게 쑥쑥 크고 있어요! 👶", week, day };
+  };
+
   useEffect(() => {
     const fetchUserAndProfile = async () => {
       const { data: { user } } = await supabase.auth.getUser();
@@ -180,6 +216,26 @@ export default function Home() {
     };
     fetchMonthData();
   }, [currentYear, currentMonth, pregnancyId, daysInMonth]);
+
+  useEffect(() => {
+    if (!pregnancyId || activeTab === 'diary') return;
+    
+    if (activeTab === 'album') {
+      const fetchAlbum = async () => {
+        const { data } = await supabase.from('diaries').select('id, date, image_url').eq('pregnancy_id', pregnancyId).not('image_url', 'is', null).order('date', { ascending: false });
+        setAlbumImages(data || []);
+      };
+      fetchAlbum();
+    }
+    
+    if (activeTab === 'checklist' && coupleId) {
+      const fetchChecklist = async () => {
+        const { data } = await supabase.from('checklists').select('*').eq('couple_id', coupleId).order('created_at', { ascending: false });
+        setChecklists(data || []);
+      };
+      fetchChecklist();
+    }
+  }, [pregnancyId, activeTab, coupleId]);
 
   useEffect(() => {
     const targetDate = `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(selectedDate).padStart(2, '0')}`;
@@ -757,6 +813,8 @@ export default function Home() {
         )}
       </div>
 
+      {activeTab === 'diary' && (
+      <div style={{ paddingBottom: '70px' }}>
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '20px' }}>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '15px' }}>
@@ -782,6 +840,18 @@ export default function Home() {
             return `${name}(이) 만나기까지 D-${diffDays}`;
           })() : "예정일을 입력해주세요"}
         </p>
+
+        {/* Baby Growth Info */}
+        <div style={{ color: 'var(--text-primary)', marginTop: '15px', backgroundColor: 'var(--card-bg)', padding: '12px 20px', borderRadius: '15px', display: 'inline-block', boxShadow: 'var(--shadow-sm)', border: '1px solid var(--border-color)' }}>
+          {getPregnancyWeekInfo() ? (
+            <>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+                {getPregnancyWeekInfo().week > 0 ? `${getPregnancyWeekInfo().week}주 ${getPregnancyWeekInfo().day}일차` : '임신 준비중'}
+              </div>
+              <div style={{ fontSize: '1.1rem', fontWeight: 'bold', marginTop: '5px' }}>{getPregnancyWeekInfo().text}</div>
+            </>
+          ) : '출산 예정일을 입력해주세요'}
+        </div>
       </div>
       
       {/* Calendar Grid */}
@@ -1567,6 +1637,106 @@ export default function Home() {
           </div>
         </div>
       )}
+      </div>
+      )}
+
+      {/* Album Tab */}
+      {activeTab === 'album' && (
+        <div style={{ padding: '20px', paddingBottom: '90px' }}>
+          <h2 style={{ color: 'var(--text-primary)', textAlign: 'center', marginBottom: '20px' }}>우리의 앨범 📷</h2>
+          {albumImages.length === 0 ? (
+            <div style={{ textAlign: 'center', color: 'var(--text-secondary)', padding: '40px 0' }}>등록된 사진이 없습니다.</div>
+          ) : (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '5px' }}>
+              {albumImages.map((img, idx) => (
+                <div key={img.id} style={{ aspectRatio: '1', position: 'relative', overflow: 'hidden', borderRadius: '8px', cursor: 'pointer' }}>
+                  <img src={img.image_url} alt="diary img" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Checklist Tab */}
+      {activeTab === 'checklist' && (
+        <div style={{ padding: '20px', paddingBottom: '90px' }}>
+          <h2 style={{ color: 'var(--text-primary)', textAlign: 'center', marginBottom: '20px' }}>출산 준비물 📝</h2>
+          
+          {/* Add Form */}
+          <div style={{ backgroundColor: 'var(--card-bg)', padding: '15px', borderRadius: '15px', marginBottom: '20px', boxShadow: 'var(--shadow-sm)' }}>
+            <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+              <select value={newChecklistCategory} onChange={(e) => setNewChecklistCategory(e.target.value)} style={{ padding: '10px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.9rem', flex: 1, backgroundColor: 'white' }}>
+                <option value="아기 용품">아기 용품</option>
+                <option value="엄마 용품">엄마 용품</option>
+                <option value="병원/조리원">병원/조리원</option>
+                <option value="기타">기타</option>
+              </select>
+            </div>
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <input type="text" value={newChecklistContent} onChange={(e) => setNewChecklistContent(e.target.value)} placeholder="준비물을 입력하세요" style={{ flex: 2, padding: '10px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.9rem' }} />
+              <button 
+                onClick={async () => {
+                  if(!newChecklistContent.trim() || !coupleId) return;
+                  const newObj = { couple_id: coupleId, category: newChecklistCategory, content: newChecklistContent, is_checked: false };
+                  const { data, error } = await supabase.from('checklists').insert(newObj).select().single();
+                  if(!error && data) {
+                    setChecklists([data, ...checklists]);
+                    setNewChecklistContent("");
+                  }
+                }}
+                style={{ padding: '10px 15px', borderRadius: '8px', border: 'none', backgroundColor: 'var(--accent-color)', color: 'white', fontWeight: 'bold', cursor: 'pointer' }}>추가</button>
+            </div>
+          </div>
+
+          {/* List */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {['아기 용품', '엄마 용품', '병원/조리원', '기타'].map(cat => {
+              const items = checklists.filter(c => c.category === cat);
+              if (items.length === 0) return null;
+              return (
+                <div key={cat} style={{ marginBottom: '15px' }}>
+                  <h3 style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', marginBottom: '10px', borderBottom: '1px solid var(--border-color)', paddingBottom: '5px' }}>{cat}</h3>
+                  {items.map(item => (
+                    <div key={item.id} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px', backgroundColor: 'white', borderRadius: '10px', marginBottom: '8px', boxShadow: '0 2px 5px rgba(0,0,0,0.02)' }}>
+                      <input type="checkbox" checked={item.is_checked} onChange={async () => {
+                        const newChecked = !item.is_checked;
+                        const { error } = await supabase.from('checklists').update({ is_checked: newChecked }).eq('id', item.id);
+                        if (!error) {
+                          setChecklists(checklists.map(c => c.id === item.id ? { ...c, is_checked: newChecked } : c));
+                        }
+                      }} style={{ width: '20px', height: '20px', accentColor: 'var(--accent-color)' }} />
+                      <span style={{ flex: 1, textDecoration: item.is_checked ? 'line-through' : 'none', color: item.is_checked ? '#aaa' : 'var(--text-primary)' }}>{item.content}</span>
+                      <button onClick={async () => {
+                        const { error } = await supabase.from('checklists').delete().eq('id', item.id);
+                        if (!error) {
+                          setChecklists(checklists.filter(c => c.id !== item.id));
+                        }
+                      }} style={{ background: 'none', border: 'none', color: '#ff6b6b', fontSize: '1.2rem', cursor: 'pointer', padding: '0 5px' }}>×</button>
+                    </div>
+                  ))}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Bottom Navigation */}
+      <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, backgroundColor: 'white', borderTop: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-around', padding: '10px 0 20px 0', zIndex: 100, boxShadow: '0 -2px 10px rgba(0,0,0,0.05)', maxWidth: '480px', margin: '0 auto' }}>
+        <div onClick={() => setActiveTab('diary')} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', color: activeTab === 'diary' ? 'var(--text-primary)' : 'var(--text-secondary)' }}>
+          <span style={{ fontSize: '1.5rem', marginBottom: '3px' }}>📅</span>
+          <span style={{ fontSize: '0.75rem', fontWeight: activeTab === 'diary' ? 'bold' : 'normal' }}>다이어리</span>
+        </div>
+        <div onClick={() => setActiveTab('album')} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', color: activeTab === 'album' ? 'var(--text-primary)' : 'var(--text-secondary)' }}>
+          <span style={{ fontSize: '1.5rem', marginBottom: '3px' }}>🖼️</span>
+          <span style={{ fontSize: '0.75rem', fontWeight: activeTab === 'album' ? 'bold' : 'normal' }}>앨범</span>
+        </div>
+        <div onClick={() => setActiveTab('checklist')} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', color: activeTab === 'checklist' ? 'var(--text-primary)' : 'var(--text-secondary)' }}>
+          <span style={{ fontSize: '1.5rem', marginBottom: '3px' }}>✅</span>
+          <span style={{ fontSize: '0.75rem', fontWeight: activeTab === 'checklist' ? 'bold' : 'normal' }}>준비물</span>
+        </div>
+      </div>
 
       {/* Export Options Modal (Mother Only) */}
       {isExportModalOpen && (
