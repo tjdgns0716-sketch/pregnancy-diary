@@ -603,7 +603,7 @@ export default function Home() {
 
   return (
     <main className="main-content" style={{ position: 'relative' }}>
-      
+      <div style={{ display: isExporting ? 'none' : 'block' }}>
       {/* Top Navigation Bar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', paddingTop: '10px' }}>
         {/* Left Side: Settings & Help */}
@@ -1599,6 +1599,7 @@ export default function Home() {
           </div>
         </div>
       )}
+      </div>
 
       {/* Printable View for PDF Export */}
       {isExporting && (
@@ -1692,7 +1693,7 @@ export default function Home() {
         @media print {
           @page {
             size: A4 portrait;
-            margin: 15mm;
+            margin: 0; /* removes default browser header/footer (date, url, etc) */
           }
           body {
             background-color: white !important;
@@ -1702,7 +1703,8 @@ export default function Home() {
             width: 800px !important;
             max-width: none !important;
             margin: 0 auto !important;
-            padding: 0 !important;
+            padding: 15mm !important; /* replaces @page margin */
+            box-sizing: border-box !important;
             background-color: white !important;
           }
         }
