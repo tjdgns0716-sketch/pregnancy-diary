@@ -1995,12 +1995,12 @@ export default function Home() {
                       
                       {/* Private Content */}
                       {currentUserRole === 'mother' && diary.private_content && exportIncludesPrivate && (
-                        <div className="pdf-inner-block" style={{ margin: '0 auto 30px auto', width: '80%', padding: '30px', backgroundColor: '#FFFFFF', borderRadius: '24px', border: '1px dashed #E7D8FF', boxShadow: '0 10px 30px rgba(0,0,0,0.02)' }}>
+                        <div className="pdf-inner-block" style={{ backgroundColor: '#FFFFFF', borderRadius: '30px', padding: '40px', marginBottom: '30px', boxShadow: '0 10px 30px rgba(0,0,0,0.02)' }}>
                           <div style={{ marginBottom: '15px' }}>
                             <span style={{ fontSize: '1.4rem', verticalAlign: 'middle', marginRight: '10px' }}>🔒</span>
-                            <strong style={{ color: '#9d7ad2', fontSize: '1.1rem', verticalAlign: 'middle' }}>나만의 비밀 이야기</strong>
+                            <strong style={{ color: '#9d7ad2', fontSize: '1.4rem', verticalAlign: 'middle', fontWeight: 'bold' }}>나만의 비밀 이야기</strong>
                           </div>
-                          <p style={{ whiteSpace: 'pre-wrap', color: '#333039', margin: '0', lineHeight: '2' }}>{diary.private_content}</p>
+                          <p style={{ whiteSpace: 'pre-wrap', color: '#333039', margin: '0', lineHeight: '2.2', fontSize: '1.1rem' }}>{diary.private_content}</p>
                         </div>
                       )}
 
