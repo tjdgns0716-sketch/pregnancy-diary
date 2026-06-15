@@ -1682,11 +1682,28 @@ export default function Home() {
         </div>
       )}
 
-      {/* Media query for FAB on mobile */}
+      {/* Media query for FAB on mobile and Print styling */}
       <style dangerouslySetInnerHTML={{__html: `
         @media (max-width: 480px) {
           div[style*="calc(50% - 210px)"] {
             right: 20px !important;
+          }
+        }
+        @media print {
+          @page {
+            size: A4 portrait;
+            margin: 15mm;
+          }
+          body {
+            background-color: white !important;
+            min-width: 800px !important; /* 모바일에서도 데스크탑 비율을 유지하도록 강제 */
+          }
+          .printable-diary-export {
+            width: 800px !important;
+            max-width: none !important;
+            margin: 0 auto !important;
+            padding: 0 !important;
+            background-color: white !important;
           }
         }
       `}} />
