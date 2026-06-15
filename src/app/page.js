@@ -1892,7 +1892,7 @@ export default function Home() {
       {/* Printable View for PDF Export */}
       {/* Printable View for PDF Export */}
       {isExporting && (
-        <div className="printable-diary-export" style={{ position: 'absolute', top: 0, left: 0, width: '100%', minHeight: '100vh', backgroundColor: '#FAF7F3', zIndex: 99999, padding: '0', boxSizing: 'border-box', color: '#333039', fontFamily: "'Nanum Myeongjo', serif" }}>
+        <div className="printable-diary-export" style={{ position: 'absolute', top: 0, left: 0, width: '100%', minHeight: '100vh', background: 'var(--bg-color)', zIndex: 99999, padding: '0', boxSizing: 'border-box', color: '#333039', fontFamily: "'Nanum Myeongjo', serif" }}>
           
           {/* Cover Page */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', pageBreakAfter: 'always', height: '100vh', padding: '40px', boxSizing: 'border-box', position: 'relative' }}>
@@ -2065,7 +2065,7 @@ export default function Home() {
             min-width: 100% !important;
             margin: 0 !important;
             padding: 0 !important;
-            background-color: #FAF7F3 !important;
+            background: var(--bg-color) !important;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
           }
@@ -2076,7 +2076,7 @@ export default function Home() {
             left: 0 !important;
             width: 100vw !important;
             height: 100vh !important;
-            background-color: #FAF7F3 !important;
+            background: var(--bg-color) !important;
             z-index: -9999 !important;
           }
           .app-container, .main-content, .printable-diary-export {
@@ -2088,8 +2088,8 @@ export default function Home() {
             margin: 0 !important;
             padding: 0 !important;
             box-shadow: none !important;
-            background: #FAF7F3 !important;
-            background-color: #FAF7F3 !important;
+            background: transparent !important;
+            background-color: transparent !important;
           }
           .main-content::before {
             display: none !important;

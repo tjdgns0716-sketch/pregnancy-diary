@@ -1,0 +1,301 @@
+﻿commit 0531fa08f07c2ba35bf986cbef2d4e9f1493c51e
+Author: Hoon <poiu0716@naver.com>
+Date:   Mon Jun 15 21:13:16 2026 +0900
+
+    Force ivory background on all wrappers and add v2.0 version indicator to cover page to debug browser caching
+
+diff --git a/src/app/page.js b/src/app/page.js
+index 7e81e5b..e8f6c3b 100644
+--- a/src/app/page.js
++++ b/src/app/page.js
+@@ -1895,7 +1895,8 @@ export default function Home() {
+         <div className="printable-diary-export" style={{ position: 'absolute', top: 0, left: 0, width: '100%', minHeight: '100vh', backgroundColor: '#FAF7F3', zIndex: 99999, padding: '0', boxSizing: 'border-box', color: '#333039', fontFamily: "'Nanum Myeongjo', serif" }}>
+           
+           {/* Cover Page */}
+-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', pageBreakAfter: 'always', height: '100vh', padding: '40px', boxSizing: 'border-box' }}>
++          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', pageBreakAfter: 'always', height: '100vh', padding: '40px', boxSizing: 'border-box', position: 'relative' }}>
++            <div style={{ position: 'absolute', top: '20px', right: '20px', fontSize: '10px', color: '#ccc' }}>v2.0 (Final Print Layout)</div>
+             <div style={{ width: '100%', height: '100%', backgroundColor: '#FFFFFF', borderRadius: '40px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 20px rgba(0,0,0,0.02)', position: 'relative' }}>
+               <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#F4EDFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', marginBottom: '30px', color: '#9d7ad2' }}>
+                 ??@@ -2078,7 +2079,7 @@ export default function Home() {
+             background-color: #FAF7F3 !important;
+             z-index: -9999 !important;
+           }
+-          .app-container, .main-content {
++          .app-container, .main-content, .printable-diary-export {
+             display: block !important;
+             height: auto !important;
+             min-height: auto !important;
+@@ -2087,8 +2088,8 @@ export default function Home() {
+             margin: 0 !important;
+             padding: 0 !important;
+             box-shadow: none !important;
+-            background: transparent !important;
+-            background-color: transparent !important;
++            background: #FAF7F3 !important;
++            background-color: #FAF7F3 !important;
+           }
+           .main-content::before {
+             display: none !important;
+
+commit e1c412853cd9226b3dd3c1c77e37850c111bbbae
+Author: Hoon <poiu0716@naver.com>
+Date:   Mon Jun 15 20:56:55 2026 +0900
+
+    Disable flexbox on root wrappers in print mode and attach fixed background to body to completely solve Chrome print rendering bugs
+
+diff --git a/src/app/page.js b/src/app/page.js
+index a826aec..7e81e5b 100644
+--- a/src/app/page.js
++++ b/src/app/page.js
+@@ -2068,7 +2068,20 @@ export default function Home() {
+             -webkit-print-color-adjust: exact !important;
+             print-color-adjust: exact !important;
+           }
++          body::before {
++            content: "";
++            position: fixed !important;
++            top: 0 !important;
++            left: 0 !important;
++            width: 100vw !important;
++            height: 100vh !important;
++            background-color: #FAF7F3 !important;
++            z-index: -9999 !important;
++          }
+           .app-container, .main-content {
++            display: block !important;
++            height: auto !important;
++            min-height: auto !important;
+             max-width: none !important;
+             width: 100% !important;
+             margin: 0 !important;
+@@ -2089,16 +2102,7 @@ export default function Home() {
+             box-sizing: border-box !important;
+             background-color: transparent !important;
+           }
+-          .printable-diary-export::before {
+-            content: "";
+-            position: fixed !important;
+-            top: 0 !important;
+-            left: 0 !important;
+-            width: 100vw !important;
+-            height: 100vh !important;
+-            background-color: #FAF7F3 !important;
+-            z-index: -1 !important;
+-          }
++
+           .printable-diary-export .pdf-diary-card {
+             margin-bottom: 40px !important;
+             padding: 40px 40px 0 40px !important;
+
+commit 2e522c4b668196a63485b00aea3db16e92dcaf27
+Author: Hoon <poiu0716@naver.com>
+Date:   Mon Jun 15 20:54:10 2026 +0900
+
+    Fix print background splitting by making all root application wrappers transparent, exposing the unified body background
+
+diff --git a/src/app/page.js b/src/app/page.js
+index 003a32f..a826aec 100644
+--- a/src/app/page.js
++++ b/src/app/page.js
+@@ -2068,12 +2068,14 @@ export default function Home() {
+             -webkit-print-color-adjust: exact !important;
+             print-color-adjust: exact !important;
+           }
+-          .main-content {
++          .app-container, .main-content {
+             max-width: none !important;
+             width: 100% !important;
+             margin: 0 !important;
+             padding: 0 !important;
+             box-shadow: none !important;
++            background: transparent !important;
++            background-color: transparent !important;
+           }
+           .main-content::before {
+             display: none !important;
+
+commit 59b4f515f62c9712734a94072f7bbc1b6e49290d
+Author: Hoon <poiu0716@naver.com>
+Date:   Mon Jun 15 20:51:41 2026 +0900
+
+    Replace buggy javascript scaling with robust CSS print layout that naturally fits on one page
+
+diff --git a/src/app/page.js b/src/app/page.js
+index 139d693..003a32f 100644
+--- a/src/app/page.js
++++ b/src/app/page.js
+@@ -568,35 +568,7 @@ export default function Home() {
+           }));
+         }
+       } else {
+-        const wrappers = document.querySelectorAll('.pdf-diary-card-wrapper');
+-        const cards = document.querySelectorAll('.pdf-diary-card');
+-        const MAX_HEIGHT = 850; 
+-        
+-        cards.forEach((card, index) => {
+-          const wrapper = wrappers[index];
+-          if (!wrapper) return;
+-          card.style.transform = 'none';
+-          wrapper.style.height = 'auto';
+-          wrapper.style.overflow = 'visible';
+-          
+-          const height = card.scrollHeight;
+-          if (height > MAX_HEIGHT) {
+-            const scale = MAX_HEIGHT / height;
+-            card.style.transform = `scale(${scale})`;
+-            card.style.transformOrigin = 'top center';
+-            wrapper.style.height = `${MAX_HEIGHT}px`;
+-            wrapper.style.overflow = 'hidden';
+-          }
+-        });
+-
+         const cleanupPrint = () => {
+-          cards.forEach((card, index) => { 
+-            card.style.transform = ''; 
+-            if (wrappers[index]) {
+-               wrappers[index].style.height = '';
+-               wrappers[index].style.overflow = '';
+-            }
+-          });
+           setIsExporting(false);
+           setAllDiariesToExport([]);
+           window.removeEventListener('afterprint', cleanupPrint);
+@@ -605,7 +577,7 @@ export default function Home() {
+ 
+         setTimeout(() => {
+           window.print();
+-        }, 300); // allow DOM to paint zoom before printing
++        }, 300); // allow DOM to settle before printing
+         return;
+       }
+       setIsExporting(false);
+@@ -1958,9 +1930,7 @@ export default function Home() {
+                   const displayContent = diary.content ? diary.content.replace(/\n{3,}/g, '\n\n') : '';
+                   
+                   return (
+-                    <div key={diary.id} className="pdf-diary-card-wrapper" style={{ marginBottom: '80px', display: 'block', pageBreakInside: 'avoid', breakInside: 'avoid' }}>
+-                      <div className="pdf-diary-card" style={{ padding: '80px 40px 0 40px', width: '100%', boxSizing: 'border-box' }}>
+-                        
++                    <div key={diary.id} className="pdf-diary-card" style={{ marginBottom: '80px', padding: '80px 40px 0 40px', display: 'block' }}>
+                       {/* Header (On Ivory Background) */}
+                       <div style={{ marginBottom: '30px' }}>
+                         <h2 style={{ color: '#333039', margin: '0 0 15px 0', fontSize: '2.5rem', fontWeight: 'bold' }}>{diary.date.split('-')[0]}??{parseInt(diary.date.split('-')[1])}??{parseInt(diary.date.split('-')[2])}??/h2>
+@@ -2040,7 +2010,6 @@ export default function Home() {
+                         </div>
+                       )}
+                       
+-                      </div>
+                     </div>
+                   );
+                 })}
+@@ -2128,15 +2097,17 @@ export default function Home() {
+             background-color: #FAF7F3 !important;
+             z-index: -1 !important;
+           }
+-          .pdf-diary-card-wrapper {
++          .printable-diary-export .pdf-diary-card {
++            margin-bottom: 40px !important;
++            padding: 40px 40px 0 40px !important;
+             page-break-inside: avoid !important;
+             break-inside: avoid !important;
+-            width: 100% !important;
+-          }
+-          .pdf-diary-card {
+-            width: 100% !important;
+-            box-sizing: border-box !important;
+           }
++          .printable-diary-export h2 { font-size: 2rem !important; margin-bottom: 10px !important; }
++          .printable-diary-export h3 { font-size: 1.2rem !important; margin-bottom: 10px !important; }
++          .printable-diary-export p { font-size: 1rem !important; line-height: 1.8 !important; }
++          .printable-diary-export .pdf-inner-block { padding: 30px !important; margin-bottom: 25px !important; }
++          .printable-diary-export .pdf-inner-block img { max-height: 350px !important; border-radius: 20px !important; }
+           .pdf-inner-block {
+             page-break-inside: avoid !important;
+             break-inside: avoid !important;
+
+commit d46ccb997f2c49a8f47b207f709476dd18e0f118
+Author: Hoon <poiu0716@naver.com>
+Date:   Mon Jun 15 20:45:45 2026 +0900
+
+    Replace buggy print zoom with standard transform scaling and fixed-height wrappers to fix background rendering bugs
+
+diff --git a/src/app/page.js b/src/app/page.js
+index 7c3f35f..139d693 100644
+--- a/src/app/page.js
++++ b/src/app/page.js
+@@ -568,20 +568,35 @@ export default function Home() {
+           }));
+         }
+       } else {
++        const wrappers = document.querySelectorAll('.pdf-diary-card-wrapper');
+         const cards = document.querySelectorAll('.pdf-diary-card');
+         const MAX_HEIGHT = 850; 
+         
+-        cards.forEach(card => {
+-          card.style.zoom = '1';
++        cards.forEach((card, index) => {
++          const wrapper = wrappers[index];
++          if (!wrapper) return;
++          card.style.transform = 'none';
++          wrapper.style.height = 'auto';
++          wrapper.style.overflow = 'visible';
++          
+           const height = card.scrollHeight;
+           if (height > MAX_HEIGHT) {
+             const scale = MAX_HEIGHT / height;
+-            card.style.zoom = scale.toString();
++            card.style.transform = `scale(${scale})`;
++            card.style.transformOrigin = 'top center';
++            wrapper.style.height = `${MAX_HEIGHT}px`;
++            wrapper.style.overflow = 'hidden';
+           }
+         });
+ 
+         const cleanupPrint = () => {
+-          cards.forEach(card => { card.style.zoom = ''; });
++          cards.forEach((card, index) => { 
++            card.style.transform = ''; 
++            if (wrappers[index]) {
++               wrappers[index].style.height = '';
++               wrappers[index].style.overflow = '';
++            }
++          });
+           setIsExporting(false);
+           setAllDiariesToExport([]);
+           window.removeEventListener('afterprint', cleanupPrint);
+@@ -1943,8 +1958,9 @@ export default function Home() {
+                   const displayContent = diary.content ? diary.content.replace(/\n{3,}/g, '\n\n') : '';
+                   
+                   return (
+-                    <div key={diary.id} className="pdf-diary-card" style={{ marginBottom: '80px', padding: '80px 40px 0 40px', display: 'block' }}>
+-                      
++                    <div key={diary.id} className="pdf-diary-card-wrapper" style={{ marginBottom: '80px', display: 'block', pageBreakInside: 'avoid', breakInside: 'avoid' }}>
++                      <div className="pdf-diary-card" style={{ padding: '80px 40px 0 40px', width: '100%', boxSizing: 'border-box' }}>
++                        
+                       {/* Header (On Ivory Background) */}
+                       <div style={{ marginBottom: '30px' }}>
+                         <h2 style={{ color: '#333039', margin: '0 0 15px 0', fontSize: '2.5rem', fontWeight: 'bold' }}>{diary.date.split('-')[0]}??{parseInt(diary.date.split('-')[1])}??{parseInt(diary.date.split('-')[2])}??/h2>
+@@ -2024,6 +2040,7 @@ export default function Home() {
+                         </div>
+                       )}
+                       
++                      </div>
+                     </div>
+                   );
+                 })}
+@@ -2111,10 +2128,13 @@ export default function Home() {
+             background-color: #FAF7F3 !important;
+             z-index: -1 !important;
+           }
+-          .pdf-diary-card {
++          .pdf-diary-card-wrapper {
+             page-break-inside: avoid !important;
+             break-inside: avoid !important;
+             width: 100% !important;
++          }
++          .pdf-diary-card {
++            width: 100% !important;
+             box-sizing: border-box !important;
+           }
+           .pdf-inner-block {
