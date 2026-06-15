@@ -213,30 +213,6 @@ body {
   margin-left: 4px; /* 중앙 정렬용 */
 }
 
-/* Print Styles for PDF Export */
-@media print {
-  body * {
-    visibility: hidden;
-  }
-  .printable-diary-export, .printable-diary-export * {
-    visibility: visible;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-  .printable-diary-export {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    background-color: var(--bg-color) !important;
-  }
-  @page {
-    margin: 0;
-  }
-}
-
 /* Landing Page Animations */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(20px); }

@@ -1895,7 +1895,8 @@ export default function Home() {
         <div className="printable-diary-export" style={{ position: 'absolute', top: 0, left: 0, width: '100%', minHeight: '100vh', backgroundColor: '#FAF7F3', zIndex: 99999, padding: '0', boxSizing: 'border-box', color: '#333039', fontFamily: "'Nanum Myeongjo', serif" }}>
           
           {/* Cover Page */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', pageBreakAfter: 'always', height: '100vh', padding: '40px', boxSizing: 'border-box' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', pageBreakAfter: 'always', height: '100vh', padding: '40px', boxSizing: 'border-box', position: 'relative' }}>
+            <div style={{ position: 'absolute', top: '20px', right: '20px', fontSize: '10px', color: '#ccc' }}>v2.0 (Final Print Layout)</div>
             <div style={{ width: '100%', height: '100%', backgroundColor: '#FFFFFF', borderRadius: '40px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 20px rgba(0,0,0,0.02)', position: 'relative' }}>
               <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#F4EDFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', marginBottom: '30px', color: '#9d7ad2' }}>
                 ♥
@@ -2078,7 +2079,7 @@ export default function Home() {
             background-color: #FAF7F3 !important;
             z-index: -9999 !important;
           }
-          .app-container, .main-content {
+          .app-container, .main-content, .printable-diary-export {
             display: block !important;
             height: auto !important;
             min-height: auto !important;
@@ -2087,8 +2088,8 @@ export default function Home() {
             margin: 0 !important;
             padding: 0 !important;
             box-shadow: none !important;
-            background: transparent !important;
-            background-color: transparent !important;
+            background: #FAF7F3 !important;
+            background-color: #FAF7F3 !important;
           }
           .main-content::before {
             display: none !important;
