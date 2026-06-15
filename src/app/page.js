@@ -1932,7 +1932,7 @@ export default function Home() {
             </p>
             <div style={{ backgroundColor: 'rgba(255, 107, 107, 0.1)', padding: '12px', borderRadius: '8px', marginBottom: '25px', border: '1px solid rgba(255, 107, 107, 0.3)' }}>
               <p style={{ fontSize: '0.85rem', color: '#e03131', margin: 0, textAlign: 'center', lineHeight: '1.4', wordBreak: 'keep-all' }}>
-                ⚠️ <strong>완벽한 PDF 추출</strong>을 위해 <strong>PC 크롬 브라우저</strong> 사용을 권장합니다.<br/>
+                ⚠️ <strong>PDF 추출</strong>은 <strong>PC 크롬 브라우저</strong> 사용을 권장합니다.<br/>
                 <span style={{ fontSize: '0.75rem', opacity: 0.8 }}>(모바일 기기는 레이아웃 잘림, 겹침 등의 인쇄 오류가 발생할 수 있습니다)</span>
               </p>
             </div>
