@@ -1181,7 +1181,7 @@ export default function Home() {
                   borderRadius: '8px', 
                   overflow: 'hidden',
                   marginBottom: '15px',
-                  backgroundColor: 'var(--bg-color)',
+                  backgroundColor: 'transparent',
                   display: 'flex',
                   justifyContent: 'center'
                 }}>
