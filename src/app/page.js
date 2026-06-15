@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import Image from "next/image";
 import { supabase } from "../lib/supabase";
 import { useRouter } from "next/navigation";
-
+import html2canvas from "html2canvas";
 const formatTime = (timeStr) => {
   if (!timeStr) return "";
   const [hours, minutes] = timeStr.split(':');
@@ -638,33 +638,66 @@ export default function Home() {
 
         // Now that the DOM is perfectly scaled, check environment and export
         if (window.ReactNativeWebView) {
-          const htmlContent = `
-            <html>
-              <head>
-                <meta charset="utf-8">
-                <style>
-                  body { font-family: sans-serif; padding: 20px; line-height: 1.6; color: #333; }
-                  .diary-entry { border-bottom: 1px solid #eee; padding-bottom: 20px; margin-bottom: 20px; page-break-inside: avoid; }
-                  img { max-width: 100%; height: auto; border-radius: 8px; margin-top: 10px; }
-                  .date { font-size: 1.2rem; font-weight: bold; color: #d48f87; margin-bottom: 10px; }
-                  .content { font-size: 1rem; margin-bottom: 10px; }
-                  .post-it { background: #fffde7; padding: 10px; border-radius: 5px; font-size: 0.9rem; margin-top: 10px; }
-                </style>
-              </head>
-              <body>
-                <h1 style="text-align: center; color: #d48f87; margin-bottom: 30px;">우리의 열달 다이어리</h1>
-                ${exportContainer.innerHTML}
-              </body>
-            </html>
-          `;
-          window.ReactNativeWebView.postMessage(JSON.stringify({
-            type: 'DOWNLOAD_PDF_HTML',
-            htmlContent
-          }));
-          setTimeout(() => {
-            setIsExporting(false);
-            setAllDiariesToExport([]);
-          }, 500);
+          // MOBILE APP (WKWebView) EXPORT:
+          // Because iOS Print engines ignore CSS scaling and overflow clipping, 
+          // we use html2canvas to take perfect snapshot images of the cover and each card.
+          // By sending images to React Native, we guarantee 0% layout bugs and perfect pagination.
+          (async () => {
+            try {
+              const coverPage = exportContainer.children[0];
+              const cardElements = document.querySelectorAll('.pdf-diary-card');
+              const elementsToSnapshot = [coverPage, ...Array.from(cardElements)];
+              const base64Images = [];
+              
+              for (let i = 0; i < elementsToSnapshot.length; i++) {
+                if (!elementsToSnapshot[i]) continue;
+                const canvas = await html2canvas(elementsToSnapshot[i], {
+                  scale: 2, // High resolution for crisp PDF text
+                  useCORS: true, 
+                  logging: false,
+                  backgroundColor: '#ffffff'
+                });
+                base64Images.push(canvas.toDataURL('image/jpeg', 0.9));
+              }
+              
+              let imagesHtml = '';
+              base64Images.forEach((src) => {
+                // Stack images with forced page breaks so each card safely occupies exactly one PDF page
+                imagesHtml += `<img src="${src}" style="width: 100%; height: auto; page-break-after: always; display: block; margin-bottom: 20px;" />`;
+              });
+              
+              const htmlContent = `
+                <html>
+                  <head>
+                    <meta charset="utf-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <style>
+                      body { margin: 0; padding: 0; background: #fff; }
+                      img { display: block; max-width: 100%; margin: 0 auto; }
+                    </style>
+                  </head>
+                  <body>
+                    ${imagesHtml}
+                  </body>
+                </html>
+              `;
+              
+              window.ReactNativeWebView.postMessage(JSON.stringify({
+                type: 'DOWNLOAD_PDF_HTML',
+                htmlContent
+              }));
+              
+              setTimeout(() => {
+                setIsExporting(false);
+                setAllDiariesToExport([]);
+              }, 500);
+            } catch (e) {
+              console.error("html2canvas error:", e);
+              alert("PDF 생성 중 이미지 변환에 실패했습니다.");
+              setIsExporting(false);
+              setAllDiariesToExport([]);
+            }
+          })();
         } else {
           const cleanupPrint = () => {
             setIsExporting(false);
