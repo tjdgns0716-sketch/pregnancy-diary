@@ -586,15 +586,29 @@ export default function Home() {
           let loadedCount = 0;
           
           const doPrint = () => {
-            // Auto-scale content to fit on one page
+            // Auto-scale content to fit on one page robustly
             const cards = document.querySelectorAll('.pdf-diary-card');
             cards.forEach(card => {
               const wrapper = card.querySelector('.pdf-card-content-wrapper');
               if (wrapper) {
+                // Reset in case of multiple prints
+                wrapper.style.transform = 'none';
+                card.style.height = 'auto';
+                
                 const actualHeight = wrapper.scrollHeight;
-                if (actualHeight > 1000) {
-                  const scale = 1000 / actualHeight;
-                  wrapper.style.zoom = scale;
+                const maxContentHeight = 940; // Safest available height on A4
+                
+                if (actualHeight > maxContentHeight) {
+                  const scale = maxContentHeight / actualHeight;
+                  // Use robust CSS transform instead of buggy zoom which breaks pagination
+                  wrapper.style.transform = `scale(${scale})`;
+                  wrapper.style.transformOrigin = 'top center';
+                  wrapper.style.width = '100%';
+                  
+                  // CRITICAL: Physically shrink the outer card's layout bounds 
+                  // so Chrome's print engine knows it fits on exactly one page!
+                  card.style.height = `${maxContentHeight + 80}px`; 
+                  card.style.overflow = 'hidden';
                 }
               }
             });
