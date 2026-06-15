@@ -1696,16 +1696,16 @@ export default function Home() {
             margin: 0; /* removes default browser header/footer (date, url, etc) */
           }
           html, body {
-            width: 210mm !important;
-            min-width: 210mm !important;
-            margin: 0 auto !important;
+            width: 100% !important;
+            min-width: 100% !important;
+            margin: 0 !important;
             padding: 0 !important;
             background-color: white !important;
           }
           .printable-diary-export {
-            width: 210mm !important;
-            max-width: 210mm !important;
-            margin: 0 auto !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
             padding: 15mm !important; /* replaces @page margin */
             box-sizing: border-box !important;
             background-color: white !important;
