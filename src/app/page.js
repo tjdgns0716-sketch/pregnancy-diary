@@ -1965,10 +1965,7 @@ export default function Home() {
               <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#F4EDFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', marginBottom: '30px', color: '#9d7ad2' }}>
                 ♥
               </div>
-              <h1 style={{ textAlign: 'center', marginBottom: '15px', color: '#333039', fontSize: '3rem', fontWeight: 'bold', letterSpacing: '-0.03em' }}>우리의 열달 기록</h1>
-              <p style={{ textAlign: 'center', color: '#8F8798', fontSize: '1.2rem', marginTop: '0', marginBottom: '40px' }}>
-                엄마의 일기와 아빠의 짧은 메모
-              </p>
+              <h1 style={{ textAlign: 'center', marginBottom: '40px', color: '#333039', fontSize: '3rem', fontWeight: 'bold', letterSpacing: '-0.03em' }}>우리의 열달 기록</h1>
               <div style={{ backgroundColor: '#F4EDFF', color: '#8F8798', padding: '10px 25px', borderRadius: '30px', fontSize: '1.1rem', marginBottom: '60px' }}>
                 {allDiariesToExport.length > 0 ? `${allDiariesToExport[0].date.replace(/-/g, '.')} - ${allDiariesToExport[allDiariesToExport.length - 1].date.replace(/-/g, '.')}` : '기록이 없습니다'}
               </div>
