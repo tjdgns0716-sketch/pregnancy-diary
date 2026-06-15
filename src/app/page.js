@@ -1930,11 +1930,10 @@ export default function Home() {
             <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '15px', textAlign: 'center', lineHeight: '1.5' }}>
               엄마만의 비밀 일기(🔒)를<br/>PDF에 포함하시겠습니까?
             </p>
-            
             <div style={{ backgroundColor: 'rgba(255, 107, 107, 0.1)', padding: '12px', borderRadius: '8px', marginBottom: '25px', border: '1px solid rgba(255, 107, 107, 0.3)' }}>
               <p style={{ fontSize: '0.85rem', color: '#e03131', margin: 0, textAlign: 'center', lineHeight: '1.4', wordBreak: 'keep-all' }}>
-                ⚠️ <strong>여백 없는 완벽한 PDF 추출</strong>을 위해 가급적 <strong>PC 크롬 브라우저</strong> 사용을 권장합니다.<br/>
-                <span style={{ fontSize: '0.75rem', opacity: 0.8 }}>(모바일 환경에서는 기기 자체 여백이 발생할 수 있습니다)</span>
+                ⚠️ <strong>완벽한 PDF 추출</strong>을 위해 <strong>PC 크롬 브라우저</strong> 사용을 권장합니다.<br/>
+                <span style={{ fontSize: '0.75rem', opacity: 0.8 }}>(모바일 기기는 레이아웃 잘림, 겹침 등의 인쇄 오류가 발생할 수 있습니다)</span>
               </p>
             </div>
             
