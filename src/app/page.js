@@ -1723,18 +1723,18 @@ export default function Home() {
       )}
 
       {/* Bottom Navigation */}
-      <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, backgroundColor: 'white', borderTop: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-around', padding: '10px 0 20px 0', zIndex: 100, boxShadow: '0 -2px 10px rgba(0,0,0,0.05)', maxWidth: '480px', margin: '0 auto' }}>
-        <div onClick={() => setActiveTab('diary')} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', color: activeTab === 'diary' ? 'var(--text-primary)' : 'var(--text-secondary)' }}>
-          <span style={{ fontSize: '1.5rem', marginBottom: '3px' }}>📅</span>
-          <span style={{ fontSize: '0.75rem', fontWeight: activeTab === 'diary' ? 'bold' : 'normal' }}>다이어리</span>
+      <div style={{ position: 'fixed', bottom: '20px', left: '50%', transform: 'translateX(-50%)', backgroundColor: 'rgba(255, 255, 255, 0.85)', backdropFilter: 'blur(10px)', display: 'flex', justifyContent: 'space-around', padding: '12px 20px', zIndex: 100, boxShadow: '0 8px 32px rgba(0,0,0,0.1)', width: '90%', maxWidth: '360px', borderRadius: '30px', border: '1px solid rgba(255,255,255,0.4)' }}>
+        <div onClick={() => setActiveTab('diary')} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', color: activeTab === 'diary' ? 'var(--accent-color)' : 'var(--text-secondary)', transition: 'all 0.2s', transform: activeTab === 'diary' ? 'scale(1.05)' : 'scale(1)', width: '60px' }}>
+          <span style={{ fontSize: '1.5rem', marginBottom: '4px', filter: activeTab === 'diary' ? 'none' : 'grayscale(100%) opacity(0.6)' }}>📅</span>
+          <span style={{ fontSize: '0.7rem', fontWeight: activeTab === 'diary' ? 'bold' : 'normal' }}>다이어리</span>
         </div>
-        <div onClick={() => setActiveTab('album')} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', color: activeTab === 'album' ? 'var(--text-primary)' : 'var(--text-secondary)' }}>
-          <span style={{ fontSize: '1.5rem', marginBottom: '3px' }}>🖼️</span>
-          <span style={{ fontSize: '0.75rem', fontWeight: activeTab === 'album' ? 'bold' : 'normal' }}>앨범</span>
+        <div onClick={() => setActiveTab('album')} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', color: activeTab === 'album' ? 'var(--accent-color)' : 'var(--text-secondary)', transition: 'all 0.2s', transform: activeTab === 'album' ? 'scale(1.05)' : 'scale(1)', width: '60px' }}>
+          <span style={{ fontSize: '1.5rem', marginBottom: '4px', filter: activeTab === 'album' ? 'none' : 'grayscale(100%) opacity(0.6)' }}>🖼️</span>
+          <span style={{ fontSize: '0.7rem', fontWeight: activeTab === 'album' ? 'bold' : 'normal' }}>앨범</span>
         </div>
-        <div onClick={() => setActiveTab('checklist')} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', color: activeTab === 'checklist' ? 'var(--text-primary)' : 'var(--text-secondary)' }}>
-          <span style={{ fontSize: '1.5rem', marginBottom: '3px' }}>✅</span>
-          <span style={{ fontSize: '0.75rem', fontWeight: activeTab === 'checklist' ? 'bold' : 'normal' }}>준비물</span>
+        <div onClick={() => setActiveTab('checklist')} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', color: activeTab === 'checklist' ? 'var(--accent-color)' : 'var(--text-secondary)', transition: 'all 0.2s', transform: activeTab === 'checklist' ? 'scale(1.05)' : 'scale(1)', width: '60px' }}>
+          <span style={{ fontSize: '1.5rem', marginBottom: '4px', filter: activeTab === 'checklist' ? 'none' : 'grayscale(100%) opacity(0.6)' }}>✅</span>
+          <span style={{ fontSize: '0.7rem', fontWeight: activeTab === 'checklist' ? 'bold' : 'normal' }}>준비물</span>
         </div>
       </div>
 
