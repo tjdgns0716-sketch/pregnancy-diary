@@ -1702,7 +1702,18 @@ export default function Home() {
             padding: 0 !important;
             background-color: white !important;
           }
+          .main-content {
+            max-width: none !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            box-shadow: none !important;
+          }
+          .main-content::before {
+            display: none !important;
+          }
           .printable-diary-export {
+            position: static !important;
             width: 100% !important;
             max-width: 100% !important;
             margin: 0 !important;
