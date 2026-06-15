@@ -575,21 +575,66 @@ export default function Home() {
         };
         window.addEventListener('afterprint', cleanupPrint);
 
-        setTimeout(() => {
-          // Auto-scale content to fit on one page
-          const cards = document.querySelectorAll('.pdf-diary-card');
-          cards.forEach(card => {
-            const wrapper = card.querySelector('.pdf-card-content-wrapper');
-            if (wrapper) {
-              const actualHeight = wrapper.scrollHeight;
-              if (actualHeight > 1000) {
-                const scale = 1000 / actualHeight;
-                wrapper.style.zoom = scale;
+        // Wait for all images inside export container to load before measuring and printing
+        const checkImagesAndPrint = () => {
+          const exportContainer = document.querySelector('.printable-diary-export');
+          if (!exportContainer) {
+            window.print();
+            return;
+          }
+          const images = Array.from(exportContainer.querySelectorAll('img'));
+          let loadedCount = 0;
+          
+          const doPrint = () => {
+            // Auto-scale content to fit on one page
+            const cards = document.querySelectorAll('.pdf-diary-card');
+            cards.forEach(card => {
+              const wrapper = card.querySelector('.pdf-card-content-wrapper');
+              if (wrapper) {
+                const actualHeight = wrapper.scrollHeight;
+                if (actualHeight > 1000) {
+                  const scale = 1000 / actualHeight;
+                  wrapper.style.zoom = scale;
+                }
               }
-            }
-          });
-          window.print();
-        }, 300); // allow DOM to settle before printing
+            });
+            window.print();
+          };
+
+          if (images.length === 0) {
+            // If no images, still give DOM a tiny tick to render text
+            setTimeout(doPrint, 100);
+          } else {
+            // Add a timeout fallback in case images fail to load or take too long
+            let printed = false;
+            const fallbackTimer = setTimeout(() => {
+              if (!printed) { printed = true; doPrint(); }
+            }, 3000);
+
+            images.forEach(img => {
+              if (img.complete) {
+                loadedCount++;
+                if (loadedCount === images.length && !printed) {
+                  printed = true;
+                  clearTimeout(fallbackTimer);
+                  // Give layout one final tick to settle after images complete
+                  setTimeout(doPrint, 100);
+                }
+              } else {
+                img.onload = img.onerror = () => {
+                  loadedCount++;
+                  if (loadedCount === images.length && !printed) {
+                    printed = true;
+                    clearTimeout(fallbackTimer);
+                    // Give layout one final tick to settle after images complete
+                    setTimeout(doPrint, 100);
+                  }
+                };
+              }
+            });
+          }
+        };
+        checkImagesAndPrint();
         return;
       }
       setIsExporting(false);
