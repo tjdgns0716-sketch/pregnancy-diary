@@ -568,35 +568,7 @@ export default function Home() {
           }));
         }
       } else {
-        const wrappers = document.querySelectorAll('.pdf-diary-card-wrapper');
-        const cards = document.querySelectorAll('.pdf-diary-card');
-        const MAX_HEIGHT = 850; 
-        
-        cards.forEach((card, index) => {
-          const wrapper = wrappers[index];
-          if (!wrapper) return;
-          card.style.transform = 'none';
-          wrapper.style.height = 'auto';
-          wrapper.style.overflow = 'visible';
-          
-          const height = card.scrollHeight;
-          if (height > MAX_HEIGHT) {
-            const scale = MAX_HEIGHT / height;
-            card.style.transform = `scale(${scale})`;
-            card.style.transformOrigin = 'top center';
-            wrapper.style.height = `${MAX_HEIGHT}px`;
-            wrapper.style.overflow = 'hidden';
-          }
-        });
-
         const cleanupPrint = () => {
-          cards.forEach((card, index) => { 
-            card.style.transform = ''; 
-            if (wrappers[index]) {
-               wrappers[index].style.height = '';
-               wrappers[index].style.overflow = '';
-            }
-          });
           setIsExporting(false);
           setAllDiariesToExport([]);
           window.removeEventListener('afterprint', cleanupPrint);
@@ -605,7 +577,7 @@ export default function Home() {
 
         setTimeout(() => {
           window.print();
-        }, 300); // allow DOM to paint zoom before printing
+        }, 300); // allow DOM to settle before printing
         return;
       }
       setIsExporting(false);
@@ -1958,9 +1930,7 @@ export default function Home() {
                   const displayContent = diary.content ? diary.content.replace(/\n{3,}/g, '\n\n') : '';
                   
                   return (
-                    <div key={diary.id} className="pdf-diary-card-wrapper" style={{ marginBottom: '80px', display: 'block', pageBreakInside: 'avoid', breakInside: 'avoid' }}>
-                      <div className="pdf-diary-card" style={{ padding: '80px 40px 0 40px', width: '100%', boxSizing: 'border-box' }}>
-                        
+                    <div key={diary.id} className="pdf-diary-card" style={{ marginBottom: '80px', padding: '80px 40px 0 40px', display: 'block' }}>
                       {/* Header (On Ivory Background) */}
                       <div style={{ marginBottom: '30px' }}>
                         <h2 style={{ color: '#333039', margin: '0 0 15px 0', fontSize: '2.5rem', fontWeight: 'bold' }}>{diary.date.split('-')[0]}년 {parseInt(diary.date.split('-')[1])}월 {parseInt(diary.date.split('-')[2])}일</h2>
@@ -2040,7 +2010,6 @@ export default function Home() {
                         </div>
                       )}
                       
-                      </div>
                     </div>
                   );
                 })}
@@ -2128,15 +2097,17 @@ export default function Home() {
             background-color: #FAF7F3 !important;
             z-index: -1 !important;
           }
-          .pdf-diary-card-wrapper {
+          .printable-diary-export .pdf-diary-card {
+            margin-bottom: 40px !important;
+            padding: 40px 40px 0 40px !important;
             page-break-inside: avoid !important;
             break-inside: avoid !important;
-            width: 100% !important;
           }
-          .pdf-diary-card {
-            width: 100% !important;
-            box-sizing: border-box !important;
-          }
+          .printable-diary-export h2 { font-size: 2rem !important; margin-bottom: 10px !important; }
+          .printable-diary-export h3 { font-size: 1.2rem !important; margin-bottom: 10px !important; }
+          .printable-diary-export p { font-size: 1rem !important; line-height: 1.8 !important; }
+          .printable-diary-export .pdf-inner-block { padding: 30px !important; margin-bottom: 25px !important; }
+          .printable-diary-export .pdf-inner-block img { max-height: 350px !important; border-radius: 20px !important; }
           .pdf-inner-block {
             page-break-inside: avoid !important;
             break-inside: avoid !important;
