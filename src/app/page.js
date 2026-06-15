@@ -576,6 +576,18 @@ export default function Home() {
         window.addEventListener('afterprint', cleanupPrint);
 
         setTimeout(() => {
+          // Auto-scale content to fit on one page
+          const cards = document.querySelectorAll('.pdf-diary-card');
+          cards.forEach(card => {
+            const wrapper = card.querySelector('.pdf-card-content-wrapper');
+            if (wrapper) {
+              const actualHeight = wrapper.scrollHeight;
+              if (actualHeight > 1000) {
+                const scale = 1000 / actualHeight;
+                wrapper.style.zoom = scale;
+              }
+            }
+          });
           window.print();
         }, 300); // allow DOM to settle before printing
         return;
@@ -1947,6 +1959,7 @@ export default function Home() {
 
                   return (
                     <div key={diary.id} className="pdf-diary-card" style={{ marginBottom: '20px', padding: '40px 40px 0 40px', display: 'block', pageBreakInside: 'avoid' }}>
+                      <div className="pdf-card-content-wrapper">
                       {/* Header (On Ivory Background) */}
                       <div style={{ marginBottom: '15px' }}>
                         <h2 style={{ color: '#333039', margin: '0 0 10px 0', fontSize: '2rem', fontWeight: 'bold' }}>{diary.date.split('-')[0]}년 {parseInt(diary.date.split('-')[1])}월 {parseInt(diary.date.split('-')[2])}일</h2>
@@ -2023,6 +2036,7 @@ export default function Home() {
                         </div>
                       )}
                       
+                      </div>
                     </div>
                   );
                 })}
