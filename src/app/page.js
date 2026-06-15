@@ -1882,7 +1882,7 @@ export default function Home() {
       {/* Printable View for PDF Export */}
       {/* Printable View for PDF Export */}
       {isExporting && (
-        <div className="printable-diary-export" style={{ position: 'absolute', top: 0, left: 0, width: '100%', minHeight: '100vh', backgroundColor: '#FAF7F3', zIndex: 99999, padding: '0', boxSizing: 'border-box', color: '#333039', fontFamily: "'Pretendard', 'Noto Sans KR', sans-serif" }}>
+        <div className="printable-diary-export" style={{ position: 'absolute', top: 0, left: 0, width: '100%', minHeight: '100vh', backgroundColor: '#FAF7F3', zIndex: 99999, padding: '0', boxSizing: 'border-box', color: '#333039', fontFamily: "'Nanum Myeongjo', serif" }}>
           
           {/* Cover Page */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', pageBreakAfter: 'always', height: '100vh', padding: '40px', boxSizing: 'border-box' }}>
@@ -1920,7 +1920,7 @@ export default function Home() {
                   const displayContent = diary.content ? diary.content.replace(/\n{3,}/g, '\n\n') : '';
                   
                   return (
-                    <div key={diary.id} className="pdf-diary-card" style={{ marginBottom: '80px', padding: '0 40px', display: 'block' }}>
+                    <div key={diary.id} className="pdf-diary-card" style={{ marginBottom: '80px', padding: '80px 40px 0 40px', display: 'block' }}>
                       
                       {/* Header (On Ivory Background) */}
                       <div style={{ marginBottom: '30px' }}>
@@ -2039,6 +2039,7 @@ export default function Home() {
 
       {/* Media query for FAB on mobile and Print styling */}
       <style dangerouslySetInnerHTML={{__html: `
+        @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap');
         @media (max-width: 480px) {
           div[style*="calc(50% - 210px)"] {
             right: 20px !important;
