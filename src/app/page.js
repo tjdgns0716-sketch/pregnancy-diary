@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import Image from "next/image";
 import { supabase } from "../lib/supabase";
 import { useRouter } from "next/navigation";
@@ -52,6 +52,53 @@ export default function Home() {
   const [dueDate, setDueDate] = useState(null);
   const [isExporting, setIsExporting] = useState(false);
   const [allDiariesToExport, setAllDiariesToExport] = useState([]);
+
+  // Prepare grouped data for PDF Export
+  const pdfData = useMemo(() => {
+    if (!isExporting || !allDiariesToExport.length) return { months: [], shortRecords: [] };
+    
+    let shortRecords = [];
+    const groupedByMonth = {};
+    
+    allDiariesToExport.forEach(diary => {
+      const hasVisibleContent = diary.content || (diary.badges && diary.badges.length > 0) || diary.image_url || (currentUserRole === 'mother' && diary.private_content && exportIncludesPrivate) || (diary.post_its && diary.post_its.length > 0);
+      if (!hasVisibleContent) return;
+      
+      const isShort = !diary.image_url && (!diary.content || diary.content.length <= 60) && !(currentUserRole === 'mother' && diary.private_content && exportIncludesPrivate);
+      
+      if (isShort) {
+        shortRecords.push(diary);
+        return; 
+      }
+
+      const monthKey = diary.date.substring(0, 7);
+      if (!groupedByMonth[monthKey]) {
+        groupedByMonth[monthKey] = {
+          month: monthKey,
+          diaries: [],
+          stats: { diaryCount: 0, photoCount: 0, memoCount: 0 },
+          highlights: []
+        };
+      }
+      groupedByMonth[monthKey].diaries.push(diary);
+      groupedByMonth[monthKey].stats.diaryCount += 1;
+      if (diary.image_url) groupedByMonth[monthKey].stats.photoCount += 1;
+      if (diary.post_its && diary.post_its.length > 0) groupedByMonth[monthKey].stats.memoCount += 1;
+      
+      let highlightText = "짧은 기록";
+      if (diary.content) highlightText = diary.content.split('\n')[0].substring(0, 20) + (diary.content.length > 20 ? '...' : '');
+      else if (diary.image_url) highlightText = "사진이 담긴 날";
+      
+      if (groupedByMonth[monthKey].highlights.length < 5) {
+        groupedByMonth[monthKey].highlights.push({ date: diary.date.substring(5).replace('-', '.'), text: highlightText });
+      }
+    });
+    
+    return {
+      months: Object.values(groupedByMonth).sort((a, b) => a.month.localeCompare(b.month)),
+      shortRecords
+    };
+  }, [allDiariesToExport, isExporting, currentUserRole, exportIncludesPrivate]);
   
   const [isBabyInfoModalOpen, setIsBabyInfoModalOpen] = useState(false);
   const [isNewJourneyModalOpen, setIsNewJourneyModalOpen] = useState(false);
@@ -469,7 +516,21 @@ export default function Home() {
     setExportIncludesPrivate(includePrivate);
     setIsExporting(true);
     const { data: allDiaries } = await supabase.from('diaries').select('*, post_its(*)').eq('pregnancy_id', pregnancyId).order('date', { ascending: true });
-    setAllDiariesToExport(allDiaries || []);
+    
+    // Preload image dimensions for layout calculations
+    const processedDiaries = await Promise.all((allDiaries || []).map(async (diary) => {
+      if (!diary.image_url) return diary;
+      return new Promise((resolve) => {
+        const img = new window.Image();
+        img.onload = () => {
+          resolve({ ...diary, image_width: img.width, image_height: img.height, image_ratio: img.width / img.height });
+        };
+        img.onerror = () => resolve(diary); // Fallback if image fails to load
+        img.src = diary.image_url;
+      });
+    }));
+
+    setAllDiariesToExport(processedDiaries);
     
     // Give DOM time to render all diaries
     setTimeout(() => {
@@ -1804,84 +1865,176 @@ export default function Home() {
       </div>
 
       {/* Printable View for PDF Export */}
+      {/* Printable View for PDF Export */}
       {isExporting && (
-        <div className="printable-diary-export" style={{ position: 'absolute', top: 0, left: 0, width: '100%', minHeight: '100vh', backgroundColor: 'var(--bg-color)', zIndex: 99999, padding: '0', boxSizing: 'border-box', color: 'var(--text-primary)' }}>
+        <div className="printable-diary-export" style={{ position: 'absolute', top: 0, left: 0, width: '100%', minHeight: '100vh', backgroundColor: '#FAF7F3', zIndex: 99999, padding: '0', boxSizing: 'border-box', color: '#333039', fontFamily: "'Pretendard', 'Noto Sans KR', sans-serif" }}>
           
           {/* Cover Page */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', pageBreakAfter: 'always', paddingTop: '350px', paddingBottom: '100px' }}>
-            <div style={{ width: '100px', height: '100px', borderRadius: '50%', backgroundColor: 'var(--card-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '3rem', marginBottom: '30px', boxShadow: '0 10px 30px rgba(0,0,0,0.05)' }}>
-              🤍
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', pageBreakAfter: 'always', height: '100vh', padding: '40px', boxSizing: 'border-box' }}>
+            <div style={{ width: '100%', height: '100%', backgroundColor: '#FFFFFF', borderRadius: '40px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 20px rgba(0,0,0,0.02)', position: 'relative' }}>
+              <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#F4EDFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', marginBottom: '30px', color: '#9d7ad2' }}>
+                ♥
+              </div>
+              <h1 style={{ textAlign: 'center', marginBottom: '15px', color: '#333039', fontSize: '3rem', fontWeight: 'bold', letterSpacing: '-0.03em' }}>우리의 열달 기록</h1>
+              <p style={{ textAlign: 'center', color: '#8F8798', fontSize: '1.2rem', marginTop: '0', marginBottom: '40px' }}>
+                엄마의 하루와 아빠의 짧은 마음
+              </p>
+              <div style={{ backgroundColor: '#F4EDFF', color: '#8F8798', padding: '10px 25px', borderRadius: '30px', fontSize: '1.1rem', marginBottom: '60px' }}>
+                {allDiariesToExport.length > 0 ? `${allDiariesToExport[0].date.replace(/-/g, '.')} - ${allDiariesToExport[allDiariesToExport.length - 1].date.replace(/-/g, '.')}` : '기록이 없습니다'}
+              </div>
+              
+              <div style={{ position: 'absolute', bottom: '80px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <span style={{ fontSize: '2rem', color: '#E7D8FF', marginBottom: '15px' }}>🌿</span>
+                <p style={{ textAlign: 'center', color: '#8F8798', fontSize: '1rem', lineHeight: '1.6', margin: 0 }}>
+                  작은 기록이 모여,<br/>나중엔 가장 선명한 기억이 되도록
+                </p>
+              </div>
             </div>
-            <h1 style={{ textAlign: 'center', marginBottom: '15px', color: 'var(--text-primary)', fontSize: '2.5rem', fontWeight: 'bold' }}>우리의 열달 기록</h1>
-            <p style={{ textAlign: 'center', color: 'var(--text-secondary)', fontSize: '1.2rem', marginTop: '0' }}>
-              {babyName ? `${babyName}와(과) 함께한 소중한 시간들` : '우리 아기와 함께한 소중한 시간들'}
-            </p>
           </div>
           
-          {/* Diary Entries */}
-          <div className="pdf-entries-container" style={{ padding: '40px' }}>
-            {allDiariesToExport.length === 0 ? (
-              <p style={{ textAlign: 'center', color: 'var(--text-secondary)', marginTop: '50px' }}>기록된 일기가 없습니다.</p>
-            ) : (
-              allDiariesToExport.map(diary => {
-                const hasVisibleContent = diary.content || (diary.badges && diary.badges.length > 0) || diary.image_url || (currentUserRole === 'mother' && diary.private_content && exportIncludesPrivate) || (diary.post_its && diary.post_its.length > 0);
-                if (!hasVisibleContent) return null;
-                
-                return (
-                  <div key={diary.id} className="diary-entry-card" style={{ marginBottom: '50px', padding: '40px', backgroundColor: 'var(--card-bg)', borderRadius: '20px', boxShadow: 'var(--shadow-sm)', border: '1px solid var(--border-color)' }}>
-                    
-                    <div style={{ borderBottom: '2px solid var(--bg-color)', paddingBottom: '15px', marginBottom: '20px' }}>
-                      <h2 style={{ color: 'var(--text-primary)', margin: '0', fontSize: '1.5rem' }}>{diary.date}</h2>
-                    </div>
-                    
-                    {diary.badges && diary.badges.length > 0 && (
-                      <div style={{ display: 'flex', gap: '8px', marginBottom: '20px', flexWrap: 'wrap' }}>
-                        {diary.badges.map(b => <span key={b} style={{ backgroundColor: 'var(--bg-color)', color: 'var(--text-primary)', padding: '8px 15px', borderRadius: '20px', fontSize: '0.85rem', border: '1px solid var(--border-color)' }}>{b}</span>)}
+          {/* Months & Daily Entries */}
+          {pdfData.months.map((monthData, mIndex) => (
+            <div key={monthData.month}>
+              {/* Monthly Summary Page */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', pageBreakAfter: 'always', height: '100vh', padding: '40px', boxSizing: 'border-box' }}>
+                <div style={{ width: '100%', height: '100%', backgroundColor: '#FFFFFF', borderRadius: '40px', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '60px', boxSizing: 'border-box', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
+                  <h2 style={{ fontSize: '2.5rem', color: '#333039', marginBottom: '30px' }}>{parseInt(monthData.month.split('-')[1])}월의 기록</h2>
+                  <div style={{ display: 'flex', gap: '20px', marginBottom: '50px' }}>
+                    <span style={{ backgroundColor: '#F4EDFF', color: '#8F8798', padding: '8px 20px', borderRadius: '20px', fontSize: '1rem' }}>일기 {monthData.stats.diaryCount}개</span>
+                    <span style={{ backgroundColor: '#F4EDFF', color: '#8F8798', padding: '8px 20px', borderRadius: '20px', fontSize: '1rem' }}>사진 {monthData.stats.photoCount}장</span>
+                    <span style={{ backgroundColor: '#FFF4CF', color: '#8F8798', padding: '8px 20px', borderRadius: '20px', fontSize: '1rem' }}>아빠 메모 {monthData.stats.memoCount}개</span>
+                  </div>
+                  
+                  <h3 style={{ fontSize: '1.3rem', color: '#333039', marginBottom: '20px' }}>이번 달의 작은 장면</h3>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                    {monthData.highlights.map((h, i) => (
+                      <div key={i} style={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
+                        <span style={{ color: '#8F8798', fontSize: '1.1rem', minWidth: '60px', fontWeight: 'bold' }}>{h.date}</span>
+                        <span style={{ color: '#333039', fontSize: '1.1rem', lineHeight: '1.5' }}>{h.text}</span>
                       </div>
-                    )}
-                    
-                    {diary.content && (
-                      <p style={{ whiteSpace: 'pre-wrap', lineHeight: '1.8', color: 'var(--text-primary)', fontSize: '1.05rem', margin: diary.image_url ? '0 0 20px 0' : '0' }}>
-                        {diary.content}
-                      </p>
-                    )}
-                    
-                    {diary.image_url && (
-                      <div className="pdf-inner-block" style={{ marginBottom: diary.content ? '20px' : '0', borderRadius: '15px', overflow: 'hidden', backgroundColor: 'var(--bg-color)', display: 'flex', justifyContent: 'center' }}>
-                        <img src={diary.image_url} style={{ maxWidth: '100%', maxHeight: '500px', objectFit: 'contain' }} />
-                      </div>
-                    )}
-                    
-                    {currentUserRole === 'mother' && diary.private_content && exportIncludesPrivate && (
-                      <div className="pdf-inner-block" style={{ marginTop: '20px', padding: '25px', backgroundColor: 'var(--bg-color)', borderRadius: '15px', border: '1px dashed var(--accent-color)' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '10px' }}>
-                          <span style={{ fontSize: '1.2rem' }}>🔒</span>
-                          <strong style={{ color: 'var(--accent-color)', fontSize: '1rem' }}>나만의 비밀 이야기</strong>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              
+              {/* Daily Diaries for this month */}
+              <div style={{ padding: '0 40px' }}>
+                {monthData.diaries.map(diary => {
+                  const isLandscape = diary.image_ratio && diary.image_ratio >= 1.25;
+                  const isPortrait = diary.image_ratio && diary.image_ratio <= 0.8;
+                  
+                  return (
+                    <div key={diary.id} className="pdf-diary-card" style={{ marginBottom: '60px', padding: '50px', backgroundColor: '#FFFFFF', borderRadius: '24px', border: '1px solid #EADFF7', display: 'flex', flexDirection: 'column', gap: '30px', breakInside: 'avoid', pageBreakInside: 'avoid' }}>
+                      
+                      {/* Header */}
+                      <div style={{ borderBottom: '1px dashed #EADFF7', paddingBottom: '20px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                        <h2 style={{ color: '#333039', margin: '0', fontSize: '2rem' }}>{diary.date.split('-')[0]}년 {parseInt(diary.date.split('-')[1])}월 {parseInt(diary.date.split('-')[2])}일</h2>
+                        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                          {diary.badges && diary.badges.map(b => <span key={b} style={{ backgroundColor: '#F4EDFF', color: '#8F8798', padding: '6px 15px', borderRadius: '20px', fontSize: '0.9rem' }}>{b}</span>)}
+                          {diary.image_url && <span style={{ backgroundColor: '#FAF7F3', color: '#8F8798', padding: '6px 15px', borderRadius: '20px', fontSize: '0.9rem' }}>사진 1장</span>}
+                          <span style={{ marginLeft: 'auto', color: '#E7D8FF', fontSize: '1.5rem' }}>♥</span>
                         </div>
-                        <p style={{ whiteSpace: 'pre-wrap', color: 'var(--text-primary)', margin: '0', lineHeight: '1.8' }}>{diary.private_content}</p>
                       </div>
-                    )}
-                    
+
+                      {/* Content Layout */}
+                      {isPortrait && diary.image_url && diary.content ? (
+                        // 세로형 2단 배치 (엄마기록 좌측, 사진 우측)
+                        <div style={{ display: 'flex', gap: '40px', alignItems: 'flex-start' }}>
+                          <div style={{ flex: 1 }}>
+                            <h3 style={{ color: '#9d7ad2', fontSize: '1.3rem', marginBottom: '20px', fontWeight: 'bold' }}>엄마의 기록</h3>
+                            <p style={{ whiteSpace: 'pre-wrap', lineHeight: '2', color: '#333039', fontSize: '1.1rem', margin: 0 }}>{diary.content}</p>
+                          </div>
+                          <div className="pdf-inner-block" style={{ width: '45%', borderRadius: '16px', overflow: 'hidden' }}>
+                            <img src={diary.image_url} style={{ width: '100%', display: 'block', objectFit: 'cover', borderRadius: '16px' }} />
+                          </div>
+                        </div>
+                      ) : isLandscape && diary.image_url ? (
+                        // 가로형 (기록 -> 넓은사진)
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
+                          {diary.content && (
+                            <div>
+                              <h3 style={{ color: '#9d7ad2', fontSize: '1.3rem', marginBottom: '20px', fontWeight: 'bold' }}>엄마의 기록</h3>
+                              <p style={{ whiteSpace: 'pre-wrap', lineHeight: '2', color: '#333039', fontSize: '1.1rem', margin: 0 }}>{diary.content}</p>
+                            </div>
+                          )}
+                          <div className="pdf-inner-block" style={{ width: '100%', borderRadius: '16px', overflow: 'hidden', backgroundColor: '#FAF7F3' }}>
+                            <img src={diary.image_url} style={{ width: '100%', maxHeight: '500px', display: 'block', objectFit: 'contain', borderRadius: '16px' }} />
+                          </div>
+                        </div>
+                      ) : (
+                        // 일반/정사각형 비율 또는 사진 없는 경우
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
+                          {diary.content && (
+                            <div>
+                              <h3 style={{ color: '#9d7ad2', fontSize: '1.3rem', marginBottom: '20px', fontWeight: 'bold' }}>엄마의 기록</h3>
+                              <p style={{ whiteSpace: 'pre-wrap', lineHeight: '2', color: '#333039', fontSize: '1.1rem', margin: 0 }}>{diary.content}</p>
+                            </div>
+                          )}
+                          {diary.image_url && (
+                            <div className="pdf-inner-block" style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                              <img src={diary.image_url} style={{ maxWidth: '80%', maxHeight: '500px', display: 'block', objectFit: 'contain', borderRadius: '16px' }} />
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      
+                      {/* Private Content */}
+                      {currentUserRole === 'mother' && diary.private_content && exportIncludesPrivate && (
+                        <div className="pdf-inner-block" style={{ padding: '30px', backgroundColor: '#FAF7F3', borderRadius: '16px', border: '1px dashed #E7D8FF' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
+                            <span style={{ fontSize: '1.4rem' }}>🔒</span>
+                            <strong style={{ color: '#9d7ad2', fontSize: '1.1rem' }}>나만의 비밀 이야기</strong>
+                          </div>
+                          <p style={{ whiteSpace: 'pre-wrap', color: '#333039', margin: '0', lineHeight: '1.8' }}>{diary.private_content}</p>
+                        </div>
+                      )}
+
+                      {/* Dad Memo */}
+                      {diary.post_its && diary.post_its.length > 0 && (
+                        <div className="pdf-inner-block" style={{ marginTop: '10px', backgroundColor: '#FFF4CF', padding: '30px', borderRadius: '16px', border: '1px solid #fbe695', position: 'relative', boxShadow: '2px 4px 15px rgba(0,0,0,0.03)' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px', borderBottom: '1px solid rgba(0,0,0,0.05)', paddingBottom: '15px' }}>
+                            <span style={{ fontSize: '1.5rem', color: '#d4aa37' }}>♡</span>
+                            <strong style={{ color: '#5c5227', fontSize: '1.2rem' }}>아빠의 짧은 메모</strong>
+                          </div>
+                          <p style={{ fontSize: '1.1rem', color: '#333039', lineHeight: '1.8', whiteSpace: 'pre-wrap', margin: 0 }}>
+                            {diary.post_its[0].content}
+                          </p>
+                        </div>
+                      )}
+                      
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+
+          {/* Short Records Page */}
+          {pdfData.shortRecords.length > 0 && (
+            <div style={{ padding: '40px', pageBreakBefore: 'always' }}>
+              <div style={{ marginBottom: '50px', textAlign: 'center' }}>
+                <h2 style={{ fontSize: '2.5rem', color: '#333039', marginBottom: '15px' }}>짧은 기록 모아보기</h2>
+                <p style={{ color: '#8F8798', fontSize: '1.1rem' }}>바쁜 하루 끝에 남긴 작은 기록들</p>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px' }}>
+                {pdfData.shortRecords.map(diary => (
+                  <div key={diary.id} className="pdf-inner-block" style={{ padding: '30px', backgroundColor: '#FFFFFF', borderRadius: '24px', border: '1px solid #EADFF7', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ color: '#8F8798', fontSize: '1.1rem', fontWeight: 'bold' }}>{diary.date.substring(5).replace('-', '.')}</span>
+                      {diary.post_its && diary.post_its.length > 0 && <span style={{ fontSize: '1.2rem' }}>💛</span>}
+                    </div>
+                    {diary.content && <p style={{ margin: 0, color: '#333039', lineHeight: '1.8', fontSize: '1.05rem', whiteSpace: 'pre-wrap' }}>{diary.content}</p>}
                     {diary.post_its && diary.post_its.length > 0 && (
-                      <div className="pdf-inner-block" style={{
-                        marginTop: '20px',
-                        backgroundColor: '#fff7d6',
-                        padding: '15px',
-                        borderRadius: '2px 12px 12px 12px',
-                        position: 'relative',
-                        borderLeft: '3px solid #ffde59'
-                      }}>
-                        <span style={{ position: 'absolute', top: '-10px', left: '10px', fontSize: '1.2rem' }}>📌</span>
-                        <p style={{ fontSize: '0.95rem', color: '#5c5227', fontStyle: 'italic', lineHeight: '1.6', whiteSpace: 'pre-wrap', margin: '10px 0 0 0' }}>
-                          "{diary.post_its[0].content}"
-                        </p>
+                      <div style={{ marginTop: '15px', backgroundColor: '#FFF4CF', padding: '15px', borderRadius: '12px', color: '#5c5227', fontSize: '0.95rem', lineHeight: '1.6' }}>
+                        <strong style={{ display: 'block', marginBottom: '5px' }}>아빠:</strong> {diary.post_its[0].content}
                       </div>
                     )}
                   </div>
-                );
-              })
-            )}
-          </div>
+                ))}
+              </div>
+            </div>
+          )}
+          
         </div>
       )}
 
@@ -1902,7 +2055,9 @@ export default function Home() {
             min-width: 100% !important;
             margin: 0 !important;
             padding: 0 !important;
-            background-color: white !important;
+            background-color: #FAF7F3 !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
           }
           .main-content {
             max-width: none !important;
@@ -1919,32 +2074,22 @@ export default function Home() {
             width: 100% !important;
             max-width: 100% !important;
             margin: 0 !important;
-            padding: 15mm !important; /* replaces @page margin */
+            padding: 0 !important;
             box-sizing: border-box !important;
-            background-color: white !important;
+            background-color: #FAF7F3 !important;
           }
-          .pdf-entries-container {
-            column-count: 2 !important;
-            column-gap: 30px !important;
-            padding: 0 !important; /* Let the parent handle padding */
-          }
-          .diary-entry-card {
+          .pdf-diary-card {
             page-break-inside: avoid !important;
             break-inside: avoid !important;
-            -webkit-column-break-inside: avoid !important;
-            display: inline-block !important; /* Forces block not to break in Chrome */
             width: 100% !important;
             box-sizing: border-box !important;
-            padding: 25px !important; /* Shrink padding for 2-column layout */
-            margin-bottom: 30px !important;
           }
           .pdf-inner-block {
             page-break-inside: avoid !important;
             break-inside: avoid !important;
-            -webkit-column-break-inside: avoid !important;
-            display: inline-block !important;
             width: 100% !important;
             box-sizing: border-box !important;
+            display: block !important;
           }
         }
       `}} />
