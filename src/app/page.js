@@ -1932,9 +1932,9 @@ export default function Home() {
             </p>
             
             <div style={{ backgroundColor: 'rgba(255, 107, 107, 0.1)', padding: '12px', borderRadius: '8px', marginBottom: '25px', border: '1px solid rgba(255, 107, 107, 0.3)' }}>
-              <p style={{ fontSize: '0.8rem', color: '#e03131', margin: 0, textAlign: 'center', lineHeight: '1.4', wordBreak: 'keep-all' }}>
-                <strong>⚠️ 가급적 PC 크롬 브라우저 사용을 권장합니다.</strong><br/>
-                모바일 기기에서 추출할 경우 기기 자체의 강제 인쇄 여백으로 인해 테두리에 흰색 여백이 남고 크기가 살짝 축소될 수 있습니다. (PC 크롬에서는 '여백 없음' 설정으로 완벽하게 추출 가능합니다)
+              <p style={{ fontSize: '0.85rem', color: '#e03131', margin: 0, textAlign: 'center', lineHeight: '1.4', wordBreak: 'keep-all' }}>
+                ⚠️ <strong>여백 없는 완벽한 PDF 추출</strong>을 위해 가급적 <strong>PC 크롬 브라우저</strong> 사용을 권장합니다.<br/>
+                <span style={{ fontSize: '0.75rem', opacity: 0.8 }}>(모바일 환경에서는 기기 자체 여백이 발생할 수 있습니다)</span>
               </p>
             </div>
             
