@@ -1919,7 +1919,7 @@ export default function Home() {
                   const isPortrait = diary.image_ratio && diary.image_ratio <= 0.8;
                   
                   return (
-                    <div key={diary.id} className="pdf-diary-card" style={{ marginBottom: '60px', padding: '50px', backgroundColor: '#FFFFFF', borderRadius: '24px', border: '1px solid #EADFF7', display: 'block', breakInside: 'avoid', pageBreakInside: 'avoid' }}>
+                    <div key={diary.id} className="pdf-diary-card" style={{ marginBottom: '60px', padding: '50px', backgroundColor: '#FFFFFF', borderRadius: '24px', border: '1px solid #EADFF7', display: 'block' }}>
                       
                       {/* Header */}
                       <div style={{ borderBottom: '1px dashed #EADFF7', paddingBottom: '20px', marginBottom: '30px' }}>
@@ -2082,9 +2082,7 @@ export default function Home() {
           .pdf-inner-block {
             page-break-inside: avoid !important;
             break-inside: avoid !important;
-            width: 100% !important;
             box-sizing: border-box !important;
-            display: block !important;
           }
         }
       `}} />
