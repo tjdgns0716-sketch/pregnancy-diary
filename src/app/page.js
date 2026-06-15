@@ -81,6 +81,7 @@ export default function Home() {
   // New Tab States
   const [activeTab, setActiveTab] = useState('diary'); // 'diary', 'album', 'checklist'
   const [albumImages, setAlbumImages] = useState([]);
+  const [selectedAlbumImage, setSelectedAlbumImage] = useState(null);
   const [checklists, setChecklists] = useState([]);
   const [newChecklistCategory, setNewChecklistCategory] = useState("아기 용품");
   const [newChecklistContent, setNewChecklistContent] = useState("");
@@ -1623,7 +1624,7 @@ export default function Home() {
           ) : (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '5px' }}>
               {albumImages.map((img, idx) => (
-                <div key={img.id} style={{ aspectRatio: '1', position: 'relative', overflow: 'hidden', borderRadius: '8px', cursor: 'pointer' }}>
+                <div key={img.id} onClick={() => setSelectedAlbumImage(img.image_url)} style={{ aspectRatio: '1', position: 'relative', overflow: 'hidden', borderRadius: '8px', cursor: 'zoom-in' }}>
                   <img src={img.image_url} alt="diary img" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
               ))}
@@ -1699,6 +1700,32 @@ export default function Home() {
       )}
 
 
+
+      {/* Fullscreen Image Viewer Modal */}
+      {selectedAlbumImage && (
+        <div 
+          onClick={() => setSelectedAlbumImage(null)}
+          style={{
+            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+            backgroundColor: 'rgba(0,0,0,0.85)', zIndex: 1000,
+            display: 'flex', justifyContent: 'center', alignItems: 'center',
+            cursor: 'zoom-out'
+          }}
+        >
+          <img 
+            src={selectedAlbumImage} 
+            alt="Fullscreen Album Image" 
+            style={{ maxWidth: '95vw', maxHeight: '95vh', objectFit: 'contain', borderRadius: '10px', boxShadow: '0 5px 25px rgba(0,0,0,0.5)', cursor: 'default' }} 
+            onClick={(e) => e.stopPropagation()} 
+          />
+          <button 
+            onClick={() => setSelectedAlbumImage(null)}
+            style={{ position: 'absolute', top: '20px', right: '20px', background: 'rgba(255,255,255,0.2)', border: 'none', color: 'white', fontSize: '2rem', cursor: 'pointer', width: '40px', height: '40px', borderRadius: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+          >
+            ×
+          </button>
+        </div>
+      )}
 
       {/* Export Options Modal (Mother Only) */}
       {isExportModalOpen && (
