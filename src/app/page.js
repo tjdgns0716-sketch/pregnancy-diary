@@ -1896,27 +1896,7 @@ export default function Home() {
           {/* Months & Daily Entries */}
           {pdfData.months.map((monthData, mIndex) => (
             <div key={monthData.month}>
-              {/* Monthly Summary Page */}
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', pageBreakAfter: 'always', height: '100vh', padding: '40px', boxSizing: 'border-box' }}>
-                <div style={{ width: '100%', height: '100%', backgroundColor: '#FFFFFF', borderRadius: '40px', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '60px', boxSizing: 'border-box', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
-                  <h2 style={{ fontSize: '2.5rem', color: '#333039', marginBottom: '30px' }}>{parseInt(monthData.month.split('-')[1])}월의 기록</h2>
-                  <div style={{ display: 'flex', gap: '20px', marginBottom: '50px' }}>
-                    <span style={{ backgroundColor: '#F4EDFF', color: '#8F8798', padding: '8px 20px', borderRadius: '20px', fontSize: '1rem' }}>일기 {monthData.stats.diaryCount}개</span>
-                    <span style={{ backgroundColor: '#F4EDFF', color: '#8F8798', padding: '8px 20px', borderRadius: '20px', fontSize: '1rem' }}>사진 {monthData.stats.photoCount}장</span>
-                    <span style={{ backgroundColor: '#FFF4CF', color: '#8F8798', padding: '8px 20px', borderRadius: '20px', fontSize: '1rem' }}>아빠 메모 {monthData.stats.memoCount}개</span>
-                  </div>
-                  
-                  <h3 style={{ fontSize: '1.3rem', color: '#333039', marginBottom: '20px' }}>이번 달의 작은 장면</h3>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                    {monthData.highlights.map((h, i) => (
-                      <div key={i} style={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
-                        <span style={{ color: '#8F8798', fontSize: '1.1rem', minWidth: '60px', fontWeight: 'bold' }}>{h.date}</span>
-                        <span style={{ color: '#333039', fontSize: '1.1rem', lineHeight: '1.5' }}>{h.text}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
+              {/* Monthly Summary Page Removed */}
               
               {/* Daily Diaries for this month */}
               <div style={{ padding: '0 40px' }}>
