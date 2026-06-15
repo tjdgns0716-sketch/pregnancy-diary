@@ -1892,7 +1892,7 @@ export default function Home() {
       {/* Printable View for PDF Export */}
       {/* Printable View for PDF Export */}
       {isExporting && (
-        <div className="printable-diary-export" style={{ position: 'absolute', top: 0, left: 0, width: '100%', minHeight: '100vh', background: 'var(--pdf-bg-color, var(--bg-color))', zIndex: 99999, padding: '0', boxSizing: 'border-box', color: '#333039', fontFamily: "'Nanum Myeongjo', serif" }}>
+        <div className="printable-diary-export" style={{ position: 'absolute', top: 0, left: 0, width: '100%', minHeight: '100vh', background: 'var(--pdf-bg-color, var(--bg-color))', zIndex: 99999, padding: '0', boxSizing: 'border-box', color: '#333039', fontFamily: 'inherit' }}>
           
           {/* Cover Page */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', pageBreakAfter: 'always', height: '100vh', padding: '40px', boxSizing: 'border-box', position: 'relative' }}>
@@ -1928,16 +1928,31 @@ export default function Home() {
                 {monthData.diaries.map(diary => {
                   const isLandscape = diary.image_ratio && diary.image_ratio >= 1.25;
                   const isPortrait = diary.image_ratio && diary.image_ratio <= 0.8;
+                  let pregBadge = null;
+                  if (dueDate && diary.date) {
+                    const due = new Date(dueDate);
+                    const target = new Date(diary.date);
+                    due.setHours(0,0,0,0);
+                    target.setHours(0,0,0,0);
+                    const diffTime = due - target;
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    if (diffDays > 0 && diffDays <= 280) {
+                      const week = Math.floor((280 - diffDays) / 7);
+                      const day = (280 - diffDays) % 7;
+                      if (week > 0) pregBadge = `임신 ${week}주 ${day}일`;
+                    }
+                  }
+
                   const displayContent = diary.content ? diary.content.replace(/\n{3,}/g, '\n\n') : '';
-                  
+
                   return (
                     <div key={diary.id} className="pdf-diary-card" style={{ marginBottom: '80px', padding: '80px 40px 0 40px', display: 'block' }}>
                       {/* Header (On Ivory Background) */}
                       <div style={{ marginBottom: '30px' }}>
                         <h2 style={{ color: '#333039', margin: '0 0 15px 0', fontSize: '2.5rem', fontWeight: 'bold' }}>{diary.date.split('-')[0]}년 {parseInt(diary.date.split('-')[1])}월 {parseInt(diary.date.split('-')[2])}일</h2>
                         <div style={{ display: 'block' }}>
-                          {diary.badges && diary.badges.map(b => <span key={b} style={{ display: 'inline-block', backgroundColor: '#EADFF7', color: '#7a6696', padding: '6px 20px', borderRadius: '30px', fontSize: '1rem', marginRight: '10px', marginBottom: '10px' }}>{b}</span>)}
-                          {diary.image_url && <span style={{ display: 'inline-block', backgroundColor: '#FDF1E6', color: '#c48b71', padding: '6px 20px', borderRadius: '30px', fontSize: '1rem', marginRight: '10px', marginBottom: '10px' }}>사진 1장</span>}
+                          {pregBadge && <span style={{ display: 'inline-block', backgroundColor: '#EADFF7', color: '#7a6696', padding: '6px 20px', borderRadius: '30px', fontSize: '1rem', marginRight: '10px', marginBottom: '10px' }}>{pregBadge}</span>}
+                          {diary.badges && diary.badges.map(b => <span key={b} style={{ display: 'inline-block', backgroundColor: '#E6F4EA', color: '#5b8a6a', padding: '6px 20px', borderRadius: '30px', fontSize: '1rem', marginRight: '10px', marginBottom: '10px' }}>{b}</span>)}
                           <span style={{ float: 'right', color: '#D4C4E9', fontSize: '1.8rem', marginTop: '-5px' }}>♥</span>
                         </div>
                         <div style={{ borderBottom: '1px dashed #EADFF7', marginTop: '20px' }} />
