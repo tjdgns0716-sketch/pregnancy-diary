@@ -569,7 +569,7 @@ export default function Home() {
         }
       } else {
         const cards = document.querySelectorAll('.pdf-diary-card');
-        const MAX_HEIGHT = 1030; // Approx A4 height (1122) minus margins
+        const MAX_HEIGHT = 850; // Lower threshold to ensure scaling triggers before ANY risk of clipping
         
         cards.forEach(card => {
           card.style.zoom = '1';
