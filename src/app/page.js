@@ -1828,7 +1828,7 @@ export default function Home() {
                 if (!hasVisibleContent) return null;
                 
                 return (
-                  <div key={diary.id} style={{ marginBottom: '50px', padding: '40px', backgroundColor: 'var(--card-bg)', borderRadius: '20px', boxShadow: 'var(--shadow-sm)', pageBreakInside: 'avoid', border: '1px solid var(--border-color)' }}>
+                  <div key={diary.id} className="diary-entry-card" style={{ marginBottom: '50px', padding: '40px', backgroundColor: 'var(--card-bg)', borderRadius: '20px', boxShadow: 'var(--shadow-sm)', border: '1px solid var(--border-color)' }}>
                     
                     <div style={{ borderBottom: '2px solid var(--bg-color)', paddingBottom: '15px', marginBottom: '20px' }}>
                       <h2 style={{ color: 'var(--text-primary)', margin: '0', fontSize: '1.5rem' }}>{diary.date}</h2>
@@ -1922,6 +1922,13 @@ export default function Home() {
             padding: 15mm !important; /* replaces @page margin */
             box-sizing: border-box !important;
             background-color: white !important;
+          }
+          .diary-entry-card {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+            -webkit-column-break-inside: avoid;
+            display: inline-block !important; /* Forces block not to break in Chrome */
+            width: 100% !important;
           }
         }
       `}} />
