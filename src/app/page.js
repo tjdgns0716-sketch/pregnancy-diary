@@ -636,13 +636,18 @@ export default function Home() {
               
               let imagesHtml = '';
               base64Images.forEach((src) => {
-                // Stack images with forced page breaks
-                imagesHtml += `<img src="${src}" style="width: 100%; height: auto; page-break-after: always; display: block; margin-bottom: 20px;" />`;
+                // FORCES the image to shrink proportionally so its height NEVER exceeds one printed A4 page.
+                // This completely prevents horizontal slicing and overlapping.
+                imagesHtml += `
+                  <div style="page-break-after: always; display: flex; justify-content: center; align-items: center; width: 100%; height: 95vh; overflow: hidden; box-sizing: border-box; padding: 10px;">
+                    <img src="${src}" style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; display: block; margin: 0 auto;" />
+                  </div>
+                `;
               });
               
               if (window.ReactNativeWebView) {
                  // Send to React Native if available
-                 const htmlContent = `<html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>body{margin:0;padding:0;background:#fff;}img{display:block;max-width:100%;margin:0 auto;}</style></head><body>${imagesHtml}</body></html>`;
+                 const htmlContent = `<html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>body{margin:0;padding:0;background:#fff;}@media print { @page { size: A4 portrait; margin: 0; } }</style></head><body>${imagesHtml}</body></html>`;
                  window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'DOWNLOAD_PDF_HTML', htmlContent }));
                  
                  setTimeout(() => {
