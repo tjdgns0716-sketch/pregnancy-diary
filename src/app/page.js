@@ -614,9 +614,13 @@ export default function Home() {
             if (actualHeight > maxContentHeight) {
               const scale = maxContentHeight / actualHeight;
               
-              if (isMobile) {
-                // Mobile PDF engines (WKWebView) ignore CSS scaling and overflow clipping.
-                // We MUST physically shrink the DOM so it natively fits without layout tricks.
+              if (window.ReactNativeWebView) {
+                // REACT NATIVE WEBVIEW: Do absolutely nothing to the DOM!
+                // We want the DOM to remain full-size and pristine because html2canvas will take 
+                // a high-res snapshot of it, and the resulting image will natively scale down in the PDF.
+              } else if (isMobile) {
+                // OTHER MOBILE BROWSERS (Mobile Safari/Chrome): Fallback to physical DOM shrinking
+                // because window.print() on mobile ignores CSS scaling.
                 applyNativeScale(wrapper, scale);
               } else if (isFirefox) {
                 // Firefox Desktop: 'zoom' is buggy, but transform + overflow hidden works well.
