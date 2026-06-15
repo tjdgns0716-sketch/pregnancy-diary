@@ -1138,13 +1138,13 @@ export default function Home() {
         <div style={{
           position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
           backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1000,
-          display: 'flex', justifyContent: 'center', alignItems: 'flex-end'
+          display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '20px'
         }}>
           <div style={{
-            width: '100%', maxWidth: '480px', height: '85vh',
-            backgroundColor: 'var(--card-bg)', borderTopLeftRadius: '20px', borderTopRightRadius: '20px',
+            width: '100%', maxWidth: '480px', height: '85vh', maxHeight: '800px',
+            backgroundColor: 'var(--card-bg)', borderRadius: '20px',
             display: 'flex', flexDirection: 'column',
-            boxShadow: '0 -4px 20px rgba(0,0,0,0.1)', overflow: 'hidden'
+            boxShadow: 'var(--shadow-lg)', overflow: 'hidden'
           }}>
             
             {/* Sticky Header */}
