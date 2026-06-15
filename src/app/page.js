@@ -1963,7 +1963,6 @@ export default function Home() {
                         // 세로형 2단 배치 (엄마기록 좌측, 사진 우측 - 같은 흰색 상자 안)
                         <div className="pdf-inner-block" style={{ backgroundColor: '#FFFFFF', borderRadius: '30px', padding: '40px', marginBottom: '30px', display: 'table', width: '100%', tableLayout: 'fixed', boxShadow: '0 10px 30px rgba(0,0,0,0.02)' }}>
                           <div style={{ display: 'table-cell', verticalAlign: 'top', width: '55%', paddingRight: '40px' }}>
-                            <h3 style={{ color: '#9d7ad2', fontSize: '1.4rem', marginBottom: '20px', fontWeight: 'bold' }}>엄마의 기록</h3>
                             <p style={{ whiteSpace: 'pre-wrap', lineHeight: '2.2', color: '#333039', fontSize: '1.1rem', margin: 0 }}>{displayContent}</p>
                           </div>
                           <div style={{ display: 'table-cell', verticalAlign: 'top', width: '45%' }}>
@@ -1975,7 +1974,6 @@ export default function Home() {
                         <div style={{ display: 'block', marginBottom: '30px' }}>
                           {diary.content && (
                             <div className="pdf-inner-block" style={{ backgroundColor: '#FFFFFF', borderRadius: '30px', padding: '40px', marginBottom: '30px', boxShadow: '0 10px 30px rgba(0,0,0,0.02)' }}>
-                              <h3 style={{ color: '#9d7ad2', fontSize: '1.4rem', marginBottom: '20px', fontWeight: 'bold' }}>엄마의 기록</h3>
                               <p style={{ whiteSpace: 'pre-wrap', lineHeight: '2.2', color: '#333039', fontSize: '1.1rem', margin: 0 }}>{displayContent}</p>
                             </div>
                           )}
@@ -1988,7 +1986,6 @@ export default function Home() {
                         <div style={{ display: 'block', marginBottom: '30px' }}>
                           {diary.content && (
                             <div className="pdf-inner-block" style={{ backgroundColor: '#FFFFFF', borderRadius: '30px', padding: '40px', marginBottom: '30px', boxShadow: '0 10px 30px rgba(0,0,0,0.02)' }}>
-                              <h3 style={{ color: '#9d7ad2', fontSize: '1.4rem', marginBottom: '20px', fontWeight: 'bold' }}>엄마의 기록</h3>
                               <p style={{ whiteSpace: 'pre-wrap', lineHeight: '2.2', color: '#333039', fontSize: '1.1rem', margin: 0 }}>{displayContent}</p>
                             </div>
                           )}
@@ -2005,7 +2002,7 @@ export default function Home() {
                         <div className="pdf-inner-block" style={{ backgroundColor: '#FFFFFF', borderRadius: '30px', padding: '40px', marginBottom: '30px', boxShadow: '0 10px 30px rgba(0,0,0,0.02)' }}>
                           <div style={{ marginBottom: '15px' }}>
                             <span style={{ fontSize: '1.4rem', verticalAlign: 'middle', marginRight: '10px' }}>🔒</span>
-                            <strong style={{ color: '#9d7ad2', fontSize: '1.4rem', verticalAlign: 'middle', fontWeight: 'bold' }}>나만의 비밀 이야기</strong>
+                            <strong style={{ color: '#9d7ad2', fontSize: '1.4rem', verticalAlign: 'middle', fontWeight: 'bold' }}>비밀</strong>
                           </div>
                           <p style={{ whiteSpace: 'pre-wrap', color: '#333039', margin: '0', lineHeight: '2.2', fontSize: '1.1rem' }}>{diary.private_content}</p>
                         </div>
