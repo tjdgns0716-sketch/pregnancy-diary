@@ -13,6 +13,7 @@ export const metadata = {
   description: "아내와 남편이 함께 기록하는 가장 특별한 280일의 임신 다이어리",
   manifest: "/manifest.json",
   icons: {
+    icon: "/favicon.png?v=3",
     apple: "/icon-192x192.png",
   },
   openGraph: {
