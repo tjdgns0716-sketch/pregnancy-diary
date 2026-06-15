@@ -594,21 +594,21 @@ export default function Home() {
                 // Reset in case of multiple prints
                 wrapper.style.transform = 'none';
                 card.style.height = 'auto';
+                card.style.overflow = 'visible';
                 
                 const actualHeight = wrapper.scrollHeight;
-                const maxContentHeight = 940; // Safest available height on A4
+                const maxContentHeight = 820; // Extremely safe height, accounts for any crazy custom print margins
                 
                 if (actualHeight > maxContentHeight) {
                   const scale = maxContentHeight / actualHeight;
-                  // Use robust CSS transform instead of buggy zoom which breaks pagination
+                  // Use robust CSS transform
                   wrapper.style.transform = `scale(${scale})`;
                   wrapper.style.transformOrigin = 'top center';
                   wrapper.style.width = '100%';
                   
                   // CRITICAL: Physically shrink the outer card's layout bounds 
-                  // so Chrome's print engine knows it fits on exactly one page!
-                  card.style.height = `${maxContentHeight + 80}px`; 
-                  card.style.overflow = 'hidden';
+                  // to exactly match the visual scaled height + padding.
+                  card.style.height = `${(actualHeight * scale) + 60}px`; 
                 }
               }
             });
