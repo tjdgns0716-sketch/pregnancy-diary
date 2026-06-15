@@ -1141,7 +1141,7 @@ export default function Home() {
           display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '20px'
         }}>
           <div style={{
-            width: '100%', maxWidth: '480px', height: '85vh', maxHeight: '800px',
+            width: '100%', maxWidth: '480px', maxHeight: '85vh',
             backgroundColor: 'var(--card-bg)', borderRadius: '20px',
             display: 'flex', flexDirection: 'column',
             boxShadow: 'var(--shadow-lg)', overflow: 'hidden'
