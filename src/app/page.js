@@ -1927,9 +1927,16 @@ export default function Home() {
             boxShadow: 'var(--shadow-md)'
           }}>
             <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '15px', color: 'var(--text-primary)', textAlign: 'center' }}>PDF 다운로드 옵션</h3>
-            <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '25px', textAlign: 'center', lineHeight: '1.5' }}>
+            <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '15px', textAlign: 'center', lineHeight: '1.5' }}>
               엄마만의 비밀 일기(🔒)를<br/>PDF에 포함하시겠습니까?
             </p>
+            
+            <div style={{ backgroundColor: 'rgba(255, 107, 107, 0.1)', padding: '12px', borderRadius: '8px', marginBottom: '25px', border: '1px solid rgba(255, 107, 107, 0.3)' }}>
+              <p style={{ fontSize: '0.8rem', color: '#e03131', margin: 0, textAlign: 'center', lineHeight: '1.4', wordBreak: 'keep-all' }}>
+                <strong>⚠️ 가급적 PC 크롬 브라우저 사용을 권장합니다.</strong><br/>
+                모바일 기기에서 추출할 경우 기기 자체의 강제 인쇄 여백으로 인해 테두리에 흰색 여백이 남고 크기가 살짝 축소될 수 있습니다. (PC 크롬에서는 '여백 없음' 설정으로 완벽하게 추출 가능합니다)
+              </p>
+            </div>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <button onClick={() => handleExportAll(true)} style={{ padding: '15px', borderRadius: '10px', border: 'none', backgroundColor: 'var(--accent-color)', color: 'white', cursor: 'pointer', fontWeight: 'bold' }}>
