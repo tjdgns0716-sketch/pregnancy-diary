@@ -97,14 +97,7 @@ export default function Home() {
     allDiariesToExport.forEach(diary => {
       const hasVisibleContent = diary.content || (diary.badges && diary.badges.length > 0) || diary.image_url || (currentUserRole === 'mother' && diary.private_content && exportIncludesPrivate) || (diary.post_its && diary.post_its.length > 0);
       if (!hasVisibleContent) return;
-      
-      const isShort = !diary.image_url && (!diary.content || diary.content.length <= 60) && !(currentUserRole === 'mother' && diary.private_content && exportIncludesPrivate);
-      
-      if (isShort) {
-        shortRecords.push(diary);
-        return; 
-      }
-
+      // Process all diaries equally, no "shortRecords" logic
       const monthKey = diary.date.substring(0, 7);
       if (!groupedByMonth[monthKey]) {
         groupedByMonth[monthKey] = {
@@ -129,8 +122,7 @@ export default function Home() {
     });
     
     return {
-      months: Object.values(groupedByMonth).sort((a, b) => a.month.localeCompare(b.month)),
-      shortRecords
+      months: Object.values(groupedByMonth).sort((a, b) => a.month.localeCompare(b.month))
     };
   }, [allDiariesToExport, isExporting, currentUserRole, exportIncludesPrivate]);
 
@@ -1956,7 +1948,7 @@ export default function Home() {
       {/* Printable View for PDF Export */}
       {/* Printable View for PDF Export */}
       {isExporting && (
-        <div className="printable-diary-export" style={{ position: 'absolute', top: 0, left: 0, width: '100%', minHeight: '100vh', background: 'var(--bg-color)', zIndex: 99999, padding: '0', boxSizing: 'border-box', color: 'var(--text-primary)', fontFamily: 'inherit' }}>
+        <div className="printable-diary-export" style={{ position: 'absolute', top: 0, left: 0, width: '100%', minHeight: '100vh', background: 'var(--pdf-bg-color, var(--bg-color))', zIndex: 99999, padding: '0', boxSizing: 'border-box', color: 'var(--text-primary)', fontFamily: 'inherit' }}>
           
           {/* Cover Page */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', pageBreakAfter: 'always', height: '100vh', padding: '40px', boxSizing: 'border-box', position: 'relative' }}>
@@ -2110,31 +2102,7 @@ export default function Home() {
             </div>
           ))}
 
-          {/* Short Records Page */}
-          {pdfData.shortRecords.length > 0 && (
-            <div style={{ padding: '40px', pageBreakBefore: 'always' }}>
-              <div style={{ marginBottom: '50px', textAlign: 'center' }}>
-                <h2 style={{ fontSize: '2.5rem', color: 'var(--text-primary)', marginBottom: '15px' }}>짧은 기록 모아보기</h2>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem' }}>바쁜 하루 끝에 남긴 작은 기록들</p>
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px' }}>
-                {pdfData.shortRecords.map(diary => (
-                  <div key={diary.id} className="pdf-inner-block" style={{ padding: '30px', backgroundColor: '#FFFFFF', borderRadius: '24px', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', fontWeight: 'bold' }}>{diary.date.substring(5).replace('-', '.')}</span>
-                      {diary.post_its && diary.post_its.length > 0 && <span style={{ fontSize: '1.2rem' }}>💛</span>}
-                    </div>
-                    {diary.content && <p style={{ margin: 0, color: 'var(--text-primary)', lineHeight: '1.8', fontSize: '1.05rem', whiteSpace: 'pre-wrap' }}>{diary.content}</p>}
-                    {diary.post_its && diary.post_its.length > 0 && (
-                      <div style={{ marginTop: '15px', backgroundColor: '#FFF4CF', padding: '15px', borderRadius: '12px', color: '#5c5227', fontSize: '0.95rem', lineHeight: '1.6' }}>
-                        <strong style={{ display: 'block', marginBottom: '5px' }}>아빠:</strong> {diary.post_its[0].content}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+
           
         </div>
       )}
